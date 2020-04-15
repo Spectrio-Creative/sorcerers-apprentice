@@ -1,9 +1,16 @@
 // UI Group Templates to use in the UI Set up
 // ============
 
-function addTextGroup(gName, label, tab, inText) {
-    var sizes = (tab === 'tab') ? [110,302] : [91,378];
-    inText = inText || '';
+function addTextGroup(gName, label, tab, inText, typeOptions) {
+    inText = inText || ['', true];
+    typeOptions = typeOptions || [];
+    var sizes = (tab === 'tab') ? [110,302] : [91,378],
+        multiline = (typeOptions.indexOf('m') !== -1) ? true : false,
+        visible = (typeOptions.indexOf('v') !== -1) ? true : false,
+        h = multiline ? 60 : 25,
+        visCheck = !visible ? "" : "visCheck: Checkbox {text:'',  alignment: ['left','bottom'], preferredSize: [-1, 19], value: " + inText[1] + "}, \
+        ";
+    sizes = !visible ? sizes : [82, sizes[1]];
     return "group { \
         name: '" + gName + "',\
         orientation:'row',\
@@ -11,14 +18,15 @@ function addTextGroup(gName, label, tab, inText) {
         alignChildren: ['left','center'],\
         spacing: 10,\
         margins: 0,\
-        label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
-        txt: EditText { text: '" + inText + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
+        " + visCheck + "label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
+        txt: EditText { text: '" + inText[0] + "', preferredSize:[" + sizes[1] + "," + h + "], alignment: ['left','fill'], properties: {multiline: "+ multiline +"}}\
     }";
 }
 
 function addBrowseGroup(gName, label, tab, inText) {
+    inText = inText || ['', true];
     var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90];
-    inText = inText || '';
+    
     return "group { \
         name: '" + gName + "',\
         orientation:'row',\
@@ -27,14 +35,20 @@ function addBrowseGroup(gName, label, tab, inText) {
         spacing: 10,\
         margins: 0,\
         label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
-        txt: EditText { text: '" + inText + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
+        txt: EditText { text: '" + inText[0] + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
         browse: Button { text: 'Browse', preferredSize:[" + sizes[2] + ",25]}\
     }";
 }
 
-function addImageGroup(gName, label, tab, inText) {
-    var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90];
-    inText = inText || '';
+function addImageGroup(gName, label, tab, inText, opts) {
+    inText = inText || ['', true];
+    opts = opts || [];
+    var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90],
+        visible = (opts.indexOf('v') !== -1) ? true : false,
+        visCheck = !visible ? "" : "visCheck: Checkbox {text:'',  alignment: ['left','center'], preferredSize: [-1, 15], value: " + inText[1] + "}, \
+        ";
+    sizes = !visible ? sizes : [82, sizes[1]];
+    
     return "group { \
         name: '" + gName + "',\
         orientation:'row',\
@@ -42,15 +56,21 @@ function addImageGroup(gName, label, tab, inText) {
         alignChildren: ['left','center'],\
         spacing: 10,\
         margins: 0,\
-        label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
-        img: EditText { text: '" + inText + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
+        " + visCheck + "label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
+        img: EditText { text: '" + inText[0] + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
         browse: Button { text: 'Browse', preferredSize:[" + sizes[2] + ",25]}\
     }";
 }
 
-function addAudioGroup(gName, label, tab, inText) {
-    var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90];
-    inText = inText || '';
+function addAudioGroup(gName, label, tab, inText, opts) {
+    inText = inText || ['', true];
+    opts = opts || [];
+    var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90],
+        visible = (opts.indexOf('v') !== -1) ? true : false,
+        visCheck = !visible ? "" : "visCheck: Checkbox {text:'',  alignment: ['left','center'], preferredSize: [-1, 15], value: " + inText[1] + "}, \
+        ";
+    sizes = !visible ? sizes : [82, sizes[1]];
+    
     return "group { \
         name: '" + gName + "',\
         orientation:'row',\
@@ -58,8 +78,8 @@ function addAudioGroup(gName, label, tab, inText) {
         alignChildren: ['left','center'],\
         spacing: 10,\
         margins: 0,\
-        label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
-        audio: EditText { text: '" + inText + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
+        " + visCheck + "label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
+        audio: EditText { text: '" + inText[0] + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
         browse: Button { text: 'Browse', preferredSize:[" + sizes[2] + ",25]}\
     }";
 }
@@ -99,7 +119,7 @@ function addTabbedPannel(tName) {
 // MDS
 // ===
 var mds = new Window("palette"); 
-    mds.text = "MDS RENDERER v1.5"; 
+    mds.text = "MDS RENDERER v1.6"; 
     mds.preferredSize.width = 510; 
     mds.orientation = "column"; 
     mds.alignChildren = ["center","top"]; 
@@ -249,9 +269,10 @@ function populateTemplates(mainTab){
     var folderArray = []
     
     for(var u = 0; u < idArray.length; u++){
-        var folderObj = libItemsReg(idArray[u].id, 'Folder', 1);
+        var folderObj = libItemsReg(idArray[u].id, 'Folder', 1),
+            compArr = libItemsInFolder(idArray[u].name, folderObj, 'Composition');
         
-        if(findLayers(/^!T|^!I|^!C|^!G|^!A/g, libItemsInFolder(idArray[u].name, folderObj, 'Composition')[0]).length > 0){
+        if(compArr.length > 0 && findLayers(/^!T|^!I|^!C|^!G|^!A/g, compArr[0]).length > 0){
             templateFolders.push(folderObj);
         }
     }
@@ -350,43 +371,20 @@ function getPreComps(folder){
 // ====
 function loadTabs(arrayToLoad, template){
     for(var i = 0; i < arrayToLoad.length; i++){
-        var terminalReg = /!T /g;
-        var tabDefault = 'Text Input';
-        var funToUse = addTextGroup;
-        var varType = arrayToLoad[i].name.match(/^!T|^!I|^!C|^!G|^!A/g)[0];
-        var inText = '';
-
-        //Check what type of layer it is
-        switch(varType){
-            case '!T':
-                tabDefault = 'Text Input';
-                terminalReg = /!T /g;
-                funToUse = addTextGroup;
-                inText = arrayToLoad[i].text.sourceText.value.text;
-                break;
-            case '!I':
-                tabDefault = 'Image';
-                terminalReg = /!I /g;
-                funToUse = addImageGroup;
-                break;
-            case '!C':
-                tabDefault = 'Colors';
-                terminalReg = /!C /g;
-                funToUse = addColorGroup;
-                break;
-            case '!G':
-                tabDefault = 'Group';
-                terminalReg = /!G /g;
-                break;
-            case '!A':
-                tabDefault = 'Audio';
-                terminalReg = /!A /g;
-                funToUse = addAudioGroup;
-                break;
-            default:
-                tabDefault = 'Text Input';
-                break;
-        }
+        var typeMatches = arrayToLoad[i].name.match(/^!T[a-z]*|^!I[a-z]*|^!C[a-z]*|^!G[a-z]*|^!A[a-z]*/g),
+            typeHeader = typeMatches[typeMatches.length - 1],
+            varType = typeHeader.match(/^!T|^!I|^!C|^!G|^!A/g)[0],
+            typeOptions = typeHeader.match(/[a-z]/g),
+            terminalReg = new RegExp(typeHeader, 'g'),
+            tabObj = {
+                T: {tab: 'Text Input', func: addTextGroup, inText: /!T/.test(varType) ?[regSafe(arrayToLoad[i].text.sourceText.value.text), arrayToLoad[i].enabled] : ['', arrayToLoad[i].enabled]},
+                I: {tab: 'Image', func: addImageGroup, inText: ['', arrayToLoad[i].enabled]},
+                C: {tab: 'Colors', func: addColorGroup, inText: ''},
+                G: {tab: 'Group'},
+                A: {tab: 'Audio', func: addAudioGroup, inText: ['', arrayToLoad[i].enabled]}
+            },
+            tObj = tabObj[varType.replace('!', '')],
+            tabDefault = tObj.tab;
         
         var groupData = arrayToLoad[i].name.split(terminalReg)[1].replace(/(^\s*)|(\s*$)/g,'');
         var tabName = /\[.+\]/g.test(groupData);
@@ -406,13 +404,13 @@ function loadTabs(arrayToLoad, template){
         if(varType === '!C'){ //If a color layer, get color effects
             for(var u = 1; u <= arrayToLoad[i]('Effects').numProperties; u++){
                 var gdata = arrayToLoad[i]('Effects').property(u).name;
-                template[tabID][camelize(gdata)] = template[tabID].add(funToUse((camelize(gdata)), gdata, 'tab', decToRgb(arrayToLoad[i].effect(gdata)("Color").value)).replace());
+                template[tabID][camelize(gdata)] = template[tabID].add(tObj.func((camelize(gdata)), gdata, 'tab', decToRgb(arrayToLoad[i].effect(gdata)("Color").value)).replace());
                 template[tabID][camelize(gdata)].picker.onClick = function(){colorBtn(this)};
             }
             continue;
         }
         if(varType === '!G') continue; //If a group layer, do not generate fields
-        template[tabID][camelize(groupData)] = template[tabID].add(funToUse((camelize(groupData)), groupData, 'tab', regSafe(inText)).replace());
+        template[tabID][camelize(groupData)] = template[tabID].add(tObj.func((camelize(groupData)), groupData, 'tab', tObj.inText, typeOptions));
         
         if(varType === '!I' || varType === '!A'){ //If an image layer, set up the browse button
             template[tabID][camelize(groupData)].browse.onClick = function(){browserBtn(this)};
@@ -458,8 +456,12 @@ function colorpicker(result_color) {
         var r = hex >> 16;var g = hex >> 8 & 0xFF;var b = hex & 0xFF;
         return [r, g, b];
     };
- 
-    var color_decimal = $.colorPicker();
+    
+    /*alert(result_color);
+    alert(decToRgb(result_color));
+    alert(rgbToHex(decToRgb(result_color)));*/
+    
+    var color_decimal = $.colorPicker('0x' + rgbToHex(decToRgb(result_color)));
     $.writeln(color_decimal);
     var color_hexadecimal = color_decimal.toString(16);
     $.writeln(color_hexadecimal);
@@ -660,6 +662,27 @@ function hexToRgb(hex) {
 // ====
 // ====
 // ====
+//Convert rgb to hex
+function rgbToHex(rgb) {
+    if(Array.isArray(rgb) === false){
+//        alert('rgb: '+rgb+' '+typeof rgb);
+        rgb = rgb.split(/ *, */);
+    }
+//    alert(Array.isArray(rgb));
+    var elToHex = function (el) { 
+      var hex = Number(el).toString(16);
+//        alert('el: ' + el + 'el hex: ' + hex);
+      if (hex.length < 2) {
+           hex = "0" + hex;
+      }
+      return hex;
+    };
+    return elToHex(rgb[0]) + elToHex(rgb[1]) + elToHex(rgb[2]);
+}
+// ====
+// ====
+// ====
+// ====
 //convert rbg to decimals
 function colorize(rgbCode) {
     var colorCodes = rgbCode.match(/[0-9]+/g),
@@ -699,12 +722,12 @@ function prerequisites(templateName, ORcomp, ORcompfolder) {
     
     for(var z=0; z<editableLayers.length; z++){
         var layer = editableLayers[z];
-        if(/^!T/g.test(layer.name) && layer.position.numKeys > 0) {
+        if(/^!T[a-z]*/g.test(layer.name) && layer.position.numKeys > 0) {
             alert('Layer Setup Error:\
 The text layer "' + layer.name + '" contains position keyframes. These unfortunately mess with the script\'s ability to resize text. Please remove the keyframes. Maybe try adding them to a parent null layer instead!');
             return -1;
         };
-        if(/^!I/g.test(layer.name) && layer.scale.numKeys > 0) {
+        if(/^!I[a-z]*/g.test(layer.name) && layer.scale.numKeys > 0) {
             alert('Layer Setup Warning:\
 The image layer "' + layer.name + '" contains scale keyframes. These will be overwritten when the script is resizing the image. To avoid any problems that might result, try adding them to a parent null layer instead!');
         };
@@ -1271,37 +1294,18 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
     
     function replaceContent(layer){
         status.text = 'filling first layer';
-        var terminalReg = /!T /g;
-        var tabDefault = 'Text Input';
-        var varType = layer.name.match(/^!T|^!I|^!C|^!G|^!A/g)[0];
-        var layerField;
-
-        //Check what type of layer it is
-        switch(varType){
-            case '!T':
-                tabDefault = 'Text Input';
-                terminalReg = /!T /g;
-                break;
-            case '!I':
-                tabDefault = 'Image';
-                terminalReg = /!I /g;
-                break;
-            case '!C':
-                tabDefault = 'Colors';
-                terminalReg = /!C /g;
-                break;
-            case '!G':
-                tabDefault = 'Group';
-                terminalReg = /!G /g;
-                break;
-            case '!A':
-                tabDefault = 'Audio';
-                terminalReg = /!A /g;
-                break;
-            default:
-                tabDefault = 'Text Input';
-                break;
-        }
+        var typeHeader = layer.name.match(/^!T[a-z]*|^!I[a-z]*|^!C[a-z]*|^!G[a-z]*|^!A[a-z]*/g)[0],
+            varType = typeHeader.match(/^!T|^!I|^!C|^!G|^!A/g)[0],
+            typeOptions = typeHeader.match(/[a-z]/g),
+            layerField,
+            terminalReg = new RegExp(typeHeader, 'g'),
+            tabObj = {
+                T: 'Text Input',
+                I: 'Image',
+                C: 'Colors',
+                G: 'Group'
+            },
+            tabDefault = tabObj[varType.replace('!', '')];
         
         status.text = 'variables switched';
         
@@ -1368,6 +1372,8 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
             layer.replaceSource(libItemsReg(regSafe(layerField.audio.text), 'Footage', 1), false);
         }
         
+        //Check to see if the layer needs to be turned on or off
+        if(layerField.visCheck !== undefined) layer.enabled = Boolean(layerField.visCheck.value);
         
         return;
     }
