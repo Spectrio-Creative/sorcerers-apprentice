@@ -146,7 +146,7 @@ var header = mds.add("group", undefined, {name: "header"});
     header.alignment = ["fill","top"]; 
 
 var title = header.add("statictext", undefined, undefined, {name: "title"}); 
-    title.text = "The Sorcerer's Apprentice (v2.2.0)"; 
+    title.text = "The Sorcerer's Apprentice (v2.3.0)"; 
     title.alignment = ["fill","center"]; 
 
 
@@ -188,19 +188,21 @@ var divider1 = mds.add("panel", undefined, undefined, {name: "divider1"});
 // STATUS
 // ====
 var stts = mds.add("group", undefined, {name: "stts"}); 
-    stts.orientation = "row"; 
-    stts.alignChildren = ["right","center"]; 
+    stts.orientation = "column"; 
+    stts.alignChildren = ["center","center"]; 
     stts.spacing = 10; 
     stts.margins = 0; 
     stts.alignment = ["fill","top"]; 
 
-var status = stts.add("statictext", undefined, undefined, {name: "status"}); 
-    status.text = "Status Text"; 
-    status.preferredSize.width = 139; 
-
-
 var pbar = stts.add("progressbar", undefined, 0, 100, {name: "pbar"}); 
-    pbar.preferredSize.width = 330;
+    pbar.preferredSize.width = 480;
+
+var status = stts.add("statictext", undefined, undefined, {name: "status"}); 
+    status.text = "Status Text";
+//status.graphics.font = "dialog:24";
+    status.preferredSize.width = 470; 
+
+
 
 // POPULATE THE TEMPLATE TAB WITH EDITABLE LAYERS
 // ====
@@ -631,15 +633,21 @@ function addLinkedPrecomps(folderName, newFolder, composition){
         status.text = 'pre precomps ' + z;
         //alert(newPrecomps[z].name)
         for(var u = 0; u < newPrecomps.length; u++){
+            var replaceCount = 1;
             if(u===z) continue;
             var replaceLayer = findLayers(regSafe('>> ' + newPrecomps[u].name + ' <<'), newPrecomps[z]);
+            status.text = 'checking for ' + newPrecomps[u].name + ' in ' + newPrecomps[z].name;
+//            alert('Precomp length: ' + replaceLayer.length);
             if(replaceLayer.length == 0) continue;
             customEach(replaceLayer, function(preLayerRep){
-                preLayerRep.replaceSource(newComp, false);
+                preLayerRep.replaceSource(newPrecomps[u], false);
+                status.text = 'replaced ' + replaceCount + ' ' + newPrecomps[u].name + ' precomp';
+                replaceCount++;
             });
         }
     }
     
+    status.text = 'precomps all linked';
     return;
 }
 
@@ -696,7 +704,6 @@ function colorize(rgbCode) {
     var colorCodes = rgbCode.match(/[0-9]+/g),
         alpha = colorCodes.length,
         vals = [((colorCodes[0] == undefined) ? 255 : Number(trim(colorCodes[0]))), ((colorCodes[1] == undefined) ? 255 : Number(trim(colorCodes[1]))), ((colorCodes[2] == undefined) ? 255 : Number(trim(colorCodes[2]))), ((colorCodes[3] == undefined) ? 255 : Number(trim(colorCodes[3])))];
-    
     return [vals[0]/255,vals[1]/255,vals[2]/255,vals[3]/255];
 }
 // ====
@@ -801,7 +808,11 @@ The image layer "' + layer.name + '" contains scale keyframes. These will be ove
 // ====
 function importExternal(cfolder){
     for(var i = 0; i < externalImageList.length; i++){
-        var path = externalImageList[i].text;
+        var path = externalImageList[i].text,
+            loadAttempt = 0;
+        
+        if(/\.bmp$/i.test(path)) loadAttempt = 1;
+        
         status.text = 'Loading External File: ' + path.match(/[^\/\\]+\.([A-z]+)/g)[0];
         
         if(tryToLoad(path) !== -1){
@@ -814,38 +825,75 @@ function importExternal(cfolder){
             var io = new ImportOptions(File(loadPath));
             if (io.canImportAs(ImportAsType.FOOTAGE)){
                 //Change the field to just show the filename for later use
-                externalImageList[i].text = path.match(/[^\/\\]+\.([A-z]+)/g)[0];
+                externalImageList[i].text = (new File(loadPath)).name; //io.name; //(new File(path)).name;
+                
+                var windows = ($.os.indexOf("Windows") !== -1),
+                    slash = windows ? '\\' : '\/',
+                    wSpace = windows ? ' ' : '\\ ',
+                    fileLocation = String((new File(path)).parent).replace(/\%20/g, wSpace) + slash,
+                    scriptLocation = String((new File($.fileName)).parent).replace(/\%20/g, wSpace);
+                
                 try{
                     io.importAs = ImportAsType.FOOTAGE;
                 } catch(e){
-                    alert('Couldn\'t import')
+                    alert('Couldn\'t import');
                 }
                 
                 var newObject;
 
                 try{
                     newObject = app.project.importFile(io);
-                    newObject.name = path.match(/[^\/\\]+\.([A-z]+)/g)[0];
+                    newObject.name = externalImageList[i].text;
                     newObject.parentFolder = cfolder;
                     
-//                    alert(newObject.id);
-                    
                     externalImageList[i].text = newObject.id;
-                    //alert('imported!!');
                 } catch(e){
-                    status.text = 'Load error. Try as .bmp if image';
-                    if((/\.(gif|jpg|jpeg|tiff|png)$/i).test(loadPath)){
+                    //status.text = 'Load error. Try as .bmp if image';
+                    if(loadAttempt === 0){
+                        status.text = 'Load error. Try as .bmp if image';
                         //If we didn't already try it, try duplicating and importing as .bmp
                         var read_file = new File(loadPath);
                         try{
+                            loadAttempt = 1;
                             read_file.copy(read_file.fsName.replace(/\.(gif|jpg|jpeg|tiff|png)$/i, '.bmp'));
                             if(tryToLoad(read_file.fsName.replace(/\.(gif|jpg|jpeg|tiff|png)$/i, '.bmp')) !== -1) status.text = 'successfully loadeded as .bmp';
                         } catch(e) {
                             alert(e);
                         }
                         
+                    } else if(loadAttempt === 1) {
+                        status.text = 'Load error. Try as .webp if image';
+                        
+                        var deleteCommand = windows ?
+                            ('del /f \"' + loadPath + '\"') :
+                            ('rm ' + loadPath.replace(/(?:\\.)+|(\ )/g, '\\ '));
+                        
+                        if(!/\.bmp$/i.test(path)) system.callSystem(deleteCommand);
+                        
+                        try{
+                            loadAttempt = 2;
+                            
+                            var extension = /\.png/i.test(path) ? '_copy.png' : '.png',
+                                convCommand = windows ?
+                                ('"' + scriptLocation.replace("\/c\/", "C:\\").replace('\/', '\\') + slash + 'dwebp\" \"' + path + '\" -o \"' + path.replace(/\.(gif|jpg|jpeg|tiff|png|bmp)$/i, extension) + '\"') :
+                                (scriptLocation + slash + 'dwebp ' + path.replace(/(?:\\.)+|(\ )/g, '\\ ') + ' -o ' + path.replace(/(?:\\.)+|(\ )/g, '\\ ').replace(/\.(gif|jpg|jpeg|tiff|png|bmp)$/i, extension));
+                            
+                           
+                            system.callSystem(convCommand);
+                            
+                            if(tryToLoad(path.replace(/\.(gif|jpg|jpeg|tiff|png|bmp)$/i, extension)) !== -1) status.text = 'successfully converted webp to .png';
+                        } catch(e) {
+                            alert(e);
+                        }
+                        
                     } else {
-                        alert('Could not import ' + path.match(/[^\/\\]+\.([A-z]+)/g)[0]);
+                        
+                        var deleteCommand = windows ?
+                            ('del /f \"' + loadPath + '\"') :
+                            ('rm ' + loadPath.replace(/(?:\\.)+|(\ )/g, '\\ '));
+                        
+                        if(loadAttempt === 2) system.callSystem(deleteCommand);
+                        alert('Could not import ' + String((new File(path)).name));
                         alert(e);
                         pbar.value = 0;
                         return -1;
@@ -854,7 +902,7 @@ function importExternal(cfolder){
                 }
                 return 1;
             } else {
-                alert('cannot import ' + path.match(/[^\/\\]+\.([A-z]+)/g)[0]);
+                alert('cannot import ' + String((new File(path)).name));
                 pbar.value = 0;
                 return -1;
             }
@@ -1386,7 +1434,7 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
             for(var u = 1; u <= layer('Effects').numProperties; u++){
                 status.text = 'Setting color #' + u;
                 var nameData = layer('Effects').property(u).name;
-                layerField = template[templateChoice.name]['content_' + templateChoice.text][camelize(tabName)][camelize(nameData)];
+                layerField = imageList[camelize(tabName)][camelize(nameData)];
                 status.text = 'Setting color #' + u + ': ' + layerField.txt.text;
                 if(layerField.txt.text === '') continue;
                 layer.effect(nameData)("Color").setValue(colorize(layerField.txt.text));
