@@ -146,7 +146,7 @@ var header = mds.add("group", undefined, {name: "header"});
     header.alignment = ["fill","top"]; 
 
 var title = header.add("statictext", undefined, undefined, {name: "title"}); 
-    title.text = "The Sorcerer's Apprentice (v1.8)"; 
+    title.text = "The Sorcerer's Apprentice (v2.0)"; 
     title.alignment = ["fill","center"]; 
 
 
@@ -601,6 +601,7 @@ function addLinkedPrecomps(folderName, newFolder, composition){
     status.text = 'looking for original precomp folder';
     var ORprecomps = libItemsInFolder(/Precomps/g, folderName, 'Folder')[0];
     if(ORprecomps == undefined) return;
+    var newPrecomps = [];
     status.text = 'found original precomp folder';
     var precompFolder = newFolder.items.addFolder(ORprecomps.name);
     status.text = 'made new precomp folder';
@@ -611,34 +612,31 @@ function addLinkedPrecomps(folderName, newFolder, composition){
             var newComp = ORprecomps.items[i].duplicate();
             newComp.name = ORprecomps.items[i].name;
             newComp.parentFolder = precompFolder;
-            findLayers(regSafe('>> ' + newComp.name + ' <<'), composition, 1).replaceSource(newComp, false);
+            newPrecomps.push(newComp);
+            var replaceLayer1 = findLayers(regSafe('>> ' + newComp.name + ' <<'), composition);
+//            alert(replaceLayer1.length);
+            if(replaceLayer1.length == 0) continue;
+            customEach(replaceLayer1, function(layerRep){
+//                alert(newComp.name);
+                layerRep.replaceSource(newComp, false);
+            });
+        }
+    }
+    
+    for(var z = 0; z < newPrecomps.length; z++){
+        status.text = 'pre precomps ' + z;
+        //alert(newPrecomps[z].name)
+        for(var u = 0; u < newPrecomps.length; u++){
+            if(u===z) continue;
+            var replaceLayer = findLayers(regSafe('>> ' + newPrecomps[u].name + ' <<'), newPrecomps[z]);
+            if(replaceLayer.length == 0) continue;
+            customEach(replaceLayer, function(preLayerRep){
+                preLayerRep.replaceSource(newComp, false);
+            });
         }
     }
     
     return;
-    
-    subs = subs || false;
-    var originalFolder = libItemsReg(folderName.id, 'Folder', 1);
-    
-    for(var i = 1; i <= originalFolder.items.length; i++){
-        
-        if(originalFolder.items[i].typeName === "Folder" || originalFolder.items[i].typeName === "Dossier") {
-            
-            var nextFolder = newFolder.items.addFolder(originalFolder.items[i].name);
-            var orFolderID = originalFolder.items[i].id;
-            duplicateFolder(orFolderID, nextFolder, true);
-        } else if(originalFolder.items[i].typeName === "Composition"){
-            
-            if(subs === true) {
-                var newComp = originalFolder.items[i].duplicate();
-                newComp.name = originalFolder.items[i].name;
-                newComp.parentFolder = newFolder;
-            }
-            
-        } else {
-            status.text = 'Dont duplicate Footage';
-        }
-    }
 }
 
 
@@ -1319,6 +1317,7 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
             },
             tabDefault = tabObj[varType.replace('!', '')];
         
+        if(typeOptions == null || typeOptions == undefined) typeOptions = [];
         status.text = 'variables switched';
         
         var layerName = layer.name.split(terminalReg)[1].replace(/(^\s*)|(\s*$)/g,'');
@@ -1357,27 +1356,60 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
         //alert(layer.name + ' : ' + layerField.name);
         
         
+        
         if(varType === '!T'){
             setText(layer, comp, layerField.txt.text);
             //layer.property("Source Text").setValue(layerField.txt.text);
         }
         
         if(varType === '!I' && layerField.img.text !== ''){
-            var orSize = {width: layer.width, height: layer.height},
+            var orSize = {width: (layer.width * (layer.scale.value[0] / 100)), height: (layer.height * (layer.scale.value[1] / 100))},
+                orCor = {x: (layer.position.value[0] - (layer.transform.anchorPoint.value[0] * (layer.scale.value[0] / 100))), y: (layer.position.value[1] - (layer.transform.anchorPoint.value[1] * (layer.scale.value[1] / 100)))},
+                orPer = [layer.transform.anchorPoint.value[0] / layer.width, layer.transform.anchorPoint.value[1] / layer.height],
                 innerComp = comp,
-                heightOrWidth = 'width'
+                heightOrWidth = 'width',
+                ratio;
+            
             if(layer.containingComp !== comp) innerComp = layer.containingComp;
-            var ratio = layer.width / innerComp.width;
             layer.replaceSource(libItemsReg(regSafe(layerField.img.text), 'Footage', 1), false);
-            if((layer.width / layer.height) <= (innerComp.width / innerComp.height)){
-                ratio = orSize.height / innerComp.height;
-                heightOrWidth = 'height';
+            
+            if((layer.width / layer.height) <= (orSize.width / orSize.height)){
+                if(arrIndex(typeOptions, 'f') == -1 && arrIndex(typeOptions, 'b') == -1){
+                    ratio = orSize.height / innerComp.height;
+                    heightOrWidth = 'height';
+                } else {
+                    ratio = orSize.width / innerComp.width;
+                }
+            } else {
+                if(arrIndex(typeOptions, 'f') !== -1 || arrIndex(typeOptions, 'b') !== -1){
+                    ratio = orSize.height / innerComp.height;
+                    heightOrWidth = 'height';
+                } else {
+                    ratio = orSize.width / innerComp.width;
+                }
             }
-            if(orSize.width >= innerComp.width) {
-                layer.transform.scale.expression = imgExpression();
+                        
+            if(arrIndex(typeOptions, 's') !== -1){
+                layer.scale.setValue([100,100,100]);
             } else {
                 layer.transform.scale.expression = imgExpression(ratio, heightOrWidth);
             }
+            
+            //If set to 'fill' (f), then put a mask around the original shape and fill it
+            if(arrIndex(typeOptions, 'f') !== -1){
+                var newMask = layer.Masks.addProperty("Mask"),
+                    newMaskShape = newMask.property("maskShape"),
+                    newShape = newMaskShape.value,
+                    anch = layer.transform.anchorPoint.value,
+                    pos = layer.position.value,
+                    sca = layer.transform.scale.value,
+                    bounds = [((layer.width * sca[0] * .01 - orSize.width) * orPer[0] / (sca[0] * .01)), ((layer.height * sca[1] * .01 - orSize.height) * orPer[1] / (sca[1] * .01)), ((layer.width * sca[0] * .01 - orSize.width) * orPer[0] / (sca[0] * .01))+(orSize.width / (sca[0]/100)), ((layer.height * sca[1] * .01 - orSize.height) * orPer[1] / (sca[1] * .01))+(orSize.height / (sca[1]/100))];
+                
+                newShape.vertices = [[bounds[0],bounds[1]],[bounds[0],bounds[3]],[bounds[2],bounds[3]],[bounds[2],bounds[1]]];
+                newShape.closed = true;
+                newMaskShape.setValue(newShape);
+            }
+            
         }
         
         if(varType === '!A' && layerField.audio.text !== ''){
