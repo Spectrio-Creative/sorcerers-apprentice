@@ -146,7 +146,7 @@ var header = mds.add("group", undefined, {name: "header"});
     header.alignment = ["fill","top"]; 
 
 var title = header.add("statictext", undefined, undefined, {name: "title"}); 
-    title.text = "The Sorcerer's Apprentice (v2.1.1)"; 
+    title.text = "The Sorcerer's Apprentice (v2.2.0)"; 
     title.alignment = ["fill","center"]; 
 
 
@@ -220,6 +220,7 @@ mds.show();
 // ====
 var externalImageList = [];
 var idArray = [];
+var imageList = {};
 //alert(hexToRgb('#a35d52').r + ', ' + hexToRgb('#a35d52').g + ', ' + hexToRgb('#a35d52').b);
 //alert(colorize(hexToRgb('#a35d52').r + ', ' + hexToRgb('#a35d52').g + ', ' + hexToRgb('#a35d52').b));
 
@@ -521,6 +522,9 @@ function browserBtn(inputFld){
 
 // REGSAFE - escapes all special characters
 function regSafe(newString){
+    if(/^\d+$/.test(newString)){
+       return Number(newString);
+    }
     return String(newString).replace(/[^\w \t\f]|[\n\r]/g, function(match){
         return '\\' + match;
     });
@@ -736,27 +740,29 @@ The text layer "' + layer.name + '" contains position keyframes. These unfortuna
 The image layer "' + layer.name + '" contains scale keyframes. These will be overwritten when the script is resizing the image. To avoid any problems that might result, try adding them to a parent null layer instead!');
         };
     }
-    
+ 
+    var templateChildren = imageList.children;
+
     var templateChildren = template[templateName.name]['content_' + templateName.text].children;
     for(var i = 0; i< templateChildren.length; i++){
         var childChildren = templateChildren[i].children;
-        
+ 
         for(var u = 0; u< childChildren.length; u++){
-            if(childChildren[u].img !== undefined){
-                //if(childChildren[u].img.text !== '') alert(childChildren[u].img.text);
-                if(imageTest(childChildren[u].img, 'image') === -1) return -1;
-            } else if(childChildren[u].audio !== undefined){
-                if(imageTest(childChildren[u].audio, 'audio file') === -1) return -1;
-            } else if(childChildren[u].color !== undefined){
-                if(colorCheck(childChildren[u].txt.text) !== -1) {
-                    childChildren[u].txt.text = colorCheck(childChildren[u].txt.text);
+            var layerRef = imageList[templateChildren[i].name][childChildren[u].name];
+
+            if(layerRef.img !== undefined){
+                if(imageTest(layerRef.img, 'image') === -1) return -1;
+            } else if(layerRef.audio !== undefined){
+                if(imageTest(layerRef.audio, 'audio file') === -1) return -1;
+            } else if(layerRef.color !== undefined){
+                if(colorCheck(layerRef.txt.text) !== -1) {
+                    layerRef.txt.text = colorCheck(layerRef.txt.text);
                 } else {
                     return -1
                 };
             }
         };
     };
-    
     
     return;
     
@@ -819,9 +825,12 @@ function importExternal(cfolder){
 
                 try{
                     newObject = app.project.importFile(io);
-                    
                     newObject.name = path.match(/[^\/\\]+\.([A-z]+)/g)[0];
                     newObject.parentFolder = cfolder;
+                    
+//                    alert(newObject.id);
+                    
+                    externalImageList[i].text = newObject.id;
                     //alert('imported!!');
                 } catch(e){
                     status.text = 'Load error. Try as .bmp if image';
@@ -1147,9 +1156,44 @@ function arrIndex(arr, str){
     return -1;
 }
 
+function copyObj(src){
+    var target = {};
+    for(var prop in src){
+        
+        if (src.hasOwnProperty(prop)) {
+            if(prop === 'parent' || prop === 'children' || prop === 'window'){
+//            if(prop === 'parent' || prop === 'window'){
+//                alert("WHOOP");
+                continue;
+            }
+//            alert(prop);
+            
+            // if the value is a nested object, recursively copy all it's properties
+            if ((typeof src[prop]) === 'object') {
+                try{
+                    target[prop] = copyObj(src[prop]);
+                } catch(error){
+                    target[prop] = src[prop];
+                }
+            } else {
+                target[prop] = src[prop];
+            }
+        }
+           
+    }
+    
+    return target;
+}
+
 
 function mdsRender(templateChoice, renderOp) {
     
+    try{
+        imageList = copyObj(template[templateChoice.name]['content_' + templateChoice.text]);
+    } catch(e){
+        status.text = e;
+    }
+        
     var ORcompFolder = libItemsReg(Number(templateChoice.name.match(/[0-9]+$/g)[0]), 'Folder', 1);
     status.text = 'Found Comp Folder';
     var ORcomp = libItemsInFolder(regSafe(templateChoice.text), ORcompFolder, 'Composition')[0];
@@ -1352,8 +1396,8 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
         
         
         
-        layerField = template[templateChoice.name]['content_' + templateChoice.text][camelize(tabName)][camelize(layerName)];
-        //alert(layer.name + ' : ' + layerField.name);
+        layerField = imageList[camelize(tabName)][camelize(layerName)];
+//        layerField = template[templateChoice.name]['content_' + templateChoice.text][camelize(tabName)][camelize(layerName)];
         
         
         
@@ -1371,6 +1415,9 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
                 ratio;
             
             if(layer.containingComp !== comp) innerComp = layer.containingComp;
+//            alert(typeof layerField.img.text);
+//            alert(/^\d+$/.test(layerField.img.text));
+//            alert(layerField.img.text);
             layer.replaceSource(libItemsReg(regSafe(layerField.img.text), 'Footage', 1), false);
             
             if((layer.width / layer.height) <= (orSize.width / orSize.height)){
