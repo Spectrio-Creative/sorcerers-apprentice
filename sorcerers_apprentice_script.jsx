@@ -3,10 +3,20 @@
 
 function addTextGroup(gName, label, tab, inText, typeOptions) {
     inText = inText || ['', true];
-    typeOptions = typeOptions || [];
+    typeOptions = typeOptions || ['n'];
+/*    alert('Textfield ' + label + ' info\
+gName: ' + gName + '\
+label: ' + label + '\
+tab: ' + tab + '\
+inText: ' + inText.length + '\
+typeOptions: ' + typeof typeOptions + '\
+');
+    alert(typeOptions.length);
+    alert(arrIndex(typeOptions, 'n'));
+    alert(arrIndex(typeOptions, 'm'));*/
     var sizes = (tab === 'tab') ? [110,302] : [91,378],
-        multiline = (typeOptions.indexOf('m') !== -1) ? true : false,
-        visible = (typeOptions.indexOf('v') !== -1) ? true : false,
+        multiline = (arrIndex(typeOptions, 'm') !== -1) ? true : false,
+        visible = (arrIndex(typeOptions, 'v') !== -1) ? true : false,
         h = multiline ? 60 : 25,
         visCheck = !visible ? "" : "visCheck: Checkbox {text:'',  alignment: ['left','bottom'], preferredSize: [-1, 19], value: " + inText[1] + "}, \
         ";
@@ -42,9 +52,9 @@ function addBrowseGroup(gName, label, tab, inText) {
 
 function addImageGroup(gName, label, tab, inText, opts) {
     inText = inText || ['', true];
-    opts = opts || [];
+    opts = opts || ['n'];
     var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90],
-        visible = (opts.indexOf('v') !== -1) ? true : false,
+        visible = (arrIndex(opts, 'v') !== -1) ? true : false,
         visCheck = !visible ? "" : "visCheck: Checkbox {text:'',  alignment: ['left','center'], preferredSize: [-1, 15], value: " + inText[1] + "}, \
         ";
     sizes = !visible ? sizes : [82, sizes[1]];
@@ -64,9 +74,9 @@ function addImageGroup(gName, label, tab, inText, opts) {
 
 function addAudioGroup(gName, label, tab, inText, opts) {
     inText = inText || ['', true];
-    opts = opts || [];
+    opts = opts || ['n'];
     var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90],
-        visible = (opts.indexOf('v') !== -1) ? true : false,
+        visible = (arrIndex(opts, 'v') !== -1) ? true : false,
         visCheck = !visible ? "" : "visCheck: Checkbox {text:'',  alignment: ['left','center'], preferredSize: [-1, 15], value: " + inText[1] + "}, \
         ";
     sizes = !visible ? sizes : [82, sizes[1]];
@@ -457,11 +467,7 @@ function colorpicker(result_color) {
         return [r, g, b];
     };
     
-    /*alert(result_color);
-    alert(decToRgb(result_color));
-    alert(rgbToHex(decToRgb(result_color)));*/
-    
-    var color_decimal = $.colorPicker('0x' + rgbToHex(decToRgb(result_color)));
+    var color_decimal = ($.os.indexOf("Windows") !== -1) ? $.colorPicker() : $.colorPicker('0x' + rgbToHex(decToRgb(result_color)));
     $.writeln(color_decimal);
     var color_hexadecimal = color_decimal.toString(16);
     $.writeln(color_hexadecimal);
@@ -1136,6 +1142,12 @@ function customEach(arr, callback){
     }
 }
 
+function arrIndex(arr, str){
+    for(var i=0;i<arr.length;i++){
+        if(arr[i] == str) return i;
+    }
+    return -1;
+}
 
 
 function mdsRender(templateChoice, renderOp) {
@@ -1227,7 +1239,7 @@ function mdsRender(templateChoice, renderOp) {
 function imgExpression(ratio, contain){
     if(ratio === undefined) ratio = 1;
     if(ratio === 'skip') return "";
-    if(contain === 'height' || contain === 'width') return "// This lets us get the " + contain + " of the textbox containing your content.\
+    if(contain === 'height' || contain === 'width') return "// This lets us get the " + contain + " of the image containing your content.\
 layerSize = thisLayer.sourceRectAtTime(time)." + contain + ";\
 \
 \/\/ This lets us get the width of the current composition.\
