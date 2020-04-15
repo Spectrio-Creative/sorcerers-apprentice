@@ -1,0 +1,1377 @@
+// UI Group Templates to use in the UI Set up
+// ============
+
+function addTextGroup(gName, label, tab, inText) {
+    var sizes = (tab === 'tab') ? [110,302] : [91,378];
+    inText = inText || '';
+    return "group { \
+        name: '" + gName + "',\
+        orientation:'row',\
+        alignment:['fill','top'],\
+        alignChildren: ['left','center'],\
+        spacing: 10,\
+        margins: 0,\
+        label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
+        txt: EditText { text: '" + inText + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
+    }";
+}
+
+function addBrowseGroup(gName, label, tab, inText) {
+    var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90];
+    inText = inText || '';
+    return "group { \
+        name: '" + gName + "',\
+        orientation:'row',\
+        alignment:['fill','top'],\
+        alignChildren: ['left','center'],\
+        spacing: 10,\
+        margins: 0,\
+        label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
+        txt: EditText { text: '" + inText + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
+        browse: Button { text: 'Browse', preferredSize:[" + sizes[2] + ",25]}\
+    }";
+}
+
+function addImageGroup(gName, label, tab, inText) {
+    var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90];
+    inText = inText || '';
+    return "group { \
+        name: '" + gName + "',\
+        orientation:'row',\
+        alignment:['fill','top'],\
+        alignChildren: ['left','center'],\
+        spacing: 10,\
+        margins: 0,\
+        label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
+        img: EditText { text: '" + inText + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
+        browse: Button { text: 'Browse', preferredSize:[" + sizes[2] + ",25]}\
+    }";
+}
+
+function addAudioGroup(gName, label, tab, inText) {
+    var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90];
+    inText = inText || '';
+    return "group { \
+        name: '" + gName + "',\
+        orientation:'row',\
+        alignment:['fill','top'],\
+        alignChildren: ['left','center'],\
+        spacing: 10,\
+        margins: 0,\
+        label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
+        audio: EditText { text: '" + inText + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
+        browse: Button { text: 'Browse', preferredSize:[" + sizes[2] + ",25]}\
+    }";
+}
+
+function addColorGroup(gName, label, tab, inText) {
+    var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90];
+    inText = inText || '';
+    return "group { \
+        name: '" + gName + "',\
+        orientation:'row',\
+        alignment:['fill','top'],\
+        alignChildren: ['left','center'],\
+        spacing: 10,\
+        margins: 0,\
+        label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
+        txt: EditText { text: '" + inText + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
+        color: 0,\
+        picker: Button { text: 'picker', preferredSize:[" + sizes[2] + ",25]}\
+    }";
+}
+
+function addTab(tName, label) {
+    return "tab {\
+        text: '" + label + "', name: '" + tName + "', orientation: 'column', spacing: 10, margins: 10, \
+        alignChildren: ['left','top'],\
+    }";
+}
+
+function addTabbedPannel(tName) {
+    return "tabbedpanel {\
+        name: '" + tName + "', alignChildren: 'fill', preferredSize: [455, -1], margins: 0, \
+        alignment: ['fill','top'],\
+    }";
+}
+
+// START UI CREATION
+// MDS
+// ===
+var mds = new Window("palette"); 
+    mds.text = "MDS RENDERER v1.5"; 
+    mds.preferredSize.width = 510; 
+    mds.orientation = "column"; 
+    mds.alignChildren = ["center","top"]; 
+    mds.spacing = 10; 
+    mds.margins = 16;
+
+// HEADER
+// ======
+var header = mds.add("group", undefined, {name: "header"}); 
+    header.orientation = "column"; 
+    header.alignChildren = ["left","center"]; 
+    header.spacing = 10; 
+    header.margins = 0; 
+    header.alignment = ["fill","top"]; 
+
+var title = header.add("statictext", undefined, undefined, {name: "title"}); 
+    title.text = "MDS Renderer"; 
+    title.alignment = ["fill","center"]; 
+
+
+var compTitle = header.add(addTextGroup('compTitle', 'Comp Title:'));
+//var fileName = header.add(addTextGroup('fileName', 'Filename (Leave blank to use Comp Title):'));
+var outFolder = header.add(addBrowseGroup('outFolder', 'Output File'));
+
+// TEMPLATE PANEL (THIS IS WHERE ALL THE GENERATED FIELDS WILL GO)
+// ========
+var template = mds.add("tabbedpanel", undefined, undefined, {name: "template"}); 
+    template.alignChildren = "fill"; 
+    template.preferredSize.width = 479; 
+    template.margins = 0; 
+    template.alignment = ["fill","top"]; 
+
+// OPTIONS
+// =======
+var options = mds.add("group", undefined, {name: "options"}); 
+    options.orientation = "row"; 
+    options.alignChildren = ["left","center"]; 
+    options.spacing = 10; 
+    options.margins = 0; 
+
+var compBtn = options.add("button", undefined, undefined, {name: "compBtn"}); 
+    compBtn.text = "Create Comp"; 
+
+var queueBtn = options.add("button", undefined, undefined, {name: "queueBtn"}); 
+    queueBtn.text = "Queue In AME"; 
+
+var renderBtn = options.add("button", undefined, undefined, {name: "renderBtn"}); 
+    //renderBtn.enabled = false; 
+    renderBtn.text = "Render In AME"; 
+
+// DIVIDER
+// ===
+var divider1 = mds.add("panel", undefined, undefined, {name: "divider1"}); 
+    divider1.alignment = "fill"; 
+
+// STATUS
+// ====
+var stts = mds.add("group", undefined, {name: "stts"}); 
+    stts.orientation = "row"; 
+    stts.alignChildren = ["right","center"]; 
+    stts.spacing = 10; 
+    stts.margins = 0; 
+    stts.alignment = ["fill","top"]; 
+
+var status = stts.add("statictext", undefined, undefined, {name: "status"}); 
+    status.text = "Status Text"; 
+    status.preferredSize.width = 139; 
+
+
+var pbar = stts.add("progressbar", undefined, 0, 100, {name: "pbar"}); 
+    pbar.preferredSize.width = 330;
+
+// POPULATE THE TEMPLATE TAB WITH EDITABLE LAYERS
+// ====
+var allEditableLayers = {};
+var templateArray = populateTemplates(template);
+for(var i = 0; i<templateArray.length; i++){
+    poplateTabs(templateArray[i], template);
+}
+outFolder.browse.onClick = function(){browserBtn(this)};
+
+// SHOW THE MENU
+// ====
+mds.show();
+
+
+// GLOBAL VARIABLES
+// ====
+var externalImageList = [];
+var idArray = [];
+//alert(hexToRgb('#a35d52').r + ', ' + hexToRgb('#a35d52').g + ', ' + hexToRgb('#a35d52').b);
+//alert(colorize(hexToRgb('#a35d52').r + ', ' + hexToRgb('#a35d52').g + ', ' + hexToRgb('#a35d52').b));
+
+
+
+
+// OPTION BUTTONS FUNCTIONALITY
+// ====
+compBtn.onClick = function () {
+        compBtn.active = true;
+        compBtn.active = false;
+    if(pbar.value === 100) mds.close();
+    mdsRender(template.selection, 'compOnly');
+}
+
+queueBtn.onClick = function () {
+        queueBtn.active = true;
+        queueBtn.active = false;
+    if(pbar.value === 100){
+        compBtn.text = 'Create Comp';
+        queueBtn.text = 'Queue In AME';
+        renderBtn.text = 'Render In AME';
+        pbar.value = 0;
+        renderBtn.enabled = true;
+    } else {
+        mdsRender(template.selection, 'queueOnly');
+    }
+}
+
+renderBtn.onClick = function () {
+        renderBtn.active = true;
+        renderBtn.active = false;
+    if(pbar.value === 100){
+        compBtn.text = 'Create Comp';
+        queueBtn.text = 'Queue In AME';
+        renderBtn.text = 'Render In AME';
+        pbar.value = 0;
+    } else {
+        mdsRender(template.selection, 'renderAlso');
+    }
+}
+
+
+// POPULATE TEMPLATES MAIN FUNCTION (THIS CREATES THE TABS BUT DOES NOT FILL THEM)
+// ====
+function populateTemplates(mainTab){
+    var templateFolder = libItemsReg(/templates/gi, 'Folder');
+    var templateFolders = [];
+    idArray = [];
+    
+    //alert(templateFolder.length);
+    for(var i = 0; i < templateFolder.length; i++){
+        //alert(templateFolder[i].name);
+         checkFolder(templateFolder[i]);
+    }
+    
+    var folderArray = []
+    
+    for(var u = 0; u < idArray.length; u++){
+        var folderObj = libItemsReg(idArray[u].id, 'Folder', 1);
+        
+        if(findLayers(/^!T|^!I|^!C|^!G|^!A/g, libItemsInFolder(idArray[u].name, folderObj, 'Composition')[0]).length > 0){
+            templateFolders.push(folderObj);
+        }
+    }
+    
+    for(var i = 0; i < templateFolders.length; i++){
+        if(templateFolders[i].parentFolder.name === 'User Comps') break;
+        mainTab['t' + templateFolders[i].name + '_' + templateFolders[i].id] = mainTab.add(addTab(('t' + templateFolders[i].name) + '_' + templateFolders[i].id, templateFolders[i].name)); 
+        folderArray.push({
+            name: templateFolders[i].name,
+            id: templateFolders[i].id
+        });
+    }
+    // Return a list of tab folders to use to create the layer fields
+    return folderArray;
+}
+
+
+function checkFolder(folder){
+    for(var i = 1; i <= folder.items.length; i++){
+        if(folder.items[i].typeName == 'Composition' && folder.items[i].name === folder.name){
+            idArray.push({
+                 name: folder.name,
+                 id: folder.id
+             });
+        }
+        
+        if(folder.items[i].typeName == 'Folder'){
+            checkFolder(folder.items[i]);
+        }
+         
+     }
+}
+
+// POPULATE TEMPLATES MAIN FUNCTION (THIS CREATES THE TABS BUT DOES NOT FILL THEM)
+// ====
+function populateTemplatesOLD(mainTab){
+    var templateFolders = libItemsReg(/[0-9]+\_T[0-9]+/g, 'Folder');
+    var folderArray = []
+    for(var i = 0; i < templateFolders.length; i++){
+        if(templateFolders[i].parentFolder.name === 'User Comps') break;
+        mainTab['t' + templateFolders[i].name + '_' + templateFolders[i].id] = mainTab.add(addTab(('t' + templateFolders[i].name) + '_' + templateFolders[i].id, templateFolders[i].name)); 
+        folderArray.push({
+            name: templateFolders[i].name,
+            id: templateFolders[i].id
+        });
+    }
+    // Return a list of tab folders to use to create the layer fields
+    return folderArray;
+}
+
+
+// POPULATE TABS MAIN FUNCTION (THIS INITIATES FIELD CREATION FOR THE EDITABLE LAYERS)
+// ====
+function poplateTabs(templateName, mainTab){
+    var compFolder = libItemsReg(templateName.id, 'Folder', 1);
+    var comp = libItemsInFolder(regSafe(templateName.name), compFolder, 'Composition')[0];
+    
+    //Get all layers that are tagged as editable
+    var editableLayers = findLayers(/^!T|^!I|^!C|^!G|^!A/g, comp);
+    
+    //Get all compositions from any subfolder containing the word 'Precomps'
+    var preComps = getPreComps(compFolder);
+    
+    //Get all layers in preComps that are tagged as editable and push them to the main array
+    for(var i = 0; i < preComps.length; i++){
+        var editables = findLayers(/^!T|^!I|^!C|^!G|^!A/g, preComps[i]);
+        for(var u = 0; u < editables.length; u++){
+            editableLayers.push(editables[u]);
+        }
+    }
+    
+    allEditableLayers['t' + templateName.name + '_' + templateName.id] = editableLayers;
+    
+    //Set up a new tab for the template
+    mainTab['t' + templateName.name + '_' + templateName.id]['content_' + templateName.name] = mainTab['t' + templateName.name + '_' + templateName.id].add(addTabbedPannel('content_' + templateName.name));
+    
+    //Create fields for each of the editable layers
+    var tempTab = mainTab['t' + templateName.name + '_' + templateName.id]['content_' + templateName.name];
+    loadTabs(editableLayers, tempTab);
+}
+
+
+
+// GET PRECOMPS : THIS RETURNS ALL THE COMPS IN THE PRECOMP SUBFOLDER
+// ====
+function getPreComps(folder){
+    var preCompFolder = libItemsInFolder(/Precomps/g, folder, 'Folder')[0];
+    //alert(preCompFolder);
+    if(preCompFolder == undefined) return [];
+    return libItemsInFolder(/[\s\S]+/g, preCompFolder, 'Composition');
+}
+
+
+
+// LOAD TABS : THIS CREATES THE FIELDS FOR THE EDITABLE LAYERS
+// ====
+function loadTabs(arrayToLoad, template){
+    for(var i = 0; i < arrayToLoad.length; i++){
+        var terminalReg = /!T /g;
+        var tabDefault = 'Text Input';
+        var funToUse = addTextGroup;
+        var varType = arrayToLoad[i].name.match(/^!T|^!I|^!C|^!G|^!A/g)[0];
+        var inText = '';
+
+        //Check what type of layer it is
+        switch(varType){
+            case '!T':
+                tabDefault = 'Text Input';
+                terminalReg = /!T /g;
+                funToUse = addTextGroup;
+                inText = arrayToLoad[i].text.sourceText.value.text;
+                break;
+            case '!I':
+                tabDefault = 'Image';
+                terminalReg = /!I /g;
+                funToUse = addImageGroup;
+                break;
+            case '!C':
+                tabDefault = 'Colors';
+                terminalReg = /!C /g;
+                funToUse = addColorGroup;
+                break;
+            case '!G':
+                tabDefault = 'Group';
+                terminalReg = /!G /g;
+                break;
+            case '!A':
+                tabDefault = 'Audio';
+                terminalReg = /!A /g;
+                funToUse = addAudioGroup;
+                break;
+            default:
+                tabDefault = 'Text Input';
+                break;
+        }
+        
+        var groupData = arrayToLoad[i].name.split(terminalReg)[1].replace(/(^\s*)|(\s*$)/g,'');
+        var tabName = /\[.+\]/g.test(groupData);
+        
+        //Check if tab is specified : if not, use type default tab
+        if(tabName){
+            tabName = groupData.match(/\[.+\]/g)[0].replace(/[\[\]]/g, '');
+            groupData = groupData.replace(/\[.+\](\s)+/g, '');
+        } else {
+            tabName = tabDefault;
+        }
+        var tabID = camelize(tabName);
+
+        //Check if tab exists and create if not
+        if(template[tabID] === undefined) template[tabID] = template.add(addTab(tabID, tabName));
+        
+        if(varType === '!C'){ //If a color layer, get color effects
+            for(var u = 1; u <= arrayToLoad[i]('Effects').numProperties; u++){
+                var gdata = arrayToLoad[i]('Effects').property(u).name;
+                template[tabID][camelize(gdata)] = template[tabID].add(funToUse((camelize(gdata)), gdata, 'tab', decToRgb(arrayToLoad[i].effect(gdata)("Color").value)).replace());
+                template[tabID][camelize(gdata)].picker.onClick = function(){colorBtn(this)};
+            }
+            continue;
+        }
+        if(varType === '!G') continue; //If a group layer, do not generate fields
+        template[tabID][camelize(groupData)] = template[tabID].add(funToUse((camelize(groupData)), groupData, 'tab', regSafe(inText)).replace());
+        
+        if(varType === '!I' || varType === '!A'){ //If an image layer, set up the browse button
+            template[tabID][camelize(groupData)].browse.onClick = function(){browserBtn(this)};
+        }
+        
+    }
+}
+
+
+
+// CAMELIZE : MAKE CAMEL CASE (FOR ID ASSIGNMENT)
+// ====
+function camelize(str) {
+    if(/^text$/gi.test(str)) str = str + 'ID'
+    return str.toLowerCase().replace(/[^a-zA-Z\d\s:]/g, ' ').replace(/(?:^\w|\b\w|\s+)/g, function(match, index){
+                return index === 0 ? match.toLowerCase() : match.toUpperCase();
+            }).replace(/\s/g, '');
+}
+
+function revealFile(filePath) {
+	if ( filePath instanceof File ) {
+		filePath = filePath.fsName;
+	}
+
+	var command = "open -R";
+	if ($.os.indexOf("Win") != -1) {
+		command = "Explorer /select,";
+	}
+	arg = "\"" + filePath + "\"";
+	return system.callSystem(command + " " + arg);
+}
+
+
+// COLOR BUTTON SETUP
+// ====
+function colorBtn(inputFld){
+    inputFld.parent.txt.text = decToRgb(colorpicker(colorize(inputFld.parent.txt.text)));
+}
+
+
+function colorpicker(result_color) {
+    var hexToRGB = function(hex) {
+        var r = hex >> 16;var g = hex >> 8 & 0xFF;var b = hex & 0xFF;
+        return [r, g, b];
+    };
+ 
+    var color_decimal = $.colorPicker();
+    $.writeln(color_decimal);
+    var color_hexadecimal = color_decimal.toString(16);
+    $.writeln(color_hexadecimal);
+    var color_rgb = hexToRGB(parseInt(color_hexadecimal, 16));
+    $.writeln(color_rgb);
+    var result_color = [color_rgb[0] / 255, color_rgb[1] / 255, color_rgb[2] / 255];
+    $.writeln(result_color);   
+    return result_color;
+    return color_rgb;
+    
+    }
+
+
+// BROWSER BUTTON SETUP - ALL FILES EXCEPT THE OUTPUT FOLDER
+// ====
+function browserBtn(inputFld){
+    var file = new File('NewFile.mp4');
+    var slash = ($.os.indexOf("Windows") !== -1) ? '\\' : '\/';
+    var name = (compTitle.txt.text !== '') ? compTitle.txt.text : 'videoID'
+    file.changePath(app.project.file.parent.fsName + slash + name);
+    
+    status.text = inputFld.parent.name;
+    
+    var textLocation = 'img';
+    if(inputFld.parent.txt !== undefined){
+        textLocation = 'txt'
+    } else if(inputFld.parent.audio !== undefined){
+        textLocation = 'audio'
+    };
+    //alert(app.project.file);
+    var defaultFolder = inputFld.parent[textLocation].text;
+    if ($.os.indexOf("Windows") !== -1)	// On Windows, escape backslashes first
+        defaultFolder = defaultFolder.replace("\\", "\\\\");
+    
+    //var newTest = revealFile('/Users/albusdumbledore/Spectrio/MDS');
+    
+    var fileF;
+    if(inputFld.parent.name === "outFolder"){
+        /*var folder = new Folder(file.parent);
+        //fileF = folder.execute();*/
+        fileF = file.saveDlg();
+    } else {
+        fileF = File.openDialog(inputFld.parent.name, false)
+    };
+    
+    if (fileF !== null)
+        inputFld.parent[textLocation].text = fileF.fsName;
+}
+
+
+
+// REGSAFE - escapes all special characters
+function regSafe(newString){
+    return String(newString).replace(/[^\w \t\f]|[\n\r]/g, function(match){
+        return '\\' + match;
+    });
+}
+
+// FIND LIBRARY ITEMS BY NAME OR REGEX
+// iType = the desired file type
+// maxResult = the maximum results in the array. If 1, the object is returned instead of an array
+// ====
+function libItemsReg(reg, iType, maxResult){
+    var searcher = 'name';
+    
+    if(typeof reg === 'number') {
+        searcher = 'id';
+    }
+    //Ensure that reg is a regular expression
+    if(typeof reg === 'string' || typeof reg === 'number'){
+        reg = new RegExp(reg, 'g');
+    }
+    var resultsArr = [];
+    
+    for(var i = 1; i <= app.project.items.length; i++){
+        if (reg.test(app.project.items[i][searcher])){
+            if(iType === undefined || iType === app.project.items[i].typeName){
+                if(maxResult === 1) return app.project.items[i];
+                resultsArr.push(app.project.items[i]);
+                if(resultsArr.length === maxResult) break;
+            };
+        };
+    }
+    return resultsArr;
+}
+
+
+// SEARCH IN FOLDER FOR ITEM
+// ====
+function libItemsInFolder(reg, folderObj, iType){
+    var resultsArr = [];
+    
+    //Ensure that reg is a regular expression
+    if(typeof reg === 'string' || typeof reg === 'number'){
+        reg = new RegExp(reg, 'g');
+    }
+    
+    for(var i = 1; i <= folderObj.items.length; i++){
+        
+        if (reg.test(folderObj.items[i].name)){
+            if(iType === undefined || iType === folderObj.items[i].typeName){
+                resultsArr.push(folderObj.items[i]);
+            };
+        };
+    }
+    return resultsArr;
+}
+
+
+// FIND LAYER IN COMP
+// ====
+function findLayers(reg, compObj, maxResult){
+    //Ensure that reg is a regular expression
+    if(typeof reg === 'string' || typeof reg === 'number'){
+        reg = new RegExp(reg, 'g');
+    }
+    var layerArr = [];
+    for(var i = 1; i <= compObj.layers.length; i++){
+        if(reg.test(compObj.layers[i].name)){
+            if(maxResult === 1) return compObj.layers[i];
+            layerArr.push(compObj.layers[i]);
+            if(layerArr.length === maxResult) break;
+        }
+    }
+    return layerArr;
+}
+
+
+function addLinkedPrecomps(folderName, newFolder, composition){
+    
+    status.text = 'looking for original precomp folder';
+    var ORprecomps = libItemsInFolder(/Precomps/g, folderName, 'Folder')[0];
+    if(ORprecomps == undefined) return;
+    status.text = 'found original precomp folder';
+    var precompFolder = newFolder.items.addFolder(ORprecomps.name);
+    status.text = 'made new precomp folder';
+    
+    for(var i = 1; i <= ORprecomps.items.length; i++){
+        status.text = 'looking for compositions ' + i;
+        if(ORprecomps.items[i].typeName === "Composition"){
+            var newComp = ORprecomps.items[i].duplicate();
+            newComp.name = ORprecomps.items[i].name;
+            newComp.parentFolder = precompFolder;
+            findLayers(regSafe('>> ' + newComp.name + ' <<'), composition, 1).replaceSource(newComp, false);
+        }
+    }
+    
+    return;
+    
+    subs = subs || false;
+    var originalFolder = libItemsReg(folderName.id, 'Folder', 1);
+    
+    for(var i = 1; i <= originalFolder.items.length; i++){
+        
+        if(originalFolder.items[i].typeName === "Folder" || originalFolder.items[i].typeName === "Dossier") {
+            
+            var nextFolder = newFolder.items.addFolder(originalFolder.items[i].name);
+            var orFolderID = originalFolder.items[i].id;
+            duplicateFolder(orFolderID, nextFolder, true);
+        } else if(originalFolder.items[i].typeName === "Composition"){
+            
+            if(subs === true) {
+                var newComp = originalFolder.items[i].duplicate();
+                newComp.name = originalFolder.items[i].name;
+                newComp.parentFolder = newFolder;
+            }
+            
+        } else {
+            status.text = 'Dont duplicate Footage';
+        }
+    }
+}
+
+
+
+// HANDLE COLORS
+// -------------------------------------------- //
+// ====
+// ====
+// ====
+// ====
+//Convert hex to rgb
+function hexToRgb(hex) {
+    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+        return r + r + g + g + b + b;
+    });
+
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+// ====
+// ====
+// ====
+// ====
+//convert rbg to decimals
+function colorize(rgbCode) {
+    var colorCodes = rgbCode.match(/[0-9]+/g),
+        alpha = colorCodes.length,
+        vals = [((colorCodes[0] == undefined) ? 255 : Number(trim(colorCodes[0]))), ((colorCodes[1] == undefined) ? 255 : Number(trim(colorCodes[1]))), ((colorCodes[2] == undefined) ? 255 : Number(trim(colorCodes[2]))), ((colorCodes[3] == undefined) ? 255 : Number(trim(colorCodes[3])))];
+    
+    return [vals[0]/255,vals[1]/255,vals[2]/255,vals[3]/255];
+}
+// ====
+// ====
+// ====
+//convert rbg to decimals
+function decToRgb(decimal) {
+    var alpha = (decimal.length === 4) ? true : false;
+    if(alpha && decimal[3] === 1) alpha = false;
+    return Math.round(decimal[0] * 255) + '\,' + Math.round(decimal[1] * 255) + '\,' + Math.round(decimal[2] * 255) + (alpha ? ('\,' + Math.round(decimal[3] * 255)) : '');
+}
+// ====
+// -------------------------------------------- //
+
+
+// TRIM (ExtendScript doesn't have a built in trim function)
+// ====
+function trim(str){
+    return str.replace(/(^\s*)|(\s*$)/g,'');
+}
+
+// PREREQUISITE CHECKS
+// ====
+function prerequisites(templateName, ORcomp, ORcompfolder) {
+    
+    status.text = 'Checking Prerequisites';
+    externalImageList = [];
+    status.text = 'Checking for images';
+    
+    var editableLayers = allEditableLayers[templateName.name];
+    
+    for(var z=0; z<editableLayers.length; z++){
+        var layer = editableLayers[z];
+        if(/^!T/g.test(layer.name) && layer.position.numKeys > 0) {
+            alert('Layer Setup Error:\
+The text layer "' + layer.name + '" contains position keyframes. These unfortunately mess with the script\'s ability to resize text. Please remove the keyframes. Maybe try adding them to a parent null layer instead!');
+            return -1;
+        };
+        if(/^!I/g.test(layer.name) && layer.scale.numKeys > 0) {
+            alert('Layer Setup Warning:\
+The image layer "' + layer.name + '" contains scale keyframes. These will be overwritten when the script is resizing the image. To avoid any problems that might result, try adding them to a parent null layer instead!');
+        };
+    }
+    
+    var templateChildren = template[templateName.name]['content_' + templateName.text].children;
+    for(var i = 0; i< templateChildren.length; i++){
+        var childChildren = templateChildren[i].children;
+        
+        for(var u = 0; u< childChildren.length; u++){
+            if(childChildren[u].img !== undefined){
+                //if(childChildren[u].img.text !== '') alert(childChildren[u].img.text);
+                if(imageTest(childChildren[u].img, 'image') === -1) return -1;
+            } else if(childChildren[u].audio !== undefined){
+                if(imageTest(childChildren[u].audio, 'audio file') === -1) return -1;
+            } else if(childChildren[u].color !== undefined){
+                if(colorCheck(childChildren[u].txt.text) !== -1) {
+                    childChildren[u].txt.text = colorCheck(childChildren[u].txt.text);
+                } else {
+                    return -1
+                };
+            }
+        };
+    };
+    
+    
+    return;
+    
+    function colorCheck(colour){
+        if(colour === '' || /^#{0,1}[0-9a-fA-F]{3,6} *$|[0-9]+, *[0-9]+, *[0-9]+ */g.test(colour)){
+            if(/^#{0,1}[0-9a-fA-F]{3,6} *$/.test(colour)){
+                var newColor = hexToRgb(/#/.test(colour) ? colour : ('#' + colour));
+                return newColor.r + ', ' + newColor.g + ', ' + newColor.b
+            } else {
+                return colour;
+            }
+        } else {
+            alert('\'' + colour + '\' not a valid color');
+            return -1;
+        }
+    }
+        
+    function imageTest(imgT, fileT){
+        status.text = 'Checking: ' + imgT.text;
+        if(/[\\\/]/g.test(imgT.text)){
+            status.text = 'Did it get here?';
+            externalImageList.push(imgT);
+        } else if(imgT.text !== '' && libItemsReg(regSafe(imgT.text), 'Footage').length === 0){
+            alert('Could not find ' + fileT + ' \'' + imgT.text + '\'');
+            pbar.value = 0;
+            return -1;
+        }
+        status.text = 'is this the problem?';
+    }
+}
+
+
+
+
+// IMPORT EXTERNAL IMAGES
+// ====
+function importExternal(cfolder){
+    for(var i = 0; i < externalImageList.length; i++){
+        var path = externalImageList[i].text;
+        status.text = 'Loading External File: ' + path.match(/[^\/\\]+\.([A-z]+)/g)[0];
+        
+        if(tryToLoad(path) !== -1){
+            status.text = 'loaded external ' + i;
+        } else {
+            return -1
+        };
+        
+        function tryToLoad(loadPath){
+            var io = new ImportOptions(File(loadPath));
+            if (io.canImportAs(ImportAsType.FOOTAGE)){
+                //Change the field to just show the filename for later use
+                externalImageList[i].text = path.match(/[^\/\\]+\.([A-z]+)/g)[0];
+                try{
+                    io.importAs = ImportAsType.FOOTAGE;
+                } catch(e){
+                    alert('Couldn\'t import')
+                }
+                
+                var newObject;
+
+                try{
+                    newObject = app.project.importFile(io);
+                    
+                    newObject.name = path.match(/[^\/\\]+\.([A-z]+)/g)[0];
+                    newObject.parentFolder = cfolder;
+                    //alert('imported!!');
+                } catch(e){
+                    status.text = 'Load error. Try as .bmp if image';
+                    if((/\.(gif|jpg|jpeg|tiff|png)$/i).test(loadPath)){
+                        //If we didn't already try it, try duplicating and importing as .bmp
+                        var read_file = new File(loadPath);
+                        try{
+                            read_file.copy(read_file.fsName.replace(/\.(gif|jpg|jpeg|tiff|png)$/i, '.bmp'));
+                            if(tryToLoad(read_file.fsName.replace(/\.(gif|jpg|jpeg|tiff|png)$/i, '.bmp')) !== -1) status.text = 'successfully loadeded as .bmp';
+                        } catch(e) {
+                            alert(e);
+                        }
+                        
+                    } else {
+                        alert('Could not import ' + path.match(/[^\/\\]+\.([A-z]+)/g)[0]);
+                        alert(e);
+                        pbar.value = 0;
+                        return -1;
+                    }
+                    
+                }
+                return 1;
+            } else {
+                alert('cannot import ' + path.match(/[^\/\\]+\.([A-z]+)/g)[0]);
+                pbar.value = 0;
+                return -1;
+            }
+        }
+    }
+}
+
+
+// SET TEXT FUNCTION (THIS FILLS THE TEXT FIELDS WITH NEW TEXT AND ENSURES THAT THEY FIT IN THE ALLOTED SPACE)
+// ====
+function setText(textLayer, comp, newText){
+    status.text = 'setting text: ' + newText;
+    var layerProp = textLayer.property('Source Text');
+    var layerTextDoc = layerProp.value;
+    var boxSize = layerTextDoc.boxText ? {width: layerTextDoc.boxTextSize[0], height: layerTextDoc.boxTextSize[1]} : undefined;
+    var rectSize = layerTextDoc.boxText ? textLayer.sourceRectAtTime(0, false) : undefined;
+    var alignment = ['c','c'];
+    var scale = textLayer.transform.scale.value[0] / 100;
+    var fontRatio = (layerTextDoc.fontSize / layerTextDoc.leading);
+    
+    if(newText === ''){
+        status.text = 'Blank - skipping resize';
+        layerTextDoc.text = newText;
+        layerProp.setValue(layerTextDoc);
+        return;
+    }
+    if(!layerTextDoc.boxText) {
+        status.text = 'No use of point text - skipping resize';
+        layerTextDoc.text = newText;
+        layerProp.setValue(layerTextDoc);
+        return;
+    }
+    
+    
+    if(layerTextDoc.boxText && boxSize.height < (layerTextDoc.leading * 2)){
+        
+        //==== // ======= // ====//
+        //====               ====//
+        //==== ONE LINE TEXT ====//
+        //====               ====//
+        //==== // ======= // ====//
+        
+        //Move anchor point and figure out where it is
+        alignment = anchorPoint(textLayer, 'rect');
+        
+        //Set the text to the new text and make the text box so large that it's bound to fit.
+        layerTextDoc.text = newText;
+        layerTextDoc.boxTextSize = [(boxSize.width * 10), boxSize.height];
+        layerProp.setValue(layerTextDoc);
+        
+        //Move the anchor point to the center or the right since we have a new TextBox size
+        if(alignment[1] === 'c'){
+            textLayer.transform.anchorPoint.setValue([(textLayer.transform.anchorPoint.value[0] + (boxSize.width * 4.5)), textLayer.transform.anchorPoint.value[1]]);
+        } else if(alignment[1] === 'r') {
+            textLayer.transform.anchorPoint.setValue([(textLayer.transform.anchorPoint.value[0] + (boxSize.width * 9)), textLayer.transform.anchorPoint.value[1]]);  
+        }
+        
+        //Add the scale expression then resize the box to fit the new text
+        textLayer.transform.scale.expression = textExpression(layerTextDoc.fontSize, (boxSize.width / comp.width));
+        layerTextDoc.boxTextSize = [Math.ceil((boxSize.width / (textLayer.transform.scale.value[0] / 100)) + (layerTextDoc.fontSize / 10)), boxSize.height];
+        layerProp.setValue(layerTextDoc);
+        
+        //Move the anchor point to the center or the right since we have a new TextBox size
+        if(alignment[1] === 'c') textLayer.transform.anchorPoint.setValue([(textLayer.transform.anchorPoint.value[0] - ((boxSize.width * 5) - (layerTextDoc.boxTextSize[0] / 2))), textLayer.transform.anchorPoint.value[1]]);
+        if(alignment[1] === 'r') textLayer.transform.anchorPoint.setValue([(textLayer.transform.anchorPoint.value[0] - ((boxSize.width * 10) - (layerTextDoc.boxTextSize[0]))), textLayer.transform.anchorPoint.value[1]]);
+        
+    } else {
+        status.text = 'Paragraph text takes longer';
+        
+        //==== // ======== // ====//
+        //====                ====//
+        //==== MULTILINE TEXT ====//
+        //====                ====//
+        //==== // ======== // ====//
+        
+        //Move anchor point and figure out where it is
+        alignment = anchorPoint(textLayer, 'box');
+        
+        //Determine how many lines of text should fit
+        var maxLines = Math.floor(layerTextDoc.boxTextSize[1] / layerTextDoc.leading);
+        
+        //Set the text to the new text and make the text box so large that it's bound to fit.
+        layerTextDoc.text = newText;
+        layerTextDoc.boxTextSize = [boxSize.width, (boxSize.height * 10)];
+        layerProp.setValue(layerTextDoc);
+        
+        if(alignment[0] === 'c' && textLayer.sourceRectAtTime(0, false).height < rectSize.height){
+            
+            //Center the text if it's not the full height and the anchor is the center
+            var layerPosition = textLayer.position.value;
+            var adjust = (rectSize.height - textLayer.sourceRectAtTime(0, false).height) / 2;
+            textLayer.position.setValue([ layerPosition[0], (layerPosition[1] + adjust), layerPosition[2] ]);
+            
+        } else if((layerTextDoc.baselineLocs.length / 4) > maxLines) {
+            
+            //Resize if too big for the textbox
+            while(textLayer.sourceRectAtTime(0, false).height > boxSize.height){
+                diminish();
+            }
+        }
+        
+        //Resize the textbox to it's original size
+        layerTextDoc.boxTextSize = [boxSize.width, boxSize.height];
+        layerProp.setValue(layerTextDoc);
+    }
+
+    //function to reduce the textsize by one point until it fits
+    function diminish() {
+        layerTextDoc.fontSize -= 1;
+        layerTextDoc.leading = layerTextDoc.fontSize / fontRatio;
+        layerProp.setValue(layerTextDoc);
+        //layerTextDoc = textLayer.sourceText.value;
+    }
+}
+
+
+
+// EXPRESSION TO USE ON TEXT LAYERS
+// ====
+function textExpression(minTextSize, maxWidth){
+    if(minTextSize === 'skip' || maxWidth === 'skip') return "";
+    return "\/\/ This lets us get the width of the textbox containing your content.\
+layerWidth = thisLayer.sourceRectAtTime(time).width;\
+layerHeight = thisLayer.sourceRectAtTime(time).height;\
+\
+\/\/ This lets us get the width of the current composition.\
+compWidth = thisComp.width;\
+\
+\/\/ we want to set the width to a little over 100%;\
+maximumWidth = compWidth * " + maxWidth + ";\
+\
+\/\/ but we don't want it to be too big if it's a short line\
+maximumHeight = " + minTextSize + ";\
+\/\/ Get the ratio\
+forWidth = maximumWidth / layerWidth * 100;\
+forHeight = maximumHeight / layerHeight * 100;\
+percentNeeded = (forWidth > forHeight) ? forHeight : forWidth;\
+percentNeeded = (percentNeeded < 100) ? percentNeeded : 100;\
+[percentNeeded, percentNeeded]"
+}
+
+
+
+// ANCHOR POINT FUNCTION (FOR USE WITH TEXT, THIS MOVES THE ANCHOR POINT TO A REASONABLE PLACE)
+// ====
+function anchorPoint(layer, bound){
+
+    var comp = layer.containingComp;
+    var curTime = comp.time;
+    var layerAnchor = layer.anchorPoint.value;
+    var x;
+    var y;
+    var cor = ['c','c'];
+    var rect = layer.sourceRectAtTime(curTime, false);
+
+    switch(layer.sourceText.value.justification){
+        case ParagraphJustification.RIGHT_JUSTIFY:
+            cor[1] = 'r';
+            break;
+        case ParagraphJustification.LEFT_JUSTIFY:
+            cor[1] = 'l';
+            break;
+        case ParagraphJustification.CENTER_JUSTIFY:
+        case ParagraphJustification.FULL_JUSTIFY_LASTLINE_LEFT:
+        case ParagraphJustification.FULL_JUSTIFY_LASTLINE_RIGHT:
+        case ParagraphJustification.FULL_JUSTIFY_LASTLINE_CENTER:
+        case ParagraphJustification.FULL_JUSTIFY_LASTLINE_FULL:
+            cor[1] = 'c';
+            break;
+        default:
+            cor[1] = 'c';
+            break;
+    }
+    
+    if(bound === 'box'){
+
+        if(layer.anchorPoint.value[1] <= (layer.sourceText.value.boxTextPos[1] + layer.sourceText.value.boxTextSize[1] / 4)){
+            cor[0] = 't'
+        } else if(layer.anchorPoint.value[1] >= (layer.sourceText.value.boxTextPos[1] + (3 * layer.sourceText.value.boxTextSize[1]) / 4)){
+            cor[0] = 'b'
+        }
+        
+        switch(cor[1]){
+            case 'l':
+                x = layer.sourceText.value.boxTextPos[0];
+                break;
+            case 'r':
+                x = layer.sourceText.value.boxTextSize[0];
+                x += layer.sourceText.value.boxTextPos[0];
+                break;
+            default:
+                x = layer.sourceText.value.boxTextSize[0]/2;
+                x += layer.sourceText.value.boxTextPos[0];
+                break;
+        }
+        
+        switch(cor[0]){
+            case 't':
+                y = layer.sourceText.value.boxTextPos[1];
+                break;
+            case 'b':
+                y = layer.sourceText.value.boxTextSize[1];
+                y += layer.sourceText.value.boxTextPos[1];
+                break;
+            default:
+                y = layer.sourceText.value.boxTextSize[1]/2;
+                y += layer.sourceText.value.boxTextPos[1];
+                break;
+        }
+
+    } else {
+
+        if(layer.anchorPoint.value[1] <= (rect.top + rect.height / 4)){
+            cor[0] = 't'
+        } else if(layer.anchorPoint.value[1] >= (rect.top + (3 * rect.height) / 4)){
+            cor[0] = 'b'
+        }
+        
+        switch(cor[1]){
+            case 'l':
+                x = layer.sourceRectAtTime(curTime, false).left;
+                break;
+            case 'r':
+                x = layer.sourceRectAtTime(curTime, false).width;
+                x += layer.sourceRectAtTime(curTime, false).left;
+                break;
+            default:
+                x = layer.sourceRectAtTime(curTime, false).width/2;
+                x += layer.sourceRectAtTime(curTime, false).left;
+                break;
+        }
+        
+        switch(cor[0]){
+            case 't':
+                y = layer.sourceRectAtTime(curTime, false).top;
+                break;
+            case 'b':
+                y = layer.sourceRectAtTime(curTime, false).height;
+                y += layer.sourceRectAtTime(curTime, false).top;
+                break;
+            default:
+                y = layer.sourceRectAtTime(curTime, false).height/2;
+                y += layer.sourceRectAtTime(curTime, false).top;
+                break;
+        }
+
+    }
+
+    var xAdd = (x-layerAnchor[0]) * (layer.scale.value[0]/100);
+    var yAdd = (y-layerAnchor[1]) * (layer.scale.value[1]/100);
+
+    layer.anchorPoint.setValue([ x, y ]);
+    
+    var layerPosition = layer.position.value ;
+
+    layer.position.setValue([ layerPosition[0] + xAdd, layerPosition[1] + yAdd, layerPosition[2] ]);
+    
+    return cor;
+
+}
+
+
+
+function sendtoRender(composition, renderOp){
+    if(renderOp === 'compOnly') return; //skip all this
+    
+    var slash = '\/';
+    //var nameOfFile = outFolder.txt//(fileName.txt.text === '') ? composition.name : fileName.txt.text;
+    if ($.os.indexOf("Windows") !== -1) slash = '\\';
+    var resultFile = new File(outFolder.txt.text);// + slash + nameOfFile);
+    var renderQueue = app.project.renderQueue;
+    var render = renderQueue.items.add(composition);
+    render.outputModules[1].file = resultFile;
+
+    // Scripting support for Queue in AME.
+    // Requires Adobe Media Encoder 11.0.
+    {
+        if (app.project.renderQueue.canQueueInAME == true) {
+           // Send queued items to AME, but do not start rendering.
+            //app.project.renderQueue.queueInAME(true);
+            app.project.renderQueue.queueInAME(((renderOp === 'queueOnly') ? false : true));
+        } else {
+            alert("There are no queued items in the Render Queue.");
+        }
+    }
+}
+
+
+function customEach(arr, callback){
+    for(var i=0; i<arr.length; i++){
+        callback(arr[i], i);
+    }
+}
+
+
+
+function mdsRender(templateChoice, renderOp) {
+    
+    var ORcompFolder = libItemsReg(Number(templateChoice.name.match(/[0-9]+$/g)[0]), 'Folder', 1);
+    status.text = 'Found Comp Folder';
+    var ORcomp = libItemsInFolder(regSafe(templateChoice.text), ORcompFolder, 'Composition')[0];
+    status.text = 'Found Original Comp';
+    
+    if(prerequisites(templateChoice, ORcomp, ORcompFolder) === -1) return;
+    /*pbar.value = 0;
+    alert('Made it!'); return;*/
+    pbar.value = 25;
+    status.text = templateChoice.text;
+    
+    var comp = ORcomp.duplicate();
+            
+    status.text = 'Duplicated Comp';
+    comp.name = (compTitle.txt.text !== '') ? compTitle.txt.text : ORcomp.name;
+
+    status.text = 'Renamed Comp \'' + comp.name + '\'';
+    var compFolder = app.project.items.addFolder(comp.name);
+    status.text = 'Created Folder \'' + comp.name + '\'';
+    var userComps = libItemsReg(/User Comps/g, 'Folder')[0];
+    if(userComps == undefined) userComps = app.project.items.addFolder('User Comps');
+    
+    status.text = 'Found or Created \'User Comps\' Folder';
+    
+    //delete existing folder if needed
+    if(libItemsInFolder(('^' + regSafe(comp.name) + '$'), userComps, 'Folder').length > 0){
+        var matchList = libItemsInFolder(('^' + regSafe(comp.name) + '$'), userComps, 'Folder');
+        customEach(matchList, function(match){
+            match.remove();
+        });
+        /*for(var i = 0; i < matchList.length; i++){
+            matchList[i].remove();
+        }*/
+    }
+    compFolder.parentFolder = userComps;
+    comp.parentFolder = compFolder;
+    
+    if(importExternal(compFolder) === -1) return;
+    
+    status.text = comp.name;
+    
+    addLinkedPrecomps(ORcompFolder, compFolder, comp);
+    
+    pbar.value = 40;
+    
+    var retroLayers = [];
+    
+    //Get all compositions from any subfolder containing the word 'Precomps'
+    var preComps = getPreComps(compFolder);
+    
+    //Get all layers in preComps that are tagged as editable and push them to the main array
+    customEach(preComps, function(item){
+        var retros = findLayers(/\<\<.*\>\>/g, item);
+        customEach(retros, function(ritem){
+            retroLayers.push(ritem);
+        });
+    });
+    
+    //Go through the retro links and link them to new comp
+    customEach(retroLayers, function(item){
+        if(/!T/.test(item.name)){
+            var newExp = item.property('Source Text').expression.replace(ORcomp.name, comp.name)
+            item.property('Source Text').expression = newExp;
+        }
+    });
+    
+    fillTemplate(comp, compFolder, templateChoice, renderOp);
+    pbar.value = 100;
+    status.text = 'Script Finished'
+    compBtn.active = true;
+    compBtn.active = false;
+    /*if(compBtn.active == true) compBtn.active = false;
+    if(queueBtn.active == true) queueBtn.active = false;
+    if(renderBtn.active == true) renderBtn.active = false;*/
+        renderBtn.enabled = false;
+    compBtn.text = 'DONE';
+    queueBtn.text = 'RESET';
+    renderBtn.text = 'TOTAL RESET';
+}
+
+
+
+// EXPRESSION TO USE ON IMAGE LAYERS
+// ====
+function imgExpression(ratio, contain){
+    if(ratio === undefined) ratio = 1;
+    if(ratio === 'skip') return "";
+    if(contain === 'height' || contain === 'width') return "// This lets us get the " + contain + " of the textbox containing your content.\
+layerSize = thisLayer.sourceRectAtTime(time)." + contain + ";\
+\
+\/\/ This lets us get the width of the current composition.\
+compSize = thisComp." + contain + ";\
+\
+\/\/ we want to set the " + contain + " to a little over 100%;\
+maximumSize = compSize * " + ratio + ";\
+\
+\/\/ Get the ratio\
+percentNeeded = maximumSize / layerSize * 100;\
+[percentNeeded, percentNeeded]"
+    return "// Get layer info.\
+layerWidth = thisLayer.sourceRectAtTime(time).width;\
+layerHeight = thisLayer.sourceRectAtTime(time).height;\
+layerRatio = layerWidth / layerHeight;\
+// Get comp info.\
+compWidth = thisComp.width;\
+compHeight = thisComp.height;\
+compRatio = compWidth / compHeight;\
+// If the layer ratio is smaller the width is at play\
+compNum = compHeight;\
+layerNum = layerHeight;\
+if(layerRatio <= compRatio) {\
+	compNum = compWidth;\
+	layerNum = layerWidth;\
+}\
+\
+maximumNum = compNum * " + ratio + ";\
+// Get the ratio\
+percentNeeded = maximumNum / layerNum * 100;\
+[percentNeeded, percentNeeded]";
+}
+
+
+function fillTemplate(comp, compFolder, templateChoice, renderOp) {
+ 
+    status.text = 'Starting to fill the template';
+    
+    //Get all layers that are tagged as editable
+    var editableLayers = findLayers(/^!T|^!I|^!C|^!G|^!A/g, comp);
+   /* var retroLayers = [];*/
+    
+    //Get all compositions from any subfolder containing the word 'Precomps'
+    var preComps = getPreComps(compFolder);
+    
+    //Get all layers in preComps that are tagged as editable and push them to the main array
+    for(var i = 0; i < preComps.length; i++){
+        
+        var editables = findLayers(/^!T|^!I|^!C|^!G|^!A/g, preComps[i]);
+        
+        for(var z = 0; z < editables.length; z++){
+            editableLayers.push(editables[z]);
+        }
+        
+    }
+    
+    status.text = 'Ready to fill layers';
+    //Go through all editable layers and replace content
+    for(var e = 0; e < editableLayers.length; e++){
+        replaceContent(editableLayers[e]);
+    }
+    
+    sendtoRender(comp, renderOp);
+    
+    function replaceContent(layer){
+        status.text = 'filling first layer';
+        var terminalReg = /!T /g;
+        var tabDefault = 'Text Input';
+        var varType = layer.name.match(/^!T|^!I|^!C|^!G|^!A/g)[0];
+        var layerField;
+
+        //Check what type of layer it is
+        switch(varType){
+            case '!T':
+                tabDefault = 'Text Input';
+                terminalReg = /!T /g;
+                break;
+            case '!I':
+                tabDefault = 'Image';
+                terminalReg = /!I /g;
+                break;
+            case '!C':
+                tabDefault = 'Colors';
+                terminalReg = /!C /g;
+                break;
+            case '!G':
+                tabDefault = 'Group';
+                terminalReg = /!G /g;
+                break;
+            case '!A':
+                tabDefault = 'Audio';
+                terminalReg = /!A /g;
+                break;
+            default:
+                tabDefault = 'Text Input';
+                break;
+        }
+        
+        status.text = 'variables switched';
+        
+        var layerName = layer.name.split(terminalReg)[1].replace(/(^\s*)|(\s*$)/g,'');
+        var tabName = /\[.+\]/g.test(layerName);
+        
+        
+        status.text = 'layer name defined: ' + layerName;
+        
+        //Check if tab is specified : if not, use type default tab
+        if(tabName){
+            tabName = layerName.match(/\[.+\]/g)[0].replace(/[\[\]]/g, '');
+            layerName = layerName.replace(/\[.+\](\s)+/g, '');
+        } else {
+            tabName = tabDefault;
+        }
+        status.text = 'tab name defined: ' + tabName;
+        
+        if(varType === '!G') return;
+        
+        if(varType === '!C'){ //If a color layer, get color effects
+        status.text = 'Looping through colors: ' + tabName;
+            for(var u = 1; u <= layer('Effects').numProperties; u++){
+                status.text = 'Setting color #' + u;
+                var nameData = layer('Effects').property(u).name;
+                layerField = template[templateChoice.name]['content_' + templateChoice.text][camelize(tabName)][camelize(nameData)];
+                status.text = 'Setting color #' + u + ': ' + layerField.txt.text;
+                if(layerField.txt.text === '') continue;
+                layer.effect(nameData)("Color").setValue(colorize(layerField.txt.text));
+            }
+            return;
+        }
+        
+        
+        
+        layerField = template[templateChoice.name]['content_' + templateChoice.text][camelize(tabName)][camelize(layerName)];
+        //alert(layer.name + ' : ' + layerField.name);
+        
+        
+        if(varType === '!T'){
+            setText(layer, comp, layerField.txt.text);
+            //layer.property("Source Text").setValue(layerField.txt.text);
+        }
+        
+        if(varType === '!I' && layerField.img.text !== ''){
+            var orSize = {width: layer.width, height: layer.height},
+                innerComp = comp,
+                heightOrWidth = 'width'
+            if(layer.containingComp !== comp) innerComp = layer.containingComp;
+            var ratio = layer.width / innerComp.width;
+            layer.replaceSource(libItemsReg(regSafe(layerField.img.text), 'Footage', 1), false);
+            if((layer.width / layer.height) <= (innerComp.width / innerComp.height)){
+                ratio = orSize.height / innerComp.height;
+                heightOrWidth = 'height';
+            }
+            if(orSize.width >= innerComp.width) {
+                layer.transform.scale.expression = imgExpression();
+            } else {
+                layer.transform.scale.expression = imgExpression(ratio, heightOrWidth);
+            }
+        }
+        
+        if(varType === '!A' && layerField.audio.text !== ''){
+            layer.replaceSource(libItemsReg(regSafe(layerField.audio.text), 'Footage', 1), false);
+        }
+        
+        
+        return;
+    }
+    
+    return;
+    
+}
