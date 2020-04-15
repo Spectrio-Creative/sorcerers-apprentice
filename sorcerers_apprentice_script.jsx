@@ -50,6 +50,28 @@ function addBrowseGroup(gName, label, tab, inText) {
     }";
 }
 
+function addGroupV(gName, label, tab, inText, opts) {
+    inText = inText || ['', true];
+    opts = opts || ['n'];
+    var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90],
+        visible = (arrIndex(opts, 'v') !== -1) ? true : false,
+        visCheck = !visible ? "" : "visCheck: Checkbox {text:'',  alignment: ['left','center'], preferredSize: [-1, 15], value: 'Visible'}, \
+        ";
+    sizes = !visible ? sizes : [82, sizes[1]];
+    
+    return "group { \
+        name: '" + gName + "',\
+        orientation:'row',\
+        alignment:['fill','top'],\
+        alignChildren: ['left','center'],\
+        spacing: 10,\
+        margins: 0,\
+        " + visCheck + "label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
+        img: EditText { text: '" + inText[0] + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
+        browse: Button { text: 'Browse', preferredSize:[" + sizes[2] + ",25]}\
+    }";
+}
+
 function addImageGroup(gName, label, tab, inText, opts) {
     inText = inText || ['', true];
     opts = opts || ['n'];
@@ -146,7 +168,7 @@ var header = mds.add("group", undefined, {name: "header"});
     header.alignment = ["fill","top"]; 
 
 var title = header.add("statictext", undefined, undefined, {name: "title"}); 
-    title.text = "The Sorcerer's Apprentice (v2.3.0)"; 
+    title.text = "The Sorcerer's Apprentice (v2.4.0)"; 
     title.alignment = ["fill","center"]; 
 
 
@@ -364,7 +386,7 @@ function poplateTabs(templateName, mainTab){
     
     //Create fields for each of the editable layers
     var tempTab = mainTab['t' + templateName.name + '_' + templateName.id]['content_' + templateName.name];
-    loadTabs(editableLayers, tempTab);
+    loadTabs(editableLayers, tempTab, comp);
 }
 
 
@@ -382,7 +404,7 @@ function getPreComps(folder){
 
 // LOAD TABS : THIS CREATES THE FIELDS FOR THE EDITABLE LAYERS
 // ====
-function loadTabs(arrayToLoad, template){
+function loadTabs(arrayToLoad, template, comp){
     for(var i = 0; i < arrayToLoad.length; i++){
         var typeMatches = arrayToLoad[i].name.match(/^!T[a-z]*|^!I[a-z]*|^!C[a-z]*|^!G[a-z]*|^!A[a-z]*/g),
             typeHeader = typeMatches[typeMatches.length - 1],
@@ -422,7 +444,19 @@ function loadTabs(arrayToLoad, template){
             }
             continue;
         }
-        if(varType === '!G') continue; //If a group layer, do not generate fields
+        
+        //If a group layer, do not generate fields
+        if(varType === '!G'){
+            if(typeOptions !== null && arrIndex(typeOptions, 'v') !== -1) {
+                var checkName = "checkbox_" + camelize(groupData),
+                    layer = findLayers('>> ' + groupData + ' <<', comp);
+                
+                template[tabID][camelize(groupData)] = template[tabID].add("checkbox", undefined, undefined, {name: "checkbox"});
+                template[tabID][camelize(groupData)].text = 'Visible';
+                template[tabID][camelize(groupData)].value = layer[0].enabled;
+            };
+            continue;
+        }; 
         template[tabID][camelize(groupData)] = template[tabID].add(tObj.func((camelize(groupData)), groupData, 'tab', tObj.inText, typeOptions));
         
         if(varType === '!I' || varType === '!A'){ //If an image layer, set up the browse button
@@ -753,8 +787,10 @@ The image layer "' + layer.name + '" contains scale keyframes. These will be ove
     var templateChildren = template[templateName.name]['content_' + templateName.text].children;
     for(var i = 0; i< templateChildren.length; i++){
         var childChildren = templateChildren[i].children;
- 
+        
         for(var u = 0; u< childChildren.length; u++){
+            if(childChildren[u].text === 'Visible') continue;
+            
             var layerRef = imageList[templateChildren[i].name][childChildren[u].name];
 
             if(layerRef.img !== undefined){
@@ -936,8 +972,7 @@ function setText(textLayer, comp, newText){
         return;
     }
     
-    
-    if(layerTextDoc.boxText && boxSize.height < (layerTextDoc.leading * 2)){
+    if(layerTextDoc.boxText && boxSize.height < (layerTextDoc.leading * 1.75)){
         
         //==== // ======= // ====//
         //====               ====//
@@ -1292,7 +1327,7 @@ function mdsRender(templateChoice, renderOp) {
     //Get all compositions from any subfolder containing the word 'Precomps'
     var preComps = getPreComps(compFolder);
     
-    //Get all layers in preComps that are tagged as editable and push them to the main array
+    //Get all layers in preComps that are linked outward.
     customEach(preComps, function(item){
         var retros = findLayers(/\<\<.*\>\>/g, item);
         customEach(retros, function(ritem){
@@ -1302,9 +1337,47 @@ function mdsRender(templateChoice, renderOp) {
     
     //Go through the retro links and link them to new comp
     customEach(retroLayers, function(item){
+        
         if(/!T/.test(item.name)){
-            var newExp = item.property('Source Text').expression.replace(ORcomp.name, comp.name)
+            
+            var orExp = item.property('Source Text').expression,
+                expressionComp = orExp.match(/comp\(\".*?\"\)/)[0].slice(6, -2),
+                newExp = orExp;
+            
+            if(expressionComp === ORcomp.name){
+                newExp = orExp.replace(ORcomp.name, comp.name);
+            } else {
+                customEach(preComps, function(item){
+                    if(expressionComp === item.name){
+                        item.name = '[' + comp.name + '] ' + item.name;
+                        newExp = orExp.replace(expressionComp, item.name);
+                    } else if(expressionComp === item.name.replace('[' + comp.name + '] ', '')){
+                        newExp = orExp.replace(expressionComp, item.name);
+                    }
+                });
+            }
+            
             item.property('Source Text').expression = newExp;
+            
+            var layerName = newExp.match(/\"\!T.*(?=\")/)[0].split(/\"\!T[a-z]/g)[1].replace(/(^\s*)|(\s*$)/g,''),
+                tabName = /\[.+\]/g.test(layerName),
+                layerField;
+
+            if(tabName){
+                tabName = layerName.match(/\[.+\]/g)[0].replace(/[\[\]]/g, '');
+                layerName = layerName.replace(/\[.+\](\s)+/g, '');
+            } else {
+                tabName = 'Text Input';
+            }
+
+            layerField = imageList[camelize(tabName)][camelize(layerName)];
+            
+//            alert(item.property('Source Text').expressionEnabled);
+            item.property('Source Text').expressionEnabled = false;
+//            alert(item.name);
+//            alert(layerField.txt.text);
+            setText(item, comp, layerField.txt.text);
+            item.property('Source Text').expressionEnabled = true;
         }
     });
     
@@ -1427,7 +1500,17 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
         }
         status.text = 'tab name defined: ' + tabName;
         
-        if(varType === '!G') return;
+        if(varType === '!G'){
+            if(typeOptions !== null && arrIndex(typeOptions, 'v') !== -1) {
+                var preCompLayers = findLayers('>> ' + layerName + ' <<', comp),
+                    onOrOff = imageList[camelize(tabName)][camelize(layerName)].value;
+                
+                customEach(preCompLayers, function(item){
+                    item.enabled = onOrOff;
+                });
+            };
+            return;
+        };
         
         if(varType === '!C'){ //If a color layer, get color effects
         status.text = 'Looping through colors: ' + tabName;
