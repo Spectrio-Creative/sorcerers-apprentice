@@ -4,16 +4,7 @@
 function addTextGroup(gName, label, tab, inText, typeOptions) {
     inText = inText || ['', true];
     typeOptions = typeOptions || ['n'];
-/*    alert('Textfield ' + label + ' info\
-gName: ' + gName + '\
-label: ' + label + '\
-tab: ' + tab + '\
-inText: ' + inText.length + '\
-typeOptions: ' + typeof typeOptions + '\
-');
-    alert(typeOptions.length);
-    alert(arrIndex(typeOptions, 'n'));
-    alert(arrIndex(typeOptions, 'm'));*/
+    
     var sizes = (tab === 'tab') ? [110,302] : [91,378],
         multiline = (arrIndex(typeOptions, 'm') !== -1) ? true : false,
         visible = (arrIndex(typeOptions, 'v') !== -1) ? true : false,

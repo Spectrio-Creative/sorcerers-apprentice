@@ -5,6 +5,9 @@ For templating projects like telling brooms to fill buckets.
 ### Description
 [The Sorcerer's Apprentice](http://proteus.adamthomashoward.com/sorcerer-script/) is a script for Adobe After Effects designed to make templating (and using templates) easy. It provides rules for creating template compositions which can be filled as simply as filling out a form and attaching images.
 
+### Demo
+[![Demo Thumbnail](http://proteus.adamthomashoward.com/sorcerer-script/includes/assets/images/video-demo.jpg)](https://vimeo.com/408069759)
+
 
 ### Installation
 Installed like any other AE script; download the both the script and the UI Panel from the downloads page, then add the unzipped script file to your AE Scripts folder (`Applications⁩/Adobe After Effects <version>⁩/Scripts` on a mac and `Program Files\Adobe\Adobe After Effects <version>\Support Files\Scripts` on a windows) and the unziped UI Panel file to the ScriptUI Panels subfolder.
