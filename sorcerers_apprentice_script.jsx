@@ -146,7 +146,7 @@ var header = mds.add("group", undefined, {name: "header"});
     header.alignment = ["fill","top"]; 
 
 var title = header.add("statictext", undefined, undefined, {name: "title"}); 
-    title.text = "The Sorcerer's Apprentice (v2.1)"; 
+    title.text = "The Sorcerer's Apprentice (v2.1.1)"; 
     title.alignment = ["fill","center"]; 
 
 
@@ -905,7 +905,7 @@ function setText(textLayer, comp, newText){
         
         //Add the scale expression then resize the box to fit the new text
         textLayer.transform.scale.expression = textExpression(layerTextDoc.fontSize, (boxSize.width / comp.width));
-        layerTextDoc.boxTextSize = [Math.ceil((boxSize.width / (textLayer.transform.scale.value[0] / 100)) + (layerTextDoc.fontSize / 10)), boxSize.height];
+        layerTextDoc.boxTextSize = [Math.ceil((boxSize.width / (textLayer.transform.scale.value[0] / 100)) + (layerTextDoc.fontSize * (textLayer.transform.scale.value[0] / 100))), boxSize.height];
         layerProp.setValue(layerTextDoc);
         
         //Move the anchor point to the center or the right since we have a new TextBox size
