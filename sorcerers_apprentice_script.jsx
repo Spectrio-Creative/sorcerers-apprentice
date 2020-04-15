@@ -119,7 +119,7 @@ function addTabbedPannel(tName) {
 // MDS
 // ===
 var mds = new Window("palette"); 
-    mds.text = "MDS RENDERER v1.6"; 
+    mds.text = "THE SORCERER'S APPRENTICE"; 
     mds.preferredSize.width = 510; 
     mds.orientation = "column"; 
     mds.alignChildren = ["center","top"]; 
@@ -136,7 +136,7 @@ var header = mds.add("group", undefined, {name: "header"});
     header.alignment = ["fill","top"]; 
 
 var title = header.add("statictext", undefined, undefined, {name: "title"}); 
-    title.text = "MDS Renderer"; 
+    title.text = "The Sorcerer's Apprentice (v1.8)"; 
     title.alignment = ["fill","center"]; 
 
 
