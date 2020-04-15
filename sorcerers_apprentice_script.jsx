@@ -146,7 +146,7 @@ var header = mds.add("group", undefined, {name: "header"});
     header.alignment = ["fill","top"]; 
 
 var title = header.add("statictext", undefined, undefined, {name: "title"}); 
-    title.text = "The Sorcerer's Apprentice (v2.0)"; 
+    title.text = "The Sorcerer's Apprentice (v2.1)"; 
     title.alignment = ["fill","center"]; 
 
 
@@ -1389,10 +1389,15 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
                 }
             }
                         
-            if(arrIndex(typeOptions, 's') !== -1){
+            if(arrIndex(typeOptions, 'n') !== -1){
                 layer.scale.setValue([100,100,100]);
             } else {
                 layer.transform.scale.expression = imgExpression(ratio, heightOrWidth);
+            }
+            
+            if(arrIndex(typeOptions, 's') !== -1 && layer.transform.scale.value[0] > 100){
+                layer.transform.scale.expressionEnabled = false;
+                layer.scale.setValue([100,100,100]);
             }
             
             //If set to 'fill' (f), then put a mask around the original shape and fill it
