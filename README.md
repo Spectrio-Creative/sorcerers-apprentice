@@ -18,4 +18,4 @@ In order for the script to be able to troubleshoot problematic image files, you 
 ### Documentation
 Full documentation can be found at [http://proteus.adamthomashoward.com/sorcerer-script/](http://proteus.adamthomashoward.com/sorcerer-script/).
 
-Email
+If you have any questions, feature requests, etc please reach out to Adam Howard at [adam.thomas.howard@gmail.com](adam.thomas.howard@gmail.com).
