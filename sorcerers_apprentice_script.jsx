@@ -2,6 +2,7 @@
 // ============
 
 function addTextGroup(gName, label, tab, inText, typeOptions) {
+    
     inText = inText || ['', true];
     typeOptions = typeOptions || ['n'];
     
@@ -63,7 +64,7 @@ function addGroupV(gName, label, tab, inText, opts) {
     }";
 }
 
-function addImageGroup(gName, label, tab, inText, opts) {
+function addMediaGroup(gName, label, tab, inText, opts) {
     inText = inText || ['', true];
     opts = opts || ['n'];
     var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90],
@@ -81,28 +82,6 @@ function addImageGroup(gName, label, tab, inText, opts) {
         margins: 0,\
         " + visCheck + "label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
         img: EditText { text: '" + inText[0] + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
-        browse: Button { text: 'Browse', preferredSize:[" + sizes[2] + ",25]}\
-    }";
-}
-
-function addAudioGroup(gName, label, tab, inText, opts) {
-    inText = inText || ['', true];
-    opts = opts || ['n'];
-    var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90],
-        visible = (arrIndex(opts, 'v') !== -1) ? true : false,
-        visCheck = !visible ? "" : "visCheck: Checkbox {text:'',  alignment: ['left','center'], preferredSize: [-1, 15], value: " + inText[1] + "}, \
-        ";
-    sizes = !visible ? sizes : [82, sizes[1]];
-    
-    return "group { \
-        name: '" + gName + "',\
-        orientation:'row',\
-        alignment:['fill','top'],\
-        alignChildren: ['left','center'],\
-        spacing: 10,\
-        margins: 0,\
-        " + visCheck + "label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
-        audio: EditText { text: '" + inText[0] + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
         browse: Button { text: 'Browse', preferredSize:[" + sizes[2] + ",25]}\
     }";
 }
@@ -159,12 +138,11 @@ var header = mds.add("group", undefined, {name: "header"});
     header.alignment = ["fill","top"]; 
 
 var title = header.add("statictext", undefined, undefined, {name: "title"}); 
-    title.text = "The Sorcerer's Apprentice (v2.4.0)"; 
+    title.text = "The Sorcerer's Apprentice (v2.6.0)"; 
     title.alignment = ["fill","center"]; 
 
 
 var compTitle = header.add(addTextGroup('compTitle', 'Comp Title:'));
-//var fileName = header.add(addTextGroup('fileName', 'Filename (Leave blank to use Comp Title):'));
 var outFolder = header.add(addBrowseGroup('outFolder', 'Output File'));
 
 // TEMPLATE PANEL (THIS IS WHERE ALL THE GENERATED FIELDS WILL GO)
@@ -219,6 +197,7 @@ var status = stts.add("statictext", undefined, undefined, {name: "status"});
 
 // POPULATE THE TEMPLATE TAB WITH EDITABLE LAYERS
 // ====
+var fontStyles = {};
 var allEditableLayers = {};
 var templateArray = populateTemplates(template);
 for(var i = 0; i<templateArray.length; i++){
@@ -236,9 +215,6 @@ mds.show();
 var externalImageList = [];
 var idArray = [];
 var imageList = {};
-//alert(hexToRgb('#a35d52').r + ', ' + hexToRgb('#a35d52').g + ', ' + hexToRgb('#a35d52').b);
-//alert(colorize(hexToRgb('#a35d52').r + ', ' + hexToRgb('#a35d52').g + ', ' + hexToRgb('#a35d52').b));
-
 
 
 
@@ -286,9 +262,8 @@ function populateTemplates(mainTab){
     var templateFolders = [];
     idArray = [];
     
-    //alert(templateFolder.length);
+    
     for(var i = 0; i < templateFolder.length; i++){
-        //alert(templateFolder[i].name);
          checkFolder(templateFolder[i]);
     }
     
@@ -298,7 +273,7 @@ function populateTemplates(mainTab){
         var folderObj = libItemsReg(idArray[u].id, 'Folder', 1),
             compArr = libItemsInFolder(idArray[u].name, folderObj, 'Composition');
         
-        if(compArr.length > 0 && findLayers(/^!T|^!I|^!C|^!G|^!A/g, compArr[0]).length > 0){
+        if(compArr.length > 0 && findLayers(/^!T|^!I|^!V|^!C|^!G|^!F|^!A/g, compArr[0]).length > 0){
             templateFolders.push(folderObj);
         }
     }
@@ -357,14 +332,14 @@ function poplateTabs(templateName, mainTab){
     var comp = libItemsInFolder(regSafe(templateName.name), compFolder, 'Composition')[0];
     
     //Get all layers that are tagged as editable
-    var editableLayers = findLayers(/^!T|^!I|^!C|^!G|^!A/g, comp);
+    var editableLayers = findLayers(/^!T|^!I|^!V|^!C|^!G|^!F|^!A/g, comp);
     
     //Get all compositions from any subfolder containing the word 'Precomps'
     var preComps = getPreComps(compFolder);
     
     //Get all layers in preComps that are tagged as editable and push them to the main array
     for(var i = 0; i < preComps.length; i++){
-        var editables = findLayers(/^!T|^!I|^!C|^!G|^!A/g, preComps[i]);
+        var editables = findLayers(/^!T|^!I|^!V|^!C|^!G|^!F|^!A/g, preComps[i]);
         for(var u = 0; u < editables.length; u++){
             editableLayers.push(editables[u]);
         }
@@ -386,7 +361,7 @@ function poplateTabs(templateName, mainTab){
 // ====
 function getPreComps(folder){
     var preCompFolder = libItemsInFolder(/Precomps/g, folder, 'Folder')[0];
-    //alert(preCompFolder);
+    
     if(preCompFolder == undefined) return [];
     return libItemsInFolder(/[\s\S]+/g, preCompFolder, 'Composition');
 }
@@ -397,20 +372,26 @@ function getPreComps(folder){
 // ====
 function loadTabs(arrayToLoad, template, comp){
     for(var i = 0; i < arrayToLoad.length; i++){
-        var typeMatches = arrayToLoad[i].name.match(/^!T[a-z]*|^!I[a-z]*|^!C[a-z]*|^!G[a-z]*|^!A[a-z]*/g),
+        var typeMatches = ((/^![A-Z][a-z]*\(.*\)/.test(arrayToLoad[i].name)) ? arrayToLoad[i].name.match(/^![A-Z][a-z]*\(.*\)/g) : arrayToLoad[i].name.match(/^![A-Z][a-z]*/g)),
             typeHeader = typeMatches[typeMatches.length - 1],
-            varType = typeHeader.match(/^!T|^!I|^!C|^!G|^!A/g)[0],
+            varType = typeHeader.match(/^![A-Z]/g)[0],
             typeOptions = typeHeader.match(/[a-z]/g),
-            terminalReg = new RegExp(typeHeader, 'g'),
+            terminalReg = new RegExp(regSafe(typeHeader), 'g'),
             tabObj = {
                 T: {tab: 'Text Input', func: addTextGroup, inText: /!T/.test(varType) ?[regSafe(arrayToLoad[i].text.sourceText.value.text), arrayToLoad[i].enabled] : ['', arrayToLoad[i].enabled]},
-                I: {tab: 'Image', func: addImageGroup, inText: ['', arrayToLoad[i].enabled]},
+                I: {tab: 'Image', func: addMediaGroup, inText: ['', arrayToLoad[i].enabled]},
+                V: {tab: 'Videos', func: addMediaGroup, inText: ['', arrayToLoad[i].enabled]},
                 C: {tab: 'Colors', func: addColorGroup, inText: ''},
                 G: {tab: 'Group'},
-                A: {tab: 'Audio', func: addAudioGroup, inText: ['', arrayToLoad[i].enabled]}
+                F: {tab: 'Fonts', func: addTextGroup, inText: [(arrayToLoad[i].property("Source Text") !== null) ? arrayToLoad[i].property("Source Text").value.font : '', true]},
+                A: {tab: 'Audio', func: addMediaGroup, inText: ['', arrayToLoad[i].enabled]}
             },
             tObj = tabObj[varType.replace('!', '')],
             tabDefault = tObj.tab;
+        
+//        alert(typeHeader);
+//        if(varType === '!F') alert(tObj.inText);
+//        if(varType === '!T') alert(arrayToLoad[i].property('Source Text').value.font);
         
         var groupData = arrayToLoad[i].name.split(terminalReg)[1].replace(/(^\s*)|(\s*$)/g,'');
         var tabName = /\[.+\]/g.test(groupData);
@@ -424,8 +405,8 @@ function loadTabs(arrayToLoad, template, comp){
         }
         var tabID = camelize(tabName);
 
-        //Check if tab exists and create if not
-        if(template[tabID] === undefined) template[tabID] = template.add(addTab(tabID, tabName));
+        //Check if tab exists and create if not (and ignore if linked subtag)
+        if(template[tabID] === undefined && arrIndex(typeOptions, 'l') === -1) template[tabID] = template.add(addTab(tabID, tabName));
         
         if(varType === '!C'){ //If a color layer, get color effects
             for(var u = 1; u <= arrayToLoad[i]('Effects').numProperties; u++){
@@ -438,7 +419,7 @@ function loadTabs(arrayToLoad, template, comp){
         
         //If a group layer, do not generate fields
         if(varType === '!G'){
-            if(typeOptions !== null && arrIndex(typeOptions, 'v') !== -1) {
+            if(arrIndex(typeOptions, 'v') !== -1) {
                 var checkName = "checkbox_" + camelize(groupData),
                     layer = findLayers('>> ' + groupData + ' <<', comp);
                 
@@ -448,9 +429,30 @@ function loadTabs(arrayToLoad, template, comp){
             };
             continue;
         }; 
-        template[tabID][camelize(groupData)] = template[tabID].add(tObj.func((camelize(groupData)), groupData, 'tab', tObj.inText, typeOptions));
         
-        if(varType === '!I' || varType === '!A'){ //If an image layer, set up the browse button
+        if(varType === '!F') {
+            groupData = groupData + ' Style';
+            fontStyles[camelize(groupData)] = tabID;
+        };
+        
+        if(varType === '!T'){
+            //check for text style
+            
+            if(/\(.*\)/.test(typeHeader)){
+                var styleName = typeHeader.match(/\(.*\)/)[0].slice(1,-1);
+                
+                if(fontStyles[camelize(styleName + ' Style')] !== undefined && template[fontStyles[camelize(styleName + ' Style')]][camelize(styleName + ' Style')].txt.text === ''){
+                    template[fontStyles[camelize(styleName + ' Style')]][camelize(styleName + ' Style')].txt.text = ((arrayToLoad[i].property("Source Text") !== null) ? arrayToLoad[i].property("Source Text").value.font : '');
+                }
+                
+            }
+            
+        }
+        
+        if(arrIndex(typeOptions, 'l') === -1)
+            template[tabID][camelize(groupData)] = template[tabID].add(tObj.func((camelize(groupData)), groupData, 'tab', tObj.inText, typeOptions));
+        
+        if(varType === '!I' || varType === '!A' || varType === '!V'){ //If an image layer, set up the browse button
             template[tabID][camelize(groupData)].browse.onClick = function(){browserBtn(this)};
         }
         
@@ -525,7 +527,7 @@ function browserBtn(inputFld){
     } else if(inputFld.parent.audio !== undefined){
         textLocation = 'audio'
     };
-    //alert(app.project.file);
+    
     var defaultFolder = inputFld.parent[textLocation].text;
     if ($.os.indexOf("Windows") !== -1)	// On Windows, escape backslashes first
         defaultFolder = defaultFolder.replace("\\", "\\\\");
@@ -645,10 +647,10 @@ function addLinkedPrecomps(folderName, newFolder, composition){
             newComp.parentFolder = precompFolder;
             newPrecomps.push(newComp);
             var replaceLayer1 = findLayers(regSafe('>> ' + newComp.name + ' <<'), composition);
-//            alert(replaceLayer1.length);
+            
             if(replaceLayer1.length == 0) continue;
             customEach(replaceLayer1, function(layerRep){
-//                alert(newComp.name);
+                
                 layerRep.replaceSource(newComp, false);
             });
         }
@@ -656,13 +658,13 @@ function addLinkedPrecomps(folderName, newFolder, composition){
     
     for(var z = 0; z < newPrecomps.length; z++){
         status.text = 'pre precomps ' + z;
-        //alert(newPrecomps[z].name)
+        
         for(var u = 0; u < newPrecomps.length; u++){
             var replaceCount = 1;
             if(u===z) continue;
             var replaceLayer = findLayers(regSafe('>> ' + newPrecomps[u].name + ' <<'), newPrecomps[z]);
             status.text = 'checking for ' + newPrecomps[u].name + ' in ' + newPrecomps[z].name;
-//            alert('Precomp length: ' + replaceLayer.length);
+            
             if(replaceLayer.length == 0) continue;
             customEach(replaceLayer, function(preLayerRep){
                 preLayerRep.replaceSource(newPrecomps[u], false);
@@ -706,13 +708,12 @@ function hexToRgb(hex) {
 //Convert rgb to hex
 function rgbToHex(rgb) {
     if(Array.isArray(rgb) === false){
-//        alert('rgb: '+rgb+' '+typeof rgb);
         rgb = rgb.split(/ *, */);
     }
-//    alert(Array.isArray(rgb));
+    
     var elToHex = function (el) { 
       var hex = Number(el).toString(16);
-//        alert('el: ' + el + 'el hex: ' + hex);
+        
       if (hex.length < 2) {
            hex = "0" + hex;
       }
@@ -767,7 +768,7 @@ function prerequisites(templateName, ORcomp, ORcompfolder) {
 The text layer "' + layer.name + '" contains position keyframes. These unfortunately mess with the script\'s ability to resize text. Please remove the keyframes. Maybe try adding them to a parent null layer instead!');
             return -1;
         };
-        if(/^!I[a-z]*/g.test(layer.name) && layer.scale.numKeys > 0) {
+        if((/^!I[a-z]*/g.test(layer.name) || /^!V[a-z]*/g.test(layer.name)) && layer.scale.numKeys > 0) {
             alert('Layer Setup Warning:\
 The image layer "' + layer.name + '" contains scale keyframes. These will be overwritten when the script is resizing the image. To avoid any problems that might result, try adding them to a parent null layer instead!');
         };
@@ -941,7 +942,7 @@ function importExternal(cfolder){
 // SET TEXT FUNCTION (THIS FILLS THE TEXT FIELDS WITH NEW TEXT AND ENSURES THAT THEY FIT IN THE ALLOTED SPACE)
 // ====
 function setText(textLayer, comp, newText){
-    status.text = 'setting text: ' + newText;
+    status.text = ('setting text: ' + regSafe(newText));
     var layerProp = textLayer.property('Source Text');
     var layerTextDoc = layerProp.value;
     var boxSize = layerTextDoc.boxText ? {width: layerTextDoc.boxTextSize[0], height: layerTextDoc.boxTextSize[1]} : undefined;
@@ -949,6 +950,17 @@ function setText(textLayer, comp, newText){
     var alignment = ['c','c'];
     var scale = textLayer.transform.scale.value[0] / 100;
     var fontRatio = (layerTextDoc.fontSize / layerTextDoc.leading);
+    
+    //Check for font styles
+    if(/\(.*\)/.test(textLayer.name)){
+        var styleName = textLayer.name.match(/\(.*\)/)[0].slice(1,-1);
+        
+        if(fontStyles[camelize(styleName + ' Style')] !== undefined &&  imageList[fontStyles[camelize(styleName + ' Style')]][camelize(styleName + ' Style')].txt.text !== ''){
+            
+            layerTextDoc.font = imageList[fontStyles[camelize(styleName + ' Style')]][camelize(styleName + ' Style')].txt.text;
+        }
+
+    }
     
     if(newText === ''){
         status.text = 'Blank - skipping resize';
@@ -1224,6 +1236,7 @@ function customEach(arr, callback){
 }
 
 function arrIndex(arr, str){
+    if(arr === null) return -1;
     for(var i=0;i<arr.length;i++){
         if(arr[i] == str) return i;
     }
@@ -1298,9 +1311,6 @@ function mdsRender(templateChoice, renderOp) {
         customEach(matchList, function(match){
             match.remove();
         });
-        /*for(var i = 0; i < matchList.length; i++){
-            matchList[i].remove();
-        }*/
     }
     compFolder.parentFolder = userComps;
     comp.parentFolder = compFolder;
@@ -1320,23 +1330,31 @@ function mdsRender(templateChoice, renderOp) {
     
     //Get all layers in preComps that are linked outward.
     customEach(preComps, function(item){
-        var retros = findLayers(/\<\<.*\>\>/g, item);
+        var retros = findLayers(/\<\<.*\>\>/g, item),
+            retrols = findLayers(/\![A-Z][a-z]*l[a-z]*\s/g, item);
         customEach(retros, function(ritem){
-            retroLayers.push(ritem);
+            retroLayers.push({layer: ritem, comp: item});
+        });
+        customEach(retrols, function(rlitem){
+            retroLayers.push({layer: rlitem, comp: item});
         });
     });
+    
+    //Fill template
+    fillTemplate(comp, compFolder, templateChoice, renderOp);
     
     //Go through the retro links and link them to new comp
     customEach(retroLayers, function(item){
         
-        if(/!T/.test(item.name)){
+        if(/!T/.test(item.layer.name)){
             
-            var orExp = item.property('Source Text').expression,
+            var orExp = item.layer.property('Source Text').expression,
                 expressionComp = orExp.match(/comp\(\".*?\"\)/)[0].slice(6, -2),
                 newExp = orExp;
             
             if(expressionComp === ORcomp.name){
-                newExp = orExp.replace(ORcomp.name, comp.name);
+                var orReg = new RegExp(regSafe(ORcomp.name), 'g');
+                newExp = orExp.replace(orReg, comp.name);
             } else {
                 customEach(preComps, function(item){
                     if(expressionComp === item.name){
@@ -1347,12 +1365,17 @@ function mdsRender(templateChoice, renderOp) {
                     }
                 });
             }
+
+            item.layer.property('Source Text').expression = newExp;
             
-            item.property('Source Text').expression = newExp;
             
-            var layerName = newExp.match(/\"\!T.*(?=\")/)[0].split(/\"\!T[a-z]/g)[1].replace(/(^\s*)|(\s*$)/g,''),
+    status.text = 'ex: ' + newExp;
+            
+            var layerName = newExp.match(/\"\!T.*(?=\")/)[0].split(/\"\!T[a-z]*/g)[1].replace(/(^\s*)|(\s*$)/g,''),
                 tabName = /\[.+\]/g.test(layerName),
                 layerField;
+            
+    status.text = 'step 3: ' + item.layer.name;
 
             if(tabName){
                 tabName = layerName.match(/\[.+\]/g)[0].replace(/[\[\]]/g, '');
@@ -1360,26 +1383,23 @@ function mdsRender(templateChoice, renderOp) {
             } else {
                 tabName = 'Text Input';
             }
-
-            layerField = imageList[camelize(tabName)][camelize(layerName)];
             
-//            alert(item.property('Source Text').expressionEnabled);
-            item.property('Source Text').expressionEnabled = false;
-//            alert(item.name);
-//            alert(layerField.txt.text);
-            setText(item, comp, layerField.txt.text);
-            item.property('Source Text').expressionEnabled = true;
+    status.text = 'step 4: ' + item.layer.name;
+            
+            var textValue = item.layer.text.sourceText.valueAtTime(0, false);
+            
+            item.layer.text.sourceText.expressionEnabled = false;
+            setText(item.layer, item.comp, textValue);
+            item.layer.text.sourceText.expressionEnabled = true;
         }
+        
+    status.text = 'step 5: ' + item.layer.name;
     });
     
-    fillTemplate(comp, compFolder, templateChoice, renderOp);
     pbar.value = 100;
     status.text = 'Script Finished'
     compBtn.active = true;
     compBtn.active = false;
-    /*if(compBtn.active == true) compBtn.active = false;
-    if(queueBtn.active == true) queueBtn.active = false;
-    if(renderBtn.active == true) renderBtn.active = false;*/
         renderBtn.enabled = false;
     compBtn.text = 'DONE';
     queueBtn.text = 'RESET';
@@ -1433,7 +1453,7 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
     status.text = 'Starting to fill the template';
     
     //Get all layers that are tagged as editable
-    var editableLayers = findLayers(/^!T|^!I|^!C|^!G|^!A/g, comp);
+    var editableLayers = findLayers(/^!T|^!I|^!V|^!C|^!G|^!A/g, comp);
    /* var retroLayers = [];*/
     
     //Get all compositions from any subfolder containing the word 'Precomps'
@@ -1442,7 +1462,7 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
     //Get all layers in preComps that are tagged as editable and push them to the main array
     for(var i = 0; i < preComps.length; i++){
         
-        var editables = findLayers(/^!T|^!I|^!C|^!G|^!A/g, preComps[i]);
+        var editables = findLayers(/^!T|^!I|^!V|^!C|^!G|^!A/g, preComps[i]);
         
         for(var z = 0; z < editables.length; z++){
             editableLayers.push(editables[z]);
@@ -1460,18 +1480,24 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
     
     function replaceContent(layer){
         status.text = 'filling first layer';
-        var typeHeader = layer.name.match(/^!T[a-z]*|^!I[a-z]*|^!C[a-z]*|^!G[a-z]*|^!A[a-z]*/g)[0],
-            varType = typeHeader.match(/^!T|^!I|^!C|^!G|^!A/g)[0],
+        
+        var typeMatches = ((/^![A-Z][a-z]*\(.*\)/.test(layer.name)) ? layer.name.match(/^![A-Z][a-z]*\(.*\)/g) : layer.name.match(/^![A-Z][a-z]*/g)),
+            typeHeader = typeMatches[typeMatches.length - 1],
+            varType = typeHeader.match(/^![A-Z]/g)[0],
             typeOptions = typeHeader.match(/[a-z]/g),
             layerField,
-            terminalReg = new RegExp(typeHeader, 'g'),
+            terminalReg = new RegExp(regSafe(typeHeader), 'g'),
             tabObj = {
                 T: 'Text Input',
                 I: 'Image',
+                V: 'Video',
                 C: 'Colors',
-                G: 'Group'
+                G: 'Group',
+                F: 'Font Style'
             },
             tabDefault = tabObj[varType.replace('!', '')];
+        
+        if(arrIndex(typeOptions, 'l') !== -1 || varType === '!F') return;
         
         if(typeOptions == null || typeOptions == undefined) typeOptions = [];
         status.text = 'variables switched';
@@ -1491,8 +1517,9 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
         }
         status.text = 'tab name defined: ' + tabName;
         
+        status.text = 'checing if group';
         if(varType === '!G'){
-            if(typeOptions !== null && arrIndex(typeOptions, 'v') !== -1) {
+            if(arrIndex(typeOptions, 'v') !== -1) {
                 var preCompLayers = findLayers('>> ' + layerName + ' <<', comp),
                     onOrOff = imageList[camelize(tabName)][camelize(layerName)].value;
                 
@@ -1516,19 +1543,15 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
             return;
         }
         
-        
-        
         layerField = imageList[camelize(tabName)][camelize(layerName)];
-//        layerField = template[templateChoice.name]['content_' + templateChoice.text][camelize(tabName)][camelize(layerName)];
-        
         
         
         if(varType === '!T'){
-            setText(layer, comp, layerField.txt.text);
-            //layer.property("Source Text").setValue(layerField.txt.text);
+            var thisText = layerField.txt.text;
+                setText(layer, comp, thisText);
         }
         
-        if(varType === '!I' && layerField.img.text !== ''){
+        if((varType === '!I' || varType === '!V') && layerField.img.text !== ''){
             var orSize = {width: (layer.width * (layer.scale.value[0] / 100)), height: (layer.height * (layer.scale.value[1] / 100))},
                 orCor = {x: (layer.position.value[0] - (layer.transform.anchorPoint.value[0] * (layer.scale.value[0] / 100))), y: (layer.position.value[1] - (layer.transform.anchorPoint.value[1] * (layer.scale.value[1] / 100)))},
                 orPer = [layer.transform.anchorPoint.value[0] / layer.width, layer.transform.anchorPoint.value[1] / layer.height],
@@ -1537,9 +1560,7 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
                 ratio;
             
             if(layer.containingComp !== comp) innerComp = layer.containingComp;
-//            alert(typeof layerField.img.text);
-//            alert(/^\d+$/.test(layerField.img.text));
-//            alert(layerField.img.text);
+            
             layer.replaceSource(libItemsReg(regSafe(layerField.img.text), 'Footage', 1), false);
             
             if((layer.width / layer.height) <= (orSize.width / orSize.height)){
