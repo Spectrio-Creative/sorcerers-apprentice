@@ -138,7 +138,7 @@ var header = mds.add("group", undefined, {name: "header"});
     header.alignment = ["fill","top"]; 
 
 var title = header.add("statictext", undefined, undefined, {name: "title"}); 
-    title.text = "The Sorcerer's Apprentice (v2.6.1)"; 
+    title.text = "The Sorcerer's Apprentice (v2.6.2)"; 
     title.alignment = ["fill","center"]; 
 
 
@@ -364,7 +364,7 @@ function getPreComps(folder){
     var preCompFolder = libItemsInFolder(/Precomps/g, folder, 'Folder')[0];
     
     if(preCompFolder == undefined) return [];
-    return libItemsInFolder(/[\s\S]+/g, preCompFolder, 'Composition');
+    return libItemsInFolderRec(/[\s\S]+/g, preCompFolder, 'Composition');
 }
 
 
@@ -610,6 +610,31 @@ function libItemsInFolder(reg, folderObj, iType){
     return resultsArr;
 }
 
+// SEARCH IN FOLDER FOR ITEM
+// ====
+function libItemsInFolderRec(reg, folderObj, iType){
+    var resultsArr = [];
+    
+    //Ensure that reg is a regular expression
+    if(typeof reg === 'string' || typeof reg === 'number'){
+        reg = new RegExp(reg, 'g');
+    }
+    
+    for(var i = 1; i <= folderObj.items.length; i++){
+        
+        if(iType !== 'Folder' && folderObj.items[i].typeName === 'Folder'){
+            resultsArr = resultsArr.concat(libItemsInFolderRec(reg, folderObj.items[i], iType));
+        }
+        
+        if (reg.test(folderObj.items[i].name)){
+            if(iType === undefined || iType === folderObj.items[i].typeName){
+                resultsArr.push(folderObj.items[i]);
+            };
+        };
+    }
+    return resultsArr;
+}
+
 
 // FIND LAYER IN COMP
 // ====
@@ -640,22 +665,30 @@ function addLinkedPrecomps(folderName, newFolder, composition){
     var precompFolder = newFolder.items.addFolder(ORprecomps.name);
     status.text = 'made new precomp folder';
     
-    for(var i = 1; i <= ORprecomps.items.length; i++){
-        status.text = 'looking for compositions ' + i;
-        if(ORprecomps.items[i].typeName === "Composition"){
-            var newComp = ORprecomps.items[i].duplicate();
-            newComp.name = ORprecomps.items[i].name;
-            newComp.parentFolder = precompFolder;
-            newPrecomps.push(newComp);
-            var replaceLayer1 = findLayers(regSafe('>> ' + newComp.name + ' <<'), composition);
-            
-            if(replaceLayer1.length == 0) continue;
-            customEach(replaceLayer1, function(layerRep){
-                
-                layerRep.replaceSource(newComp, false);
-            });
+    
+    function copyPrecompFolder(oldLocation, newLocation){
+        for(var i = 1; i <= oldLocation.items.length; i++){
+            status.text = 'looking for compositions ' + i;
+            if(oldLocation.items[i].typeName === "Composition"){
+                var newComp = oldLocation.items[i].duplicate();
+                newComp.name = oldLocation.items[i].name;
+                newComp.parentFolder = newLocation;
+                newPrecomps.push(newComp);
+                var replaceLayer1 = findLayers(regSafe('>> ' + newComp.name + ' <<'), composition);
+
+                if(replaceLayer1.length == 0) continue;
+                customEach(replaceLayer1, function(layerRep){
+
+                    layerRep.replaceSource(newComp, false);
+                });
+            } else if(oldLocation.items[i].typeName === "Folder"){
+                var newFolder = newLocation.items.addFolder(oldLocation.items[i].name);
+                copyPrecompFolder(oldLocation.items[i], newFolder);
+            }
         }
     }
+    
+    copyPrecompFolder(ORprecomps, precompFolder);
     
     for(var z = 0; z < newPrecomps.length; z++){
         status.text = 'pre precomps ' + z;
@@ -1334,22 +1367,62 @@ function mdsRender(templateChoice, renderOp) {
     //Get all layers in preComps that are linked outward.
     customEach(preComps, function(item){
         var retros = findLayers(/\<\<.*\>\>/g, item),
-            retrols = findLayers(/\![A-Z][a-z]*l[a-z]*\s/g, item);
+            retrols = findLayers(/\![A-Z][a-z]*l[a-z]*\s/g, item),
+            allSubs = findLayers(/.*/g, item);
         customEach(retros, function(ritem){
             retroLayers.push({layer: ritem, comp: item});
         });
         customEach(retrols, function(rlitem){
             retroLayers.push({layer: rlitem, comp: item});
         });
+        
+//        status.text = 'about to start loop';
+        customEach(allSubs, function(layr){
+            relinkExp(layr);
+        });
+        
     });
     
     //Fill template
     fillTemplate(comp, compFolder, templateChoice, renderOp);
     
+    
+    //relink other expressions
+    function relinkExp(layr){
+        for (var i = 1; i <= layr.property("Effects").numProperties; i++){
+        var matchName = layr.property("Effects").property(i).matchName;
+        
+            if (matchName == "ADBE Fill" || matchName == "ADBE Color Control"){
+                if(layr.property("Effects").property(i).property('Color').expressionEnabled){
+                    
+                    var orExp = layr.property("Effects").property(i).property('Color').expression,
+                        expressionComp = orExp.match(/comp\(\".*?\"\)/)[0].slice(6, -2),
+                        newExp = orExp;
+                    
+                    var exReg = new RegExp(regSafe(expressionComp), 'g');
+                    if(expressionComp === ORcomp.name){
+                        newExp = orExp.replace(exReg, comp.name);
+                    } else {
+                        customEach(preComps, function(item){
+                            if(expressionComp === item.name){
+                                item.name = '[' + comp.name + '] ' + item.name;
+                                newExp = orExp.replace(exReg, item.name);
+                            } else if(expressionComp === item.name.replace('[' + comp.name + '] ', '')){
+                                newExp = orExp.replace(exReg, item.name);
+                            }
+                        });
+                    }
+                    
+                    layr.property("Effects").property(i).property('Color').expression = newExp;
+                }
+            }
+        }
+    }
+    
     //Go through the retro links and link them to new comp
     customEach(retroLayers, function(item){
         
-        if(/!T/.test(item.layer.name)){
+        if(item.layer.property('Source Text') !== undefined){
             
             var orExp = item.layer.property('Source Text').expression,
                 expressionComp = orExp.match(/comp\(\".*?\"\)/)[0].slice(6, -2),
@@ -1371,14 +1444,9 @@ function mdsRender(templateChoice, renderOp) {
 
             item.layer.property('Source Text').expression = newExp;
             
-            
-    status.text = 'ex: ' + newExp;
-            
             var layerName = newExp.match(/\"\!T.*(?=\")/)[0].split(/\"\!T[a-z]*/g)[1].replace(/(^\s*)|(\s*$)/g,''),
                 tabName = /\[.+\]/g.test(layerName),
                 layerField;
-            
-    status.text = 'step 3: ' + item.layer.name;
 
             if(tabName){
                 tabName = layerName.match(/\[.+\]/g)[0].replace(/[\[\]]/g, '');
@@ -1386,8 +1454,6 @@ function mdsRender(templateChoice, renderOp) {
             } else {
                 tabName = 'Text Input';
             }
-            
-    status.text = 'step 4: ' + item.layer.name;
             
             var textValue = item.layer.text.sourceText.valueAtTime(0, false);
             
@@ -1520,7 +1586,7 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
         }
         status.text = 'tab name defined: ' + tabName;
         
-        status.text = 'checing if group';
+        status.text = 'checking if group';
         if(varType === '!G'){
             if(arrIndex(typeOptions, 'v') !== -1) {
                 var preCompLayers = findLayers('>> ' + layerName + ' <<', comp),
