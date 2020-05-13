@@ -138,7 +138,7 @@ var header = mds.add("group", undefined, {name: "header"});
     header.alignment = ["fill","top"]; 
 
 var title = header.add("statictext", undefined, undefined, {name: "title"}); 
-    title.text = "The Sorcerer's Apprentice (v2.6.0)"; 
+    title.text = "The Sorcerer's Apprentice (v2.6.1)"; 
     title.alignment = ["fill","center"]; 
 
 
@@ -197,6 +197,7 @@ var status = stts.add("statictext", undefined, undefined, {name: "status"});
 
 // POPULATE THE TEMPLATE TAB WITH EDITABLE LAYERS
 // ====
+var fontStylesMaster = {};
 var fontStyles = {};
 var allEditableLayers = {};
 var templateArray = populateTemplates(template);
@@ -371,6 +372,10 @@ function getPreComps(folder){
 // LOAD TABS : THIS CREATES THE FIELDS FOR THE EDITABLE LAYERS
 // ====
 function loadTabs(arrayToLoad, template, comp){
+
+    // Initialize font object
+    fontStylesMaster[comp.id] = {};
+    
     for(var i = 0; i < arrayToLoad.length; i++){
         var typeMatches = ((/^![A-Z][a-z]*\(.*\)/.test(arrayToLoad[i].name)) ? arrayToLoad[i].name.match(/^![A-Z][a-z]*\(.*\)/g) : arrayToLoad[i].name.match(/^![A-Z][a-z]*/g)),
             typeHeader = typeMatches[typeMatches.length - 1],
@@ -388,10 +393,6 @@ function loadTabs(arrayToLoad, template, comp){
             },
             tObj = tabObj[varType.replace('!', '')],
             tabDefault = tObj.tab;
-        
-//        alert(typeHeader);
-//        if(varType === '!F') alert(tObj.inText);
-//        if(varType === '!T') alert(arrayToLoad[i].property('Source Text').value.font);
         
         var groupData = arrayToLoad[i].name.split(terminalReg)[1].replace(/(^\s*)|(\s*$)/g,'');
         var tabName = /\[.+\]/g.test(groupData);
@@ -432,7 +433,7 @@ function loadTabs(arrayToLoad, template, comp){
         
         if(varType === '!F') {
             groupData = groupData + ' Style';
-            fontStyles[camelize(groupData)] = tabID;
+            fontStylesMaster[comp.id][camelize(groupData)] = tabID;
         };
         
         if(varType === '!T'){
@@ -441,8 +442,8 @@ function loadTabs(arrayToLoad, template, comp){
             if(/\(.*\)/.test(typeHeader)){
                 var styleName = typeHeader.match(/\(.*\)/)[0].slice(1,-1);
                 
-                if(fontStyles[camelize(styleName + ' Style')] !== undefined && template[fontStyles[camelize(styleName + ' Style')]][camelize(styleName + ' Style')].txt.text === ''){
-                    template[fontStyles[camelize(styleName + ' Style')]][camelize(styleName + ' Style')].txt.text = ((arrayToLoad[i].property("Source Text") !== null) ? arrayToLoad[i].property("Source Text").value.font : '');
+                if(fontStylesMaster[comp.id][camelize(styleName + ' Style')] !== undefined && template[fontStylesMaster[comp.id][camelize(styleName + ' Style')]][camelize(styleName + ' Style')].txt.text === ''){
+                    template[fontStylesMaster[comp.id][camelize(styleName + ' Style')]][camelize(styleName + ' Style')].txt.text = ((arrayToLoad[i].property("Source Text") !== null) ? arrayToLoad[i].property("Source Text").value.font : '');
                 }
                 
             }
@@ -952,14 +953,14 @@ function setText(textLayer, comp, newText){
     var fontRatio = (layerTextDoc.fontSize / layerTextDoc.leading);
     
     //Check for font styles
+    
+    status.text = ('checking for font styles');
     if(/\(.*\)/.test(textLayer.name)){
         var styleName = textLayer.name.match(/\(.*\)/)[0].slice(1,-1);
         
         if(fontStyles[camelize(styleName + ' Style')] !== undefined &&  imageList[fontStyles[camelize(styleName + ' Style')]][camelize(styleName + ' Style')].txt.text !== ''){
-            
             layerTextDoc.font = imageList[fontStyles[camelize(styleName + ' Style')]][camelize(styleName + ' Style')].txt.text;
         }
-
     }
     
     if(newText === ''){
@@ -1293,7 +1294,9 @@ function mdsRender(templateChoice, renderOp) {
     status.text = templateChoice.text;
     
     var comp = ORcomp.duplicate();
-            
+    
+    fontStyles = fontStylesMaster[ORcomp.id];
+    
     status.text = 'Duplicated Comp';
     comp.name = (compTitle.txt.text !== '') ? compTitle.txt.text : ORcomp.name;
 
