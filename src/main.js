@@ -4,7 +4,7 @@ let aiVersion = version;
 console.log(aiVersion);
 import { version as scriptVersion } from "../package.json";
 
-import ui from "./spreadsheet/uiGroupTemplates";
+import ui from "./uiGroupTemplates";
 import sa_262 from "../static/sorcerers_apprentice_script_2_6_2_spreadsheet.jsx";
 import { prepare } from "./tools/setup";
 import { project } from "./globals/globals";
