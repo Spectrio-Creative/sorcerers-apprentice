@@ -48,7 +48,7 @@ function initTemplatePanel(parent) {
 // // OPTIONS
 // // =======
 function initOptionsPanel(parent) {
-  const options = mds.add("group", undefined, { name: "options" });
+  const options = parent.add("group", undefined, { name: "options" });
   options.orientation = "row";
   options.alignChildren = ["left", "center"];
   options.spacing = 10;
