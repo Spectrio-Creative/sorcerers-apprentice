@@ -15,7 +15,7 @@ function arrIndex(arr, str) {
 function copyObj(src) {
   var target = {};
   for (var prop in src) {
-    if (src.hasOwnProperty(prop)) {
+    if (Object.prototype.hasOwnProperty.call(src, prop)) {
       if (prop === "parent" || prop === "children" || prop === "window") {
         continue;
       }
