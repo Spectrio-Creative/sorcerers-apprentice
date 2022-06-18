@@ -1,28 +1,33 @@
 import json from "@rollup/plugin-json";
-import { terser } from "rollup-plugin-terser";
 import { getBabelOutputPlugin } from "@rollup/plugin-babel";
-import { eslint } from "rollup-plugin-eslint";
+import eslint from "@rollup/plugin-eslint";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import { string } from "rollup-plugin-string";
 import cleanup from 'rollup-plugin-cleanup';
+import findUnused from "rollup-plugin-unused";
 
 // rollup.config.js
 export default {
-  input: "src/main.js",
+  input: process.env.ENTRY || "src/main.js",
   output: [
     {
-      file: "build/sorcerers_apprentice.jsx",
+      file: process.env.OUTPUT || "build/sorcerers_apprentice.jsx",
       format: "esm",
-    },
-    {
-      file: "build/sorcerers_apprentice.min.jsx",
-      format: "esm",
-      name: "version",
-      plugins: [terser()],
     },
   ],
   plugins: [
+    // process.env.ENTRY
+    //   ? findUnused({ exclude: ["src/**"] })
+    //   : findUnused({ exclude: ["src/playground.js", "**/_*.js"] }),
+    nodeResolve(),
+    commonjs({
+      include: /node_modules/,
+    }),
+    string({ include: ["actions/*", "static/*"], exclude: ["static/sorcerers_apprentice_script_2_6_2_spreadsheet.jsx"] }),
+    eslint({ throwOnError: true, fix: true }),
     json(),
-    cleanup(),
-    eslint(),
+    // cleanup(),
     getBabelOutputPlugin({ presets: ["extendscript"] }),
   ],
 };
