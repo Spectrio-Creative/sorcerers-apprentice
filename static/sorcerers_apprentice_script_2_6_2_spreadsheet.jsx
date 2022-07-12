@@ -4,13 +4,7 @@ import { createSpreadsheetDialog } from "../src/spreadsheet/classes/SpreadsheetD
 import { sa_262_ii } from "../src/legacy/mdsRender";
 import { camelCase } from "case-anything";
 import { colorize, decToRgb, colorpicker } from "../src/tools/colors";
-import {
-  libItemsInFolder,
-  findLayers,
-  libItemsReg,
-  regSafe,
-  getPreComps,
-} from "../src/tools/ae";
+import { libItemsInFolder, findLayers, libItemsReg, regSafe, getPreComps } from "../src/tools/ae";
 import {
   mds,
   compTitle,
@@ -22,7 +16,7 @@ import {
   pbar,
   status,
 } from "../src/globals/project/menu";
-import { arrIndex } from '../src/tools/legacyTools';
+import { arrIndex } from "../src/tools/legacyTools";
 import { fontStylesMaster, allEditableLayers } from "../src/globals/legacySupport";
 
 function sa_262(collector = {}) {
@@ -240,18 +234,32 @@ function sa_262(collector = {}) {
       if (varType === "!C") {
         //If a color layer, get color effects
         for (var u = 1; u <= arrayToLoad[i]("Effects").numProperties; u++) {
-          var gdata = arrayToLoad[i]("Effects").property(u).name;
-          template[tabID][camelCase(gdata)] = template[tabID].add(
-            tObj
-              .func(
-                camelCase(gdata),
-                gdata,
-                "tab",
-                decToRgb(arrayToLoad[i].effect(gdata)("Color").value)
-              )
-              .replace()
+          const { name, matchName, enabled } = arrayToLoad[i]("Effects").property(u);
+          if (matchName !== "ADBE Color Control" || !enabled) continue;
+
+          template[tabID][camelCase(name)] = template[tabID].add(
+            tObj.func(
+              camelCase(name),
+              name,
+              "tab",
+              decToRgb(arrayToLoad[i].effect(name)("Color").value)
+            )
           );
-          template[tabID][camelCase(gdata)].picker.onClick = function () {
+
+          // alert(template[tabID][camelCase(name)].picker);
+          if (template[tabID][camelCase(name)] === undefined) {
+            alert(`Problem creating color control for layer '${name}'. Skipping.`);
+            continue;
+          } else if (template[tabID][camelCase(name)].picker === undefined) {
+            alert(`Picker doesn’t exist on color control for layer '${name}'. Skipping.
+            If you are using a generic title like ‘Text’, this could cause problems as Adobe reserves \
+ some of these words. You might try renaming the control to something more specific.`);
+        
+            // alert(Object.keys(template[tabID][camelCase(name)]).reducer((t, c) => t + ", " + c, ""));
+            continue;
+          }
+
+          template[tabID][camelCase(name)].picker.onClick = function () {
             colorBtn(this);
           };
         }
