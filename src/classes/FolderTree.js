@@ -54,6 +54,18 @@ const createFolderTree = () => {
       return newFile;
     },
 
+    addLocation: function (id, prompt) {
+      if (!id) return;
+      const folder = Folder.selectDialog(prompt);
+      if (folder) this[`_${id}`] = folder;
+
+      return folder;
+    },
+
+    addFileFromDialog: function () {
+      // return
+    },
+
     appendToFileFromString: function (string, location, filename) {
       filename = filename || "test.txt";
       const internalLocation = this.location(location);

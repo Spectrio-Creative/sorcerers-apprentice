@@ -1,4 +1,4 @@
-import { spaceCase } from "case-anything";
+import { snakeCase, spaceCase } from "case-anything";
 import stringify from "fast-safe-stringify";
 import get from "just-safe-get";
 import set from "just-safe-set";
@@ -39,6 +39,11 @@ const createSpreadsheetDialog = (exportables) => {
       const templates = Object.keys(this.menuMap);
       const allPaths = getFilePaths(this.menuMap);
 
+      const prefix = (app.project.file) ? spaceCase((app.project.file.name).replace(".aep", "")) + " " : "";
+
+      const chooseLocation = project.addLocation("demo_csvs", "Choose folder for CSVs");
+      if(!chooseLocation) return;
+
       templates.forEach((temp, i) => {
         project.log(temp);
         const tempTitle = (parseTabTitle(temp) || { title: temp }).title;
@@ -68,8 +73,9 @@ const createSpreadsheetDialog = (exportables) => {
         );
         project.log(stringify(csv, undefined, undefined, { depthLimit: 3 }));
         project.log(`Exported test_csv_${i + 1}.csv`);
-        project.addFileFromString(csvString, `test_csv_${i + 1}.csv`);
+        project.addFileFromString(csvString, `${snakeCase(prefix + tempTitle)}.csv`, "demo_csvs");
       });
+      alert(`${templates.length} template csv(s) exported!`);
     },
 
     printCSVs_legacy: function () {
@@ -213,7 +219,8 @@ const createSpreadsheetDialog = (exportables) => {
 
     parseCategoryTitle: function (input) {
       if (typeof input !== "string") return;
-      const matcher = /(?:\[(.*)\])?\W*(.+)/;
+      const matcher = /(?:![A-Z][a-z]*\W*(?:\([\w ]+\))?\W)?(?:\[(.*)\])?\W*(.*)/;
+      // const matcher = /(?:\[(.*)\])?\W*(.+)/;
       const [_total, group, title] = input.match(matcher);
       return { input, group, title };
     },
