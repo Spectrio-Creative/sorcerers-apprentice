@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup --config",
+    "build": "rollup --config && node ./src/tools/copyDependanciesToBuild.js",
     "playground": "ENTRY=src/playground.js OUTPUT=./build/playground.jsx rollup --config",
     "lint": "eslint"
   },
@@ -37,6 +37,7 @@
   "dependencies": {
     "@rollup/plugin-typescript": "^8.2.5",
     "case-anything": "https://github.com/Spectrio-Creative/case-anything",
+    "fs-extra": "^10.1.0",
     "rollup-plugin-typescript2": "^0.30.0",
     "string-mismatch": "^2.1.1",
     "strnum": "^1.0.4"
