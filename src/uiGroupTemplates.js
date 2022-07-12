@@ -1,15 +1,13 @@
 // UI Group Templates to use in the UI Set up
 // ============
 
-import { arrIndex } from "./tools/legacyTools";
-
 function addTextGroup(gName, label, tab, inText, typeOptions) {
   inText = inText || ["", true];
   typeOptions = typeOptions || ["n"];
 
   var sizes = tab === "tab" ? [110, 302] : [91, 378],
-    multiline = arrIndex(typeOptions, "m") !== -1 ? true : false,
-    visible = arrIndex(typeOptions, "v") !== -1 ? true : false,
+    multiline = typeOptions.indexOf("m") !== -1 ? true : false,
+    visible = typeOptions.indexOf("v") !== -1 ? true : false,
     h = multiline ? 60 : 25,
     visCheck = !visible
       ? ""
@@ -75,7 +73,7 @@ function addGroupV(gName, label, tab, inText, opts) {
   inText = inText || ["", true];
   opts = opts || ["n"];
   var sizes = tab === "tab" ? [110, 202, 90] : [91, 278, 90],
-    visible = arrIndex(opts, "v") !== -1 ? true : false,
+    visible = opts.indexOf( "v") !== -1 ? true : false,
     visCheck = !visible
       ? ""
       : "visCheck: Checkbox {text:'',  alignment: ['left','center'], preferredSize: [-1, 15], value: 'Visible'}, \n";
@@ -112,7 +110,7 @@ function addMediaGroup(gName, label, tab, inText, opts) {
   inText = inText || ["", true];
   opts = opts || ["n"];
   var sizes = tab === "tab" ? [110, 202, 90] : [91, 278, 90],
-    visible = arrIndex(opts, "v") !== -1 ? true : false,
+    visible = opts.indexOf( "v") !== -1 ? true : false,
     visCheck = !visible
       ? ""
       : `visCheck: Checkbox {text:'',  alignment: ['left','center'], preferredSize: [-1, 15], value: ${inText[1]}`;
