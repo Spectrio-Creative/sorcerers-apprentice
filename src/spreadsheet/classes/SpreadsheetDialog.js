@@ -10,6 +10,7 @@ import { compTitle, status, template } from "../../globals/project/menu";
 import { sa_262_ii } from "../../legacy/mdsRender";
 import { getFilePaths, mapMenu } from "../../tools/dialog/template";
 import { parseTabTitle, parseTemplateTitle } from "../../tools/library/sorcererDictionary";
+import { showSpreadSheetInfo } from "../info";
 import { createSpreadsheet } from "./Spreadsheet";
 
 const createSpreadsheetDialog = (exportables) => {
@@ -23,6 +24,9 @@ const createSpreadsheetDialog = (exportables) => {
     spreadsheet: null,
     menuMap: mapMenu(template),
     substatusStatus: false,
+    singleCSV: false,
+    renderOp: "aeQueueOnly",
+    renderOpOptionsn: ["aeQueueOnly", "queueOnly", "compOnly", "renderAlso"],
 
     checkLocation: function (location) {
       const result = location !== null;
@@ -44,38 +48,74 @@ const createSpreadsheetDialog = (exportables) => {
       const chooseLocation = project.addLocation("demo_csvs", "Choose folder for CSVs");
       if(!chooseLocation) return;
 
-      templates.forEach((temp, i) => {
-        project.log(temp);
-        const tempTitle = (parseTabTitle(temp) || { title: temp }).title;
-        csv[i] = [["Template"], [tempTitle]];
+      if(this.singleCSV) {
+        csv[0] = ["Template", "Comp Title", "Output File"];
+        
+        templates.forEach((temp, i) => {
+          const index = i + 1;
+          csv[index] = [];
+          
+          const tempTitle = (parseTabTitle(temp) || { title: temp }).title;
+          csv[index].push(tempTitle, tempTitle, "~/");
+  
+          const paths = allPaths.filter((path) => path.includes(temp));
+          paths.forEach((path) => {
+            const pathParts = path.split(".");
+            if (pathParts.length < 4) return;
+            const [_tempName, _content, group, title] = pathParts;
 
-        csv[i][0].push("Comp Title", "Output File");
-        csv[i][1].push(tempTitle, "~/");
+            let capTitle = spaceCase(title);
+            capTitle = capTitle.charAt(0).toUpperCase() + capTitle.slice(1);
+            const val = get(template, `${path}.text`);
 
-        const paths = allPaths.filter((path) => path.includes(temp));
-        paths.forEach((path) => {
-          project.log(path);
-          const pathParts = path.split(".");
-          project.log(pathParts.length);
-          if (pathParts.length < 4) return;
-          const [_tempName, _content, group, title] = pathParts;
-          // spaceCase()
-          let capTitle = spaceCase(title);
-          capTitle = capTitle.charAt(0).toUpperCase() + capTitle.slice(1);
-          const val = get(template, `${path}.text`);
-
-          csv[i][0].push(`"[${group}] ${capTitle}"`);
-          csv[i][1].push(`"${val}"`);
+            let columnIndex = csv[0].indexOf(`"[${group}] ${capTitle}"`);
+            if(columnIndex === -1) {
+              columnIndex = csv[0].length;
+              csv[0].push(`"[${group}] ${capTitle}"`);
+            }
+            csv[index][columnIndex] = (`"${val}"`);
+          });
         });
-        const csvString = csv[i].reducer(
-          (t, c) => t + c.reducer((it, ic) => it + "," + ic) + "\n",
+        const csvString = csv.reducer(
+          (t, c) => t + c.reducer((it, ic) => it + "," + (ic || "")) + "\n",
           ""
         );
-        project.log(stringify(csv, undefined, undefined, { depthLimit: 3 }));
-        project.log(`Exported test_csv_${i + 1}.csv`);
-        project.addFileFromString(csvString, `${snakeCase(prefix + tempTitle)}.csv`, "demo_csvs");
-      });
-      alert(`${templates.length} template csv(s) exported!`);
+        project.addFileFromString(csvString, `${snakeCase(prefix)}.csv`, "demo_csvs");
+        alert("Template csv exported!");
+      } else {
+        templates.forEach((temp, i) => {
+          project.log(temp);
+          const tempTitle = (parseTabTitle(temp) || { title: temp }).title;
+          csv[i] = [["Template"], [tempTitle]];
+  
+          csv[i][0].push("Comp Title", "Output File");
+          csv[i][1].push(tempTitle, "~/");
+  
+          const paths = allPaths.filter((path) => path.includes(temp));
+          paths.forEach((path) => {
+            project.log(path);
+            const pathParts = path.split(".");
+            project.log(pathParts.length);
+            if (pathParts.length < 4) return;
+            const [_tempName, _content, group, title] = pathParts;
+            // spaceCase()
+            let capTitle = spaceCase(title);
+            capTitle = capTitle.charAt(0).toUpperCase() + capTitle.slice(1);
+            const val = get(template, `${path}.text`);
+  
+            csv[i][0].push(`"[${group}] ${capTitle}"`);
+            csv[i][1].push(`"${val}"`);
+          });
+          const csvString = csv[i].reducer(
+            (t, c) => t + c.reducer((it, ic) => it + "," + ic) + "\n",
+            ""
+          );
+          project.log(stringify(csv, undefined, undefined, { depthLimit: 3 }));
+          project.log(`Exported test_csv_${i + 1}.csv`);
+          project.addFileFromString(csvString, `${snakeCase(prefix + tempTitle)}.csv`, "demo_csvs");
+        });
+        alert(`${templates.length} template csv(s) exported!`);
+      }
     },
 
     printCSVs_legacy: function () {
@@ -109,8 +149,8 @@ const createSpreadsheetDialog = (exportables) => {
 
       /*
       Code for Import https://scriptui.joonas.me — (Triple click to select): 
-      {"activeId":62,"items":{"item-0":{"id":0,"type":"Dialog","parentId":false,"style":{"text":"The Sorcerer’s Apprentice","preferredSize":[0,0],"margins":16,"orientation":"column","spacing":10,"alignChildren":["center","top"],"varName":null,"windowType":"Dialog","creationProps":{"su1PanelCoordinates":false,"maximizeButton":false,"minimizeButton":false,"independent":false,"closeButton":true,"borderless":false,"resizeable":false},"enabled":true}},"item-19":{"id":19,"type":"Group","parentId":0,"style":{"preferredSize":[0,0],"margins":0,"orientation":"column","spacing":10,"alignChildren":["left","top"],"alignment":null,"varName":null,"enabled":true}},"item-36":{"id":36,"type":"Group","parentId":0,"style":{"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["center","top"],"alignment":null,"varName":"finished","enabled":true}},"item-37":{"id":37,"type":"Button","parentId":36,"style":{"text":"DONE","justify":"center","preferredSize":[0,0],"alignment":null,"varName":"done","helpTip":null,"enabled":true}},"item-45":{"id":45,"type":"Panel","parentId":19,"style":{"enabled":true,"varName":null,"creationProps":{"borderStyle":"etched","su1PanelCoordinates":false},"text":"Spreadsheet Export","preferredSize":[360,0],"margins":[15,20,10,20],"orientation":"column","spacing":10,"alignChildren":["left","top"],"alignment":null}},"item-52":{"id":52,"type":"Group","parentId":45,"style":{"enabled":true,"varName":"exportModeGroup","preferredSize":[0,0],"margins":[0,0,10,0],"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-54":{"id":54,"type":"StaticText","parentId":52,"style":{"enabled":true,"varName":"exportModeText","creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"CSV:","justify":"left","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-60":{"id":60,"type":"Button","parentId":36,"style":{"enabled":true,"varName":"createCSV","text":"CREATE CSV(S)","justify":"center","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-62":{"id":62,"type":"EditText","parentId":52,"style":{"enabled":false,"varName":"filePath","creationProps":{"noecho":false,"readonly":false,"multiline":false,"scrollable":false,"borderless":false,"enterKeySignalsOnChange":false},"softWrap":false,"text":"","justify":"left","preferredSize":[190,0],"alignment":null,"helpTip":null}},"item-63":{"id":63,"type":"Button","parentId":52,"style":{"enabled":true,"varName":null,"text":"Select","justify":"center","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-66":{"id":66,"type":"Progressbar","parentId":45,"style":{"enabled":true,"varName":null,"preferredSize":[358,4],"alignment":null,"helpTip":null}},"item-67":{"id":67,"type":"StaticText","parentId":45,"style":{"enabled":true,"varName":"status","creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"status","justify":"left","preferredSize":[0,18],"alignment":null,"helpTip":null}},"item-68":{"id":68,"type":"Button","parentId":52,"style":{"enabled":true,"varName":"process","text":"Go","justify":"center","preferredSize":[0,0],"alignment":null,"helpTip":null}}},"order":[0,19,45,52,54,62,63,68,66,67,36,60,37],"settings":{"importJSON":true,"indentSize":false,"cepExport":false,"includeCSSJS":true,"functionWrapper":false,"compactCode":false,"showDialog":true,"afterEffectsDockable":false,"itemReferenceList":"None"}}
-      */
+      {"activeId":72,"items":{"item-0":{"id":0,"type":"Dialog","parentId":false,"style":{"text":"The Sorcerer’s Apprentice","preferredSize":[0,0],"margins":16,"orientation":"column","spacing":10,"alignChildren":["center","top"],"varName":null,"windowType":"Dialog","creationProps":{"su1PanelCoordinates":false,"maximizeButton":false,"minimizeButton":false,"independent":false,"closeButton":true,"borderless":false,"resizeable":false},"enabled":true}},"item-19":{"id":19,"type":"Group","parentId":0,"style":{"preferredSize":[0,0],"margins":0,"orientation":"column","spacing":10,"alignChildren":["left","top"],"alignment":null,"varName":null,"enabled":true}},"item-36":{"id":36,"type":"Group","parentId":0,"style":{"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["center","top"],"alignment":null,"varName":"finished","enabled":true}},"item-37":{"id":37,"type":"Button","parentId":36,"style":{"text":"DONE","justify":"center","preferredSize":[0,0],"alignment":null,"varName":"done","helpTip":null,"enabled":true}},"item-45":{"id":45,"type":"Panel","parentId":19,"style":{"enabled":true,"varName":null,"creationProps":{"borderStyle":"etched","su1PanelCoordinates":false},"text":"Spreadsheet Export","preferredSize":[360,0],"margins":[15,20,10,20],"orientation":"column","spacing":10,"alignChildren":["left","top"],"alignment":null}},"item-52":{"id":52,"type":"Group","parentId":45,"style":{"enabled":true,"varName":"exportModeGroup","preferredSize":[0,0],"margins":[0,0,10,0],"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-54":{"id":54,"type":"StaticText","parentId":52,"style":{"enabled":true,"varName":"exportModeText","creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"CSV:","justify":"left","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-60":{"id":60,"type":"Button","parentId":36,"style":{"enabled":true,"varName":"createCSV","text":"CREATE CSV(S)","justify":"center","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-62":{"id":62,"type":"EditText","parentId":52,"style":{"enabled":false,"varName":"filePath","creationProps":{"noecho":false,"readonly":false,"multiline":false,"scrollable":false,"borderless":false,"enterKeySignalsOnChange":false},"softWrap":false,"text":"","justify":"left","preferredSize":[190,0],"alignment":null,"helpTip":null}},"item-63":{"id":63,"type":"Button","parentId":52,"style":{"enabled":true,"varName":null,"text":"Select","justify":"center","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-66":{"id":66,"type":"Progressbar","parentId":45,"style":{"enabled":true,"varName":null,"preferredSize":[358,4],"alignment":null,"helpTip":null}},"item-67":{"id":67,"type":"StaticText","parentId":45,"style":{"enabled":true,"varName":"status","creationProps":{"truncate":"none","multiline":false,"scrolling":false},"softWrap":false,"text":"Select a spreadsheet and press 'Go' to process!","justify":"left","preferredSize":[301,18],"alignment":null,"helpTip":null}},"item-68":{"id":68,"type":"Button","parentId":52,"style":{"enabled":true,"varName":"process","text":"Go","justify":"center","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-69":{"id":69,"type":"Checkbox","parentId":71,"style":{"enabled":true,"varName":"singleCsv","text":"Single CSV*","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-70":{"id":70,"type":"Checkbox","parentId":71,"style":{"enabled":true,"varName":"renderQ","text":"Add to Render Queue","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-71":{"id":71,"type":"Group","parentId":45,"style":{"enabled":true,"varName":"additionalOptions","preferredSize":[0,0],"margins":[0,0,10,0],"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-72":{"id":72,"type":"Button","parentId":36,"style":{"enabled":true,"varName":"info","text":"Info (*)","justify":"center","preferredSize":[0,0],"alignment":null,"helpTip":null}}},"order":[0,19,45,52,54,62,63,68,71,69,70,66,67,36,72,60,37],"settings":{"importJSON":true,"indentSize":false,"cepExport":false,"includeCSSJS":true,"functionWrapper":false,"compactCode":false,"showDialog":true,"afterEffectsDockable":false,"itemReferenceList":"None"}}
+      */ 
 
       // DIALOG
       // ======
@@ -145,7 +185,7 @@ const createSpreadsheetDialog = (exportables) => {
       exportModeGroup.orientation = "row";
       exportModeGroup.alignChildren = ["left", "center"];
       exportModeGroup.spacing = 10;
-      exportModeGroup.margins = [0, 0, 0, 10];
+      exportModeGroup.margins = [0, 0, 0, 0];
 
       var exportModeText = exportModeGroup.add("statictext", undefined, undefined, {
         name: "exportModeText",
@@ -173,6 +213,28 @@ const createSpreadsheetDialog = (exportables) => {
       process.text = "Go";
       process.onClick = () => {
         this.processSheet();
+      };
+
+      // ADDITIONALOPTIONS
+      // =================
+      var additionalOptions = panel1.add("group", undefined, {name: "additionalOptions"}); 
+      additionalOptions.orientation = "row"; 
+      additionalOptions.alignChildren = ["left","center"]; 
+      additionalOptions.spacing = 10; 
+      additionalOptions.margins = [0,0,0,10]; 
+
+      var singleCsv = additionalOptions.add("checkbox", undefined, undefined, {name: "singleCsv"}); 
+      singleCsv.text = "Single CSV*";
+      singleCsv.value = false;
+      singleCsv.onClick = () => {
+        this.singleCSV = singleCsv.value;
+      };
+
+      var renderQ = additionalOptions.add("checkbox", undefined, undefined, {name: "renderQ"}); 
+      renderQ.text = "Add to Render Queue";
+      renderQ.value = true;
+      renderQ.onClick = () => {
+        this.renderOp = renderQ.value ? "aeQueueOnly" : "compOnly";
       };
 
       // PANEL1
@@ -212,6 +274,12 @@ const createSpreadsheetDialog = (exportables) => {
       createCSV.text = "CREATE CSV(S)";
       createCSV.onClick = () => {
         this.printCSVs();
+      };
+
+      var info = finished.add("button", undefined, undefined, {name: "info"}); 
+      info.text = "Info (*)"; 
+      info.onClick = () => {
+        showSpreadSheetInfo();
       };
 
       dialog.show();
@@ -280,31 +348,12 @@ const createSpreadsheetDialog = (exportables) => {
           }
         });
 
-        sa_262_ii(template[tempName], "compOnly");
+        sa_262_ii(template[tempName], this.renderOp, v["output file"]);
         this.progressbar1.value = Math.floor((100 * (i + 1)) / this.spreadsheet.obj.length);
       });
 
       this.status.text = "Finished! Select another spreadsheet or click done.";
     },
-
-    // activateSubstatusUpdate: function () {
-    //   project.log("fishfingers");
-    //   this.substatusStatus = true;
-    //   this.updateSubstatus();
-    // },
-
-    // deactivateSubstatusUpdate: function () {
-    //   this.substatusStatus = false;
-    //   this.substatus.text = "";
-    // },
-
-    // updateSubstatus: function () {
-    //   project.log("fishfingers2");
-    //   if (!this.substatusStatus) return;
-    //   project.log("fishfingers");
-    //   this.substatus.text = status.text;
-    //   // var taskId = app.scheduleTask(this.updateSubstatus(), 3500, false);
-    // },
 
     getExportType: function () {
       return this.exportType;

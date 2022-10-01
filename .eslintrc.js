@@ -28,6 +28,7 @@ module.exports = {
     SolidSource: "readonly",
     PlaceholderSource: "readonly",
     FileSource: "readonly",
+    XLSX: "readonly",
   },
   extends: "eslint:recommended",
   parserOptions: {

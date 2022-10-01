@@ -16,7 +16,7 @@ import { colorize, hexToRgb } from "../tools/colors";
 import { arrIndex, customEach } from "../tools/legacyTools";
 import { fontStylesMaster, allEditableLayers } from "../globals/legacySupport";
 
-function sa_262_ii(templateChoice, renderOp) {
+function sa_262_ii(templateChoice, renderOp, outFile) {
 
   let externalImageList = [];
   let imageList = [];
@@ -758,10 +758,12 @@ percentNeeded = (percentNeeded < 100) ? percentNeeded : 100;\
 
     //var nameOfFile = outFolder.txt//(fileName.txt.text === '') ? composition.name : fileName.txt.text;
 
-    var resultFile = new File(outFolder.txt.text); // + slash + nameOfFile);
+    var resultFile = new File(outFile || outFolder.txt.text); // + slash + nameOfFile);
     var renderQueue = app.project.renderQueue;
     var render = renderQueue.items.add(composition);
     render.outputModules[1].file = resultFile;
+
+    if (renderOp === "aeQueueOnly") return;
 
     // Scripting support for Queue in AME.
     // Requires Adobe Media Encoder 11.0.

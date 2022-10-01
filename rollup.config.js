@@ -6,6 +6,8 @@ import commonjs from "@rollup/plugin-commonjs";
 import { string } from "rollup-plugin-string";
 import cleanup from 'rollup-plugin-cleanup';
 import findUnused from "rollup-plugin-unused";
+import include from 'rollup-plugin-include';
+
 
 // rollup.config.js
 export default {
@@ -24,9 +26,10 @@ export default {
     commonjs({
       include: /node_modules/,
     }),
-    string({ include: ["actions/*", "static/*"], exclude: ["static/sorcerers_apprentice_script_2_6_2_spreadsheet.jsx"] }),
+    string({ include: ["actions/*", "static/*"], exclude: ["node_modules/*", "static/sorcerers_apprentice_script_2_6_2_spreadsheet.jsx"] }),
     eslint({ throwOnError: true, fix: true }),
     json(),
+    include(),
     // cleanup(),
     getBabelOutputPlugin({ presets: ["extendscript"] }),
   ],
