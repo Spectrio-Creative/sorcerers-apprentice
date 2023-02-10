@@ -17,6 +17,10 @@ The templates themselves also must be structured in a specific way. They must be
 
 In both of the examples below, all four of the templates would be loaded into the script and checked for editable layers.
 
+![](../images/projectsetup.jpg)  |  ![](../images/projectsetup2.jpg) 
+:-------------------------:|:-------------------------:
+Example project with 4 templates in one templates folder. | Example project with 4 templates split between two folders.
+
 ## Composition Setup
 Within your template composition, you must specify which layers you wish to be editable by the script. To do so, you must tag them with with an exclaimation point followed by the media type indicator. The media types and tags are as follows:
 
@@ -32,7 +36,21 @@ In the example below, the ‘Image Demo’ comp has seven layers, six of which a
 
 _<font size="2">Note: layers and tabs are added to the menu in the order in which they appear in the composition (with precomp layers and tabs added after all layers in the main composition). If you would like to further control the organisation of the menu tabs (for instance, putting the ‘Intro’ tab first instead of the ‘Outro’ tab in the below example), you should use the [Group Tag](#group-tag).</font>_
 
+![](../images/layersetup.jpg) |  ![](../images/layersetup_demo.jpg)
+:-------------------------:|:-------------------------:
+Example comp with 6 editable layers.  | Resulting menu when script is run on example comp.
+
 ## Group Tag
+
+Layer tag ‘G’ [`!G`]
+
+In order to organise the template menu in a way that makes sense to you, you can use the Group Tag on layers at the top of your project ordered the way you would like the menu tabs to be ordered. These layers are not processed as editable layers and will not, themselves, appear in the menu, so they may technically any type of layer. For best organisation without compromising project performance, however, either an empty null object or empty adjustment layer is recommended.
+
+The example below takes the project from the [Comp Setup](#composition-setup) section and adds two null objects tagged, respectively, as `!G [Intro]` and `!G [Outro]` which moves the ‘Intro’ tab before the ‘Outro’ tab. It’s worth mentioning that, in this example, the addition of the `!G [Outro]` layer did nothing to the appearance of the menu, but adds to the clarity & organisation of the template comp.
+
+![](../images/groupsetup.jpg) |  ![](../images/groupsetup_demo.jpg)
+:-------------------------:|:-------------------------:
+Example comp with group layers to organise menu.  | Resulting menu when script is run.
 
 ## Color Control Layer
 

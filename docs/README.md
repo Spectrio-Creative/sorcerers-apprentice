@@ -20,4 +20,4 @@ title: Home
 
 If you're only here to nab the newest version of the script, it's just here: Version 2.6.2 | Panel UI | Dependencies
 
-Otherwise, this microsite should contain all the info on how to install & use the Sorcerer's Apprentice Script for AE. Use the menu on the left to find what you're looking for and if you have any questions, feature requests, etc please reach out to Adam Howard via Skype, RingCentral, or email adamh@spectrio.com.
+Otherwise, this microsite should contain all the info on how to install & use the Sorcerer's Apprentice Script for AE. Use the menu on the left to find what you're looking for and if you have any questions, feature requests, etc please reach out to Adam Howard via Skype, RingCentral, or email [adamh@spectrio.com](mailto:adamh@spectrio.com).
