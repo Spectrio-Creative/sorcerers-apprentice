@@ -7,21 +7,24 @@ import { string } from "rollup-plugin-string";
 import cleanup from 'rollup-plugin-cleanup';
 import findUnused from "rollup-plugin-unused";
 import include from 'rollup-plugin-include';
+import typescript from '@rollup/plugin-typescript';
 
 
 // rollup.config.js
 export default {
   input: process.env.ENTRY || "src/main.js",
-  output: [
+  output:
     {
       file: process.env.OUTPUT || "build/sorcerers_apprentice.jsx",
       format: "esm",
+      sourcemap: true,
     },
-  ],
+  
   plugins: [
     // process.env.ENTRY
     //   ? findUnused({ exclude: ["src/**"] })
     //   : findUnused({ exclude: ["src/playground.js", "**/_*.js"] }),
+    // typescript(),
     nodeResolve(),
     commonjs({
       include: /node_modules/,

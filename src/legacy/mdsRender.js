@@ -276,7 +276,9 @@ percentNeeded = maximumNum / layerNum * 100;\
     status.text = "Ready to fill layers";
     //Go through all editable layers and replace content
     for (var e = 0; e < editableLayers.length; e++) {
-      replaceContent(editableLayers[e]);
+      const layer = editableLayers[e];
+      project.log(`Replacing content on layer '${layer.name}'`);
+      replaceContent(layer);
     }
 
     sendtoRender(comp, renderOp);
@@ -334,6 +336,7 @@ percentNeeded = maximumNum / layerNum * 100;\
         return;
       }
 
+      status.text = "checking if color";
       if (varType === "!C") {
         //If a color layer, get color effects
         status.text = "Looping through colors: " + tabName;
@@ -350,11 +353,13 @@ percentNeeded = maximumNum / layerNum * 100;\
 
       layerField = imageList[camelCase(tabName)][camelCase(layerName)];
 
+      status.text = "checking if text layer";
       if (varType === "!T") {
         var thisText = layerField.txt.text;
         setText(layer, comp, thisText);
       }
 
+      status.text = "checking if media layer";
       if ((varType === "!I" || varType === "!V") && layerField.img.text !== "") {
         var orSize = {
             width: layer.width * (layer.scale.value[0] / 100),
@@ -435,6 +440,7 @@ percentNeeded = maximumNum / layerNum * 100;\
         }
       }
 
+      status.text = "checking if audio";
       if (varType === "!A" && layerField.audio.text !== "") {
         layer.replaceSource(libItemsReg(regSafe(layerField.audio.text), "Footage", 1), false);
       }
@@ -915,7 +921,7 @@ The image layer \"" +
 
     function imageTest(imgT, fileT) {
       status.text = "Checking: " + imgT.text;
-      if (/[\\\/]/g.test(imgT.text)) {
+      if (/[\\/]/g.test(imgT.text)) {
         status.text = "Did it get here?";
         externalImageList.push(imgT);
       } else if (imgT.text !== "" && libItemsReg(regSafe(imgT.text), "Footage").length === 0) {
@@ -936,7 +942,7 @@ The image layer \"" +
 
       if (/\.bmp$/i.test(path)) loadAttempt = 1;
 
-      status.text = "Loading External File: " + path.match(/[^\/\\]+\.([A-z]+)/g)[0];
+      status.text = "Loading External File: " + path.match(/[^/\\]+\.([A-z]+)/g)[0];
 
       if (tryToLoad(path) !== -1) {
         status.text = "loaded external " + i;

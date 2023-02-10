@@ -3,6 +3,7 @@ import { createInitialDialog } from "./InitialDialog";
 import dateFormat from "dateformat";
 import { ___ } from "../globals/document";
 import extend from "just-extend";
+import { roundTo } from "../tools/math";
 
 const createProject = (fileName) => {
   const folderTree = createFolderTree();
@@ -53,7 +54,9 @@ const createProject = (fileName) => {
       const rootFiles = rootFolder.getFiles();
 
       const folderReg = typeof folderName === "string" ? new RegExp(folderName) : folderName;
-      const folder = rootFiles.find((file) => !file.type && folderReg.test(file.name));
+      const folder = rootFiles.find(
+        (folder) => folder instanceof Folder && folderReg.test(folder.name)
+      );
 
       if (folder && folder.exists) {
         const files = folder.getFiles(mask);
@@ -95,7 +98,7 @@ const createProject = (fileName) => {
       const now = new Date();
       const diff = now.getTime() - watch.getTime();
       if (reset && timer) this.startTimer(timer, now);
-      return Math.roundTo(diff / 1000, 100);
+      return roundTo(diff / 1000, 100);
     },
   });
 };
