@@ -12,7 +12,7 @@ const createMainDialog = () => {
   mds.text = "THE SORCERER'S APPRENTICE";
   mds.preferredSize.width = 510;
   mds.orientation = "column";
-  mds.alignChildren = ["center", "top"];
+  mds.alignChildren = "center";
   mds.spacing = 10;
   mds.margins = 16;
 
@@ -35,7 +35,7 @@ const createMainDialog = () => {
 
   // TEMPLATE PANEL (THIS IS WHERE ALL THE GENERATED FIELDS WILL GO)
   // ========
-  var template = mds.add("tabbedpanel", undefined, undefined, { name: "template" });
+  const template:TabbedPanel = mds.add("tabbedpanel", undefined, undefined, { name: "template" });
   template.alignChildren = "fill";
   template.preferredSize.width = 479;
   template.margins = 0;
