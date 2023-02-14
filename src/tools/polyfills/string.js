@@ -24,7 +24,7 @@ function setUpStringMethods() {
 
   String.prototype.repeat = function (times) {
     let output = "";
-    for (let i = 0; i < times; i++) output += this;
+    for (let i = 0; i < times; i++) output += `${this}`;
     return output;
   };
 
