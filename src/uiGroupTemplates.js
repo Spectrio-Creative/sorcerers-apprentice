@@ -129,8 +129,8 @@ function addMediaGroup(gName, label, tab, inText, opts) {
           text:'${label}',
           preferredSize: [${sizes[0]}, -1]
         }, 
-        img: EditText { 
-          name:'img', 
+        media: EditText { 
+          name:'media', 
           ss_type: 'Media', 
           text: '${inText[0]}', 
           preferredSize:[${sizes[1]},25], 

@@ -360,7 +360,7 @@ percentNeeded = maximumNum / layerNum * 100;\
       }
 
       status.text = "checking if media layer";
-      if ((varType === "!I" || varType === "!V") && layerField.img.text !== "") {
+      if ((varType === "!I" || varType === "!V") && layerField.media.text !== "") {
         var orSize = {
             width: layer.width * (layer.scale.value[0] / 100),
             height: layer.height * (layer.scale.value[1] / 100),
@@ -383,7 +383,7 @@ percentNeeded = maximumNum / layerNum * 100;\
 
         if (layer.containingComp !== comp) innerComp = layer.containingComp;
 
-        layer.replaceSource(libItemsReg(regSafe(layerField.img.text), "Footage", 1), false);
+        layer.replaceSource(libItemsReg(regSafe(layerField.media.text), "Footage", 1), false);
 
         if (layer.width / layer.height <= orSize.width / orSize.height) {
           if (arrIndex(typeOptions, "f") == -1 && arrIndex(typeOptions, "b") == -1) {
@@ -441,8 +441,16 @@ percentNeeded = maximumNum / layerNum * 100;\
       }
 
       status.text = "checking if audio";
-      if (varType === "!A" && layerField.audio.text !== "") {
-        layer.replaceSource(libItemsReg(regSafe(layerField.audio.text), "Footage", 1), false);
+      project.log(varType);
+      if(varType === "!A") {
+        let testText = layerField;
+        testText = testText.media ? testText.media: undefined;
+        testText = testText.text ? testText.text: undefined;
+
+        project.log(`!A: ${testText}`);
+      }
+      if (varType === "!A" && layerField.media.text !== "") {
+        layer.replaceSource(libItemsReg(regSafe(layerField.media.text), "Footage", 1), false);
       }
 
       //Check to see if the layer needs to be turned on or off
@@ -889,8 +897,8 @@ The image layer \"" +
 
         var layerRef = imageList[templateChildren[i].name][childChildren[u].name];
 
-        if (layerRef.img !== undefined) {
-          if (imageTest(layerRef.img, "image") === -1) return -1;
+        if (layerRef.media !== undefined) {
+          if (imageTest(layerRef.media, "media file") === -1) return -1;
         } else if (layerRef.audio !== undefined) {
           if (imageTest(layerRef.audio, "audio file") === -1) return -1;
         } else if (layerRef.color !== undefined) {
@@ -921,8 +929,7 @@ The image layer \"" +
 
     function imageTest(imgT, fileT) {
       status.text = "Checking: " + imgT.text;
-      if (/[\\/]/g.test(imgT.text)) {
-        status.text = "Did it get here?";
+      if (/[\\\/]/g.test(imgT.text)) {
         externalImageList.push(imgT);
       } else if (imgT.text !== "" && libItemsReg(regSafe(imgT.text), "Footage").length === 0) {
         alert("Could not find " + fileT + " '" + imgT.text + "'");
@@ -942,7 +949,7 @@ The image layer \"" +
 
       if (/\.bmp$/i.test(path)) loadAttempt = 1;
 
-      status.text = "Loading External File: " + path.match(/[^/\\]+\.([A-z]+)/g)[0];
+      status.text = "Loading External File: " + path.match(/[^\/\\]+\.([A-z]+)/g)[0];
 
       if (tryToLoad(path) !== -1) {
         status.text = "loaded external " + i;
