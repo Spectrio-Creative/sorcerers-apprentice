@@ -4,10 +4,32 @@ import dateFormat from "dateformat";
 import { ___ } from "../globals/document";
 import extend from "just-extend";
 import { roundTo } from "../tools/math";
+import { menuTitle } from "../globals/project/menu";
 
-const createProject = (fileName) => {
+interface Project {
+  canceled: boolean;
+  startTime: Date;
+  stopWatch: { [key: string]: any };
+  logCounters: { [key: string]: any };
+  fileName: string;
+  exportType: "Traditional" | "Spreadsheet";
+  initialDialog: any;
+  version: string;
+  initialize: (version: string) => void;
+  setFileName: (fileName: string) => void;
+  cancel: () => void;
+  createLog: (content: string) => void;
+  findFilesFromFolder: (folderName: string, mask?: string, root?: string) => void;
+  log: (info: string, withDate: boolean) => void;
+  count: (key: string) => void;
+  finalStatus: () => void;
+  startTimer: (timerName: string, override: Date) => void;
+  split: (timerName: string, reset: boolean) => void;
+}
+
+const createProject = (fileName: string): Project => {
   const folderTree = createFolderTree();
-  return extend(folderTree, {
+  const projectDetails: Project = {
     canceled: false,
     startTime: new Date(),
     stopWatch: {},
@@ -15,8 +37,12 @@ const createProject = (fileName) => {
     fileName: fileName || "",
     exportType: "Traditional",
     initialDialog: createInitialDialog(),
+    version: "0.0.0",
     initialize: function (version) {
       version = version || "0.0.1";
+      this.version = version;
+
+      menuTitle.text = `The Sorcerer's Apprentice (v${version})`;
       this.initialDialog.version = version;
       this.initialDialog.show();
       if (this.initialDialog.canceled) return false;
@@ -54,9 +80,9 @@ const createProject = (fileName) => {
       const rootFiles = rootFolder.getFiles();
 
       const folderReg = typeof folderName === "string" ? new RegExp(folderName) : folderName;
-      const folder = rootFiles.find(
+      const folder: Folder = rootFiles.find(
         (folder) => folder instanceof Folder && folderReg.test(folder.name)
-      );
+      ) as Folder;
 
       if (folder && folder.exists) {
         const files = folder.getFiles(mask);
@@ -65,9 +91,9 @@ const createProject = (fileName) => {
       return false;
     },
 
-    log: function (string, withDate = false) {
+    log: function (info: string, withDate = false) {
       const now = new Date();
-      const content = withDate ? `\n[${dateFormat(now, "HH:MM:ss")}]: ${string}` : `\n${string}`;
+      const content = withDate ? `\n[${dateFormat(now, "HH:MM:ss")}]: ${info}` : `\n${info}`;
       this.appendToFileFromString(content, this.logLocation, "export-log.txt");
     },
 
@@ -89,18 +115,20 @@ const createProject = (fileName) => {
       this.log(result, false);
     },
 
-    startTimer: function (timer, override) {
-      this.stopWatch[timer] = override || new Date();
+    startTimer: function (timerName, override) {
+      this.stopWatch[timerName] = override || new Date();
     },
 
-    split: function (timer, reset) {
-      const watch = this.stopWatch[timer] || this.startTime;
+    split: function (timerName, reset = false) {
+      const watch = this.stopWatch[timerName] || this.startTime;
       const now = new Date();
       const diff = now.getTime() - watch.getTime();
-      if (reset && timer) this.startTimer(timer, now);
+      if (reset && timerName) this.startTimer(timerName, now);
       return roundTo(diff / 1000, 100);
     },
-  });
+  };
+
+  return extend(folderTree, projectDetails) as Project;
 };
 
 export { createProject };

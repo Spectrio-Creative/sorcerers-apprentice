@@ -1,4 +1,7 @@
 module.exports = {
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
   env: {
     browser: true,
     es2021: true,
@@ -30,7 +33,6 @@ module.exports = {
     FileSource: "readonly",
     XLSX: "readonly",
   },
-  extends: "eslint:recommended",
   parserOptions: {
     ecmaVersion: 12,
     sourceType: "module",
@@ -45,7 +47,7 @@ module.exports = {
     "no-inner-declarations": "warn",
     "no-useless-escape": "warn",
     "no-misleading-character-class": "warn",
-    "no-unused-vars": [
+    "@typescript-eslint/no-unused-vars": [
       "error",
       {
         argsIgnorePattern: "^_",
@@ -53,5 +55,6 @@ module.exports = {
         caughtErrorsIgnorePattern: "^_",
       },
     ],
+    "no-unused-vars": "off"
   },
 };

@@ -3,6 +3,7 @@
         "lib": ["ES2022"],
         "types": [
             "types-for-adobe/aftereffects/22.0"
-        ]
+        ],
+        "resolveJsonModule": true
     }
 }

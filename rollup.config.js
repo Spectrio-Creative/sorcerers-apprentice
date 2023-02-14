@@ -12,7 +12,7 @@ import typescript from '@rollup/plugin-typescript';
 
 // rollup.config.js
 export default {
-  input: process.env.ENTRY || "src/main.js",
+  input: process.env.ENTRY || "src/main.ts",
   output:
     {
       file: process.env.OUTPUT || "build/sorcerers_apprentice.jsx",
@@ -24,12 +24,12 @@ export default {
     // process.env.ENTRY
     //   ? findUnused({ exclude: ["src/**"] })
     //   : findUnused({ exclude: ["src/playground.js", "**/_*.js"] }),
-    // typescript(),
+    typescript(),
     nodeResolve(),
     commonjs({
       include: /node_modules/,
     }),
-    string({ include: ["actions/*", "static/*"], exclude: ["node_modules/*", "static/sorcerers_apprentice_script_2_6_2_spreadsheet.jsx"] }),
+    string({ include: ["actions/*", "static/*"], exclude: ["node_modules/*", "static/sorcerers_apprentice_script_2_6_2_spreadsheet.js"] }),
     eslint({ throwOnError: true, fix: true }),
     json(),
     include(),

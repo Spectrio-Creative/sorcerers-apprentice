@@ -11,12 +11,12 @@ const createSpreadsheet = () => {
     file: csv,
     obj: spreadsheet,
 
-    logSheet: function (text) {
+    logSheet: function (text?:string):void {
       if (text) project.log(text);
       project.log(stringify(this.obj));
     },
 
-    getNewSpreadsheet: function () {
+    getNewSpreadsheet: function ():void {
       const csv = File.openDialog("Please select CSV Spreadsheet.");
       const newSheet = getSpreadsheet(csv);
 
