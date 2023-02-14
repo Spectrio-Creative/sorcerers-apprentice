@@ -26,7 +26,8 @@ const createMainDialog = () => {
   header.alignment = ["fill", "top"];
 
   var title = header.add("statictext", undefined, undefined, { name: "title" });
-  title.text = `The Sorcerer's Apprentice (v${project.initialDialog.version})`;
+  var version = project ? project.version ? project.version : "0" : "0";
+  title.text = `The Sorcerer's Apprentice (v${version})`;
   title.alignment = ["fill", "center"];
 
   var compTitle = header.add(ui.addTextGroup("compTitle", "Comp Title:"));
