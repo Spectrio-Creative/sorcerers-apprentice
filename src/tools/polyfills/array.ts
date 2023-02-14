@@ -1,3 +1,12 @@
+declare global {
+  interface Array<T> {
+    empty(): boolean;
+    first(): any;
+    last(): any;
+    reducer(callback, initialValue?:any): any;
+  }
+}
+
 function setUpArrayMethods() {
   Array.prototype.indexOf = function (item) {
     for (let i = 0; i < this.length; i++) {
@@ -37,10 +46,10 @@ function setUpArrayMethods() {
     return this[this.length - 1];
   };
 
-  Array.prototype.reducer = function(callback, initialValue) {
-    var accumulator = initialValue === undefined ? undefined : initialValue;
-  
-    for (var i = 0; i < this.length; i++) {
+  Array.prototype.reducer = function (callback: () => any, initialValue: any) {
+    let accumulator = initialValue === undefined ? undefined : initialValue;
+
+    for (let i = 0; i < this.length; i++) {
       if (accumulator !== undefined) {
         accumulator = callback.call(undefined, accumulator, this[i], i, this);
       } else {
