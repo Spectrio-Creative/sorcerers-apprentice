@@ -91,22 +91,27 @@ function sa_262_ii(templateChoice, renderOp, outFile) {
     var preComps = getPreComps(compFolder);
 
     //Get all layers in preComps that are linked outward.
+    project.log("");
     customEach(preComps, function (item) {
       var retros = findLayers(/<<.*>>/g, item),
         retrols = findLayers(/![A-Z][a-z]*l[a-z]*\s/g, item),
         allSubs = findLayers(/.*/g, item);
       customEach(retros, function (ritem) {
+        project.log(ritem.name);
         retroLayers.push({ layer: ritem, comp: item });
       });
       customEach(retrols, function (rlitem) {
+        project.log(rlitem.name);
         retroLayers.push({ layer: rlitem, comp: item });
       });
-
+      
       //        status.text = 'about to start loop';
       customEach(allSubs, function (layr) {
         relinkExp(layr);
+        retroLayers.push({ layer: layr, comp: item });
       });
     });
+    project.log("");
 
     //Fill template
     fillTemplate(comp, compFolder, templateChoice, renderOp);
@@ -144,7 +149,9 @@ function sa_262_ii(templateChoice, renderOp, outFile) {
 
     //Go through the retro links and link them to new comp
     customEach(retroLayers, function (item) {
-      if (item.layer.property("Source Text") !== undefined) {
+      project.log(`The END: ${item.layer.name}`);
+      if (item.layer.property("Source Text") !== undefined && item.layer.property("Source Text").expressionEnabled) {
+        project.log(item.layer.name);
         var orExp = item.layer.property("Source Text").expression,
           expressionComp = orExp.match(/comp\(".*?"\)/)[0].slice(6, -2),
           newExp = orExp;
