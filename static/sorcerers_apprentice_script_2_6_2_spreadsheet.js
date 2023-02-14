@@ -340,11 +340,9 @@ function sa_262(collector = {}) {
 
     status.text = inputFld.parent.name;
 
-    var textLocation = "img";
+    var textLocation = "media";
     if (inputFld.parent.txt !== undefined) {
       textLocation = "txt";
-    } else if (inputFld.parent.audio !== undefined) {
-      textLocation = "audio";
     }
 
     var defaultFolder = inputFld.parent[textLocation].text;
