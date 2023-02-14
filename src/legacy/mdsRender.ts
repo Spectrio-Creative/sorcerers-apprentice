@@ -16,7 +16,7 @@ import { colorize, hexToRgb } from "../tools/colors";
 import { arrIndex, customEach } from "../tools/legacyTools";
 import { fontStylesMaster, allEditableLayers } from "../globals/legacySupport";
 
-function sa_262_ii(templateChoice, renderOp, outFile) {
+function sa_262_ii(templateChoice:TabbedPanel, renderOp, outFile) {
 
   let externalImageList = [];
   let imageList = [];
@@ -46,7 +46,7 @@ function sa_262_ii(templateChoice, renderOp, outFile) {
     var ORcomp = libItemsInFolder(regSafe(templateChoice.text), ORcompFolder, "Composition")[0];
     status.text = "Found Original Comp";
 
-    if (prerequisites(templateChoice, ORcomp, ORcompFolder) === -1) return;
+    if (prerequisites(templateChoice) === -1) return;
     /*pbar.value = 0;
     alert('Made it!'); return;*/
     pbar.value = 25;
@@ -175,10 +175,12 @@ function sa_262_ii(templateChoice, renderOp, outFile) {
         var layerName = newExp
             .match(/"!T.*(?=")/)[0]
             .split(/"!T[a-z]*/g)[1]
-            .replace(/(^\s*)|(\s*$)/g, ""),
-          tabName = /\[.+\]/g.test(layerName);
+            .replace(/(^\s*)|(\s*$)/g, "");
+            
+        const hasTabName = /\[.+\]/g.test(layerName);
+        let tabName:string = "";
 
-        if (tabName) {
+        if (hasTabName) {
           tabName = layerName.match(/\[.+\]/g)[0].replace(/[[\]]/g, "");
           layerName = layerName.replace(/\[.+\](\s)+/g, "");
         } else {
@@ -316,13 +318,14 @@ percentNeeded = maximumNum / layerNum * 100;\
       if (typeOptions == null || typeOptions == undefined) typeOptions = [];
       status.text = "variables switched";
 
-      var layerName = layer.name.split(terminalReg)[1].replace(/(^\s*)|(\s*$)/g, "");
-      var tabName = /\[.+\]/g.test(layerName);
+      var layerName:string = layer.name.split(terminalReg)[1].replace(/(^\s*)|(\s*$)/g, "");
+      const hasTabName:boolean = /\[.+\]/g.test(layerName);
+      let tabName:string = "";
 
       status.text = "layer name defined: " + layerName;
 
       //Check if tab is specified : if not, use type default tab
-      if (tabName) {
+      if (hasTabName) {
         tabName = layerName.match(/\[.+\]/g)[0].replace(/[[\]]/g, "");
         layerName = layerName.replace(/\[.+\](\s)+/g, "");
       } else {
@@ -958,20 +961,13 @@ The image layer \"" +
 
       status.text = "Loading External File: " + path.match(/[^\/\\]+\.([A-z]+)/g)[0];
 
-      if (tryToLoad(path) !== -1) {
-        status.text = "loaded external " + i;
-      } else {
-        return -1;
-      }
-
-      function tryToLoad(loadPath) {
+      const tryToLoad = function (loadPath) {
         var io = new ImportOptions(File(loadPath));
         if (io.canImportAs(ImportAsType.FOOTAGE)) {
           //Change the field to just show the filename for later use
           externalImageList[i].text = new File(loadPath).name; //io.name; //(new File(path)).name;
 
           var fileLocation = String(new File(path).parent).replace(/%20/g, wSpace) + slash;
-          console.log(fileLocation);
           var scriptLocation = String(new File($.fileName).parent).replace(/%20/g, wSpace);
 
           try {
@@ -1052,6 +1048,12 @@ The image layer \"" +
           pbar.value = 0;
           return -1;
         }
+      }
+
+      if (tryToLoad(path) !== -1) {
+        status.text = "loaded external " + i;
+      } else {
+        return -1;
       }
     }
   }
