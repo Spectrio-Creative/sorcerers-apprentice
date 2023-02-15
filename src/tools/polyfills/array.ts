@@ -1,8 +1,8 @@
 declare global {
   interface Array<T> {
     empty(): boolean;
-    first(): any;
-    last(): any;
+    first(): T;
+    last(): T;
     reducer(callback, initialValue?:any): any;
   }
 }
