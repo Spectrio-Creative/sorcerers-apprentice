@@ -20,7 +20,7 @@ interface Project {
   cancel: () => void;
   createLog: (content: string) => void;
   findFilesFromFolder: (folderName: string, mask?: string, root?: string) => void;
-  log: (info: string, withDate: boolean) => void;
+  log: (info: string, withDate?: boolean) => void;
   count: (key: string) => void;
   finalStatus: () => void;
   startTimer: (timerName: string, override: Date) => void;
