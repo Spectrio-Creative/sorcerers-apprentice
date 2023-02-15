@@ -1,4 +1,4 @@
-function revealFile(filePath) {
+export function revealFile(filePath) {
   if (filePath instanceof File) {
     filePath = filePath.fsName;
   }
@@ -11,4 +11,10 @@ function revealFile(filePath) {
   return system.callSystem(command + " " + arg);
 }
 
-export { revealFile };
+export const windows = $.os.indexOf("Windows") !== -1;
+
+export const __ = windows ? "\\" : "/";
+
+export const slash = __;
+
+export const systemSpace = windows ? " " : "\\ ";
