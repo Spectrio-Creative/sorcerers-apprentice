@@ -3,11 +3,11 @@ export function revealFile(filePath) {
     filePath = filePath.fsName;
   }
 
-  var command = "open -R";
+  let command = "open -R";
   if ($.os.indexOf("Win") != -1) {
     command = "Explorer /select,";
   }
-  arg = '"' + filePath + '"';
+  const arg = "\"" + filePath + "\"";
   return system.callSystem(command + " " + arg);
 }
 
