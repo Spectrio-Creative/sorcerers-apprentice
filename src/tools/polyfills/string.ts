@@ -1,3 +1,9 @@
+declare global {
+  interface String {
+    matchFirst: (match:string|RegExp) => string;
+  }
+}
+
 function setUpStringMethods() {
   String.prototype.replaceAll = function (searchvalue, newvalue) {
     searchvalue = searchvalue instanceof RegExp ? searchvalue : new RegExp(searchvalue, "g");
@@ -28,16 +34,7 @@ function setUpStringMethods() {
     return output;
   };
 
-  String.prototype.matchAll = function (rx) {
-    if (typeof rx === "string") rx = new RegExp(rx, "g"); // coerce a string to be a global regex
-    rx = new RegExp(rx); // Clone the regex so we don't update the last index on the regex they pass us
-    let cap = []; // the single capture
-    let all = []; // all the captures (return this)
-    while ((cap = rx.exec(this)) !== null) all.push(cap); // execute and add
-    return all; // profit!
-  };
-
-  String.matchFirst = function (rx) {
+  String.prototype.matchFirst = function (rx) {
     if (typeof rx === "string") rx = new RegExp(rx, "g"); // coerce a string to be a global regex
     return (this.match(rx) || [])[0];
   };
