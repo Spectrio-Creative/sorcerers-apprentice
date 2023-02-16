@@ -22,7 +22,6 @@ import { fontStylesMaster, allEditableLayers } from "../src/globals/legacySuppor
 function sa_262(collector = {}) {
   const addBrowseGroup = collector.addBrowseGroup || ui.addBrowseGroup,
     addColorGroup = collector.addColorGroup || ui.addColorGroup,
-    //   addGroupV = collector.addGroupV || ui.addGroupV,
     addMediaGroup = collector.addMediaGroup || ui.addMediaGroup,
     addTab = collector.addTab || ui.addTab,
     addTabbedPannel = collector.addTabbedPannel || ui.addTabbedPannel,

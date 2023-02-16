@@ -1,27 +1,28 @@
 // UI Group Templates to use in the UI Set up
 // ============
 
-function addTextGroup(gName, label, tab, inText, typeOptions) {
-  inText = inText || ["", true];
-  typeOptions = typeOptions || ["n"];
+function addTextGroup(groupName:string, label:string, tab = "", inText:[string, boolean] = ["", true], typeOptions:string[] = ["n"]) {
+  let sizes = tab === "tab" ? [110, 302] : [91, 378];
+  const multiline = typeOptions.indexOf("m") !== -1 ? true : false;
+  const visible = typeOptions.indexOf("v") !== -1 ? true : false;
+  const h = multiline ? 60 : 25;
+  const visibilityToggle = `visibilityToggle: Checkbox {
+    text:'',
+    alignment: ['left','bottom'],
+    preferredSize: [-1, 19],
+    value: ${inText[1]}
+  }, \n`;
 
-  var sizes = tab === "tab" ? [110, 302] : [91, 378],
-    multiline = typeOptions.indexOf("m") !== -1 ? true : false,
-    visible = typeOptions.indexOf("v") !== -1 ? true : false,
-    h = multiline ? 60 : 25,
-    visCheck = !visible
-      ? ""
-      : `visCheck: Checkbox {text:'',  alignment: ['left','bottom'], preferredSize: [-1, 19], value: ${inText[1]}}, \n`;
   sizes = !visible ? sizes : [82, sizes[1]];
   return `group {
-        name: '${gName}',
+        name: '${groupName}',
         ss_type: 'Text Group',
         orientation:'row',
         alignment:['fill','top'],
         alignChildren: ['left','center'],
         spacing: 10,
         margins: 0,
-        ${visCheck}
+        ${visible ? visibilityToggle : ""}
         label: StaticText { 
           text:'${label}', 
           preferredSize: [${sizes[0]}, -1]
@@ -39,12 +40,11 @@ function addTextGroup(gName, label, tab, inText, typeOptions) {
     }`;
 }
 
-function addBrowseGroup(gName, label, tab, inText) {
-  inText = inText || ["", true];
-  var sizes = tab === "tab" ? [110, 202, 90] : [91, 278, 90];
+function addBrowseGroup(groupName:string, label:string, tab:"tab"|"" = "", inText:[string, boolean] = ["", true]) {
+  const sizes = tab === "tab" ? [110, 202, 90] : [91, 278, 90];
 
   return `group { 
-        name: '${gName}',
+        name: '${groupName}',
         ss_type: 'Browse Group',
         orientation:'row',
         alignment:['fill','top'],
@@ -69,62 +69,27 @@ function addBrowseGroup(gName, label, tab, inText) {
     }`;
 }
 
-function addGroupV(gName, label, tab, inText, opts) {
-  inText = inText || ["", true];
-  opts = opts || ["n"];
-  var sizes = tab === "tab" ? [110, 202, 90] : [91, 278, 90],
-    visible = opts.indexOf( "v") !== -1 ? true : false,
-    visCheck = !visible
-      ? ""
-      : "visCheck: Checkbox {text:'',  alignment: ['left','center'], preferredSize: [-1, 15], value: 'Visible'}, \n";
+function addMediaGroup(groupName:string, label:string, tab:string, inText:[string, boolean] = ["", true], opts:string[] = ["n"]) {
+  let sizes = tab === "tab" ? [110, 202, 90] : [91, 278, 90];
+  const visible = opts.indexOf( "v") !== -1 ? true : false;
+  const visibilityToggle = `visibilityToggle: Checkbox {
+    text:'',
+    alignment: ['left','center'],
+    preferredSize: [-1, 15],
+    value: ${inText[1]}
+  } \n`;
+
   sizes = !visible ? sizes : [82, sizes[1]];
 
   return `group { 
-        name: '${gName}',
-        ss_type: 'Visibility Group',
-        orientation:'row',
-        alignment:['fill','top'],
-        alignChildren: ['left','center'],
-        spacing: 10,
-        margins: 0,
-        ${visCheck}
-        label: StaticText { 
-          text:'${label}', 
-          preferredSize: [${sizes[0]}, -1]
-        }, 
-        img: EditText { 
-          name:'img', 
-          ss_type: 'GroupV',
-          text: '${inText[0]}', 
-          preferredSize:[${sizes[1]},25], 
-          alignment: ['left','fill']
-        }
-        browse: Button { 
-          text: 'Browse', 
-          preferredSize:[${sizes[2]},25]
-        }
-    }`;
-}
-
-function addMediaGroup(gName, label, tab, inText, opts) {
-  inText = inText || ["", true];
-  opts = opts || ["n"];
-  var sizes = tab === "tab" ? [110, 202, 90] : [91, 278, 90],
-    visible = opts.indexOf( "v") !== -1 ? true : false,
-    visCheck = !visible
-      ? ""
-      : `visCheck: Checkbox {text:'',  alignment: ['left','center'], preferredSize: [-1, 15], value: ${inText[1]}`;
-  sizes = !visible ? sizes : [82, sizes[1]];
-
-  return `group { 
-        name: '${gName}', 
+        name: '${groupName}', 
         ss_type: 'Media Group',
         orientation:'row',
         alignment:['fill','top'],
         alignChildren: ['left','center'],
         spacing: 10,
         margins: 0,
-        ${visCheck}
+        ${visibilityToggle}
         label: StaticText { 
           text:'${label}',
           preferredSize: [${sizes[0]}, -1]
@@ -143,11 +108,10 @@ function addMediaGroup(gName, label, tab, inText, opts) {
     }`;
 }
 
-function addColorGroup(gName, label, tab, inText) {
-  var sizes = tab === "tab" ? [110, 202, 90] : [91, 278, 90];
-  inText = inText || "";
+function addColorGroup(groupName:string, label:string, tab:string, inText = "") {
+  const sizes = tab === "tab" ? [110, 202, 90] : [91, 278, 90];
   return `group { 
-        name: '${gName}',
+        name: '${groupName}',
         ss_type: 'Color Group',
         orientation:'row',
         alignment:['fill','top'],
@@ -173,10 +137,10 @@ function addColorGroup(gName, label, tab, inText) {
     }`;
 }
 
-function addTab(tName, label) {
+function addTab(tabName:string, label:string) {
   return `tab {
         text: '${label}', 
-        name: '${tName}', 
+        name: '${tabName}', 
         ss_type: 'Tab', 
         orientation: 'column', 
         spacing: 10, margins: 10, 
@@ -184,9 +148,9 @@ function addTab(tName, label) {
     }`;
 }
 
-function addTabbedPannel(tName) {
+function addTabbedPannel(tabName:string) {
   return `tabbedpanel {
-        name: '${tName}', 
+        name: '${tabName}', 
         ss_type: 'Tabbed Pannel', 
         alignChildren: 'fill', 
         preferredSize: [455, -1], margins: 0, 
@@ -197,7 +161,6 @@ function addTabbedPannel(tName) {
 export default {
   addBrowseGroup,
   addColorGroup,
-  addGroupV,
   addMediaGroup,
   addTab,
   addTabbedPannel,
