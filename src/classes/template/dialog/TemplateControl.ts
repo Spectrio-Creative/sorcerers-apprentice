@@ -3,7 +3,6 @@ import { project } from "../../../globals/globals";
 import { template } from "../../../globals/project/menu";
 import set from "just-safe-set";
 import get from "just-safe-get";
-import stringify from "fast-safe-stringify";
 
 export const isMatch = (
   a: string,
@@ -59,16 +58,30 @@ export const findPathByKey = (
 
 export const parseCategoryTitle = (fullTitle: string) => {
   if (typeof fullTitle !== "string") return;
-  const matcher = /(?:![A-Z][a-z]*\W*(?:\([\w ]+\))?\W)?(?:\[(.*)\])?\W*(.*)/;
-  // const matcher = /(?:\[(.*)\])?\W*(.+)/;
-  const [_total, group, title] = fullTitle.match(matcher);
-  return { input: fullTitle, group, title };
+  // const matcher = /(?:![A-Z][a-z]*\s*(?:\([\w ]+\))?\s)?(?:\[(.*)\])?\s*(.*)/;
+  let title = fullTitle;
+
+  const typeMatch = /!([A-Z])([a-z]*)/;
+  const groupMatch = /(?:\[(.*)\])/;
+  const sectionMatch = /(?:\((.*)\))/;
+
+  const [_typeMatch, type, subtype] = title.match(typeMatch) || [];
+  title = title.replace(typeMatch, "").trim();
+
+  const [_groupMatch, group] = title.match(groupMatch) || [];
+  title = title.replace(groupMatch, "").trim();
+
+  const [_sectionMatch, section] = title.match(sectionMatch) || [];
+  title = title.replace(sectionMatch, "").trim();
+
+  return { input: fullTitle, type, subtype, group, section, title };
 };
 
 interface TemplateLookup {
   compName?: string;
   layerName?: string;
   fullTitle?: string;
+  template?: string;
 }
 
 interface TemplateValueData extends TemplateLookup {
@@ -79,16 +92,18 @@ export class TemplateControl {
   menuMap: GenericObject;
   allPaths: string[];
 
-  constructor() {
+  // constructor() {}
+
+  init = function () {
     this.menuMap = this.mapMenu(template);
     this.allPaths = findPathByKey(this.menuMap, undefined, { allFullPaths: true });
 
     project.log("Created TemplateControl");
     project.log("===========");
     project.log("All Paths:");
-    project.log(stringify(this.allPaths));
+    project.log(this.allPaths.reducer((t, c) => `${t}\n${c}`));
     project.log("===========\n");
-  }
+  };
 
   mapMenu = function (menu: TabbedPanel) {
     const map = Object.entries(menu);
@@ -111,17 +126,17 @@ export class TemplateControl {
     return output;
   };
 
-  getTemplatePath = ({ compName, layerName, fullTitle }: TemplateLookup) => {
+  getTemplatePath = ({ compName, layerName, fullTitle, template }: TemplateLookup) => {
     if (!layerName && !fullTitle) return;
     const titleInfo = parseCategoryTitle(fullTitle) || { title: layerName, group: compName };
-    const titleSansSpace = titleInfo.title.replace(/\W/g, "");
+    const titleSansSpace = titleInfo.title.replace(/\s/g, "");
 
-    const paths = this.allPaths.filter((path) => path.includes(titleInfo.group || ""));
+    const paths = template ? this.allPaths.filter((path) => path.includes(template.replace(/\W/g, ""))) : this.allPaths;
 
     const possiblePaths = paths.filter((path) => {
-      path = path.replace(/\W/g, "");
+      path = path.replace(/\s/g, "");
       const titleMatch = new RegExp(titleSansSpace, "i").test(path);
-      const groupMatch = titleInfo.group ? new RegExp(titleInfo.group.replace(/\W/g, ""), "i").test(path) : true;
+      const groupMatch = titleInfo.group ? new RegExp(titleInfo.group.replace(/\s/g, ""), "i").test(path) : true;
 
       return titleMatch && groupMatch;
     });
@@ -136,9 +151,9 @@ export class TemplateControl {
     }
   };
 
-  setTemplateValue = ({ value, compName, layerName, fullTitle }: TemplateValueData) => {
-    const path = this.getTemplatePath({ compName, layerName, fullTitle });
-
+  setTemplateValue = (input: TemplateValueData) => {
+    const path = this.getTemplatePath(input);
+    const value = input.value;
     if (!path) return;
 
     set(template, `${path}.text`, value);
@@ -149,9 +164,8 @@ export class TemplateControl {
     }
   };
 
-  getTemplateValue = ({ compName, layerName, fullTitle }: TemplateLookup) => {
-    const path = this.getTemplatePath({ compName, layerName, fullTitle });
-
+  getTemplateValue = (input: TemplateLookup) => {
+    const path = this.getTemplatePath(input);
     if (!path) return;
 
     return get(template, `${path}.text`);

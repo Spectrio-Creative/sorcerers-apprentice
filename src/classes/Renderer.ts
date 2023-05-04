@@ -1,6 +1,6 @@
 import { project } from "../globals/globals";
 // import { status } from "../globals/project/menu";
-import { compBtn, compTitle, pbar, queueBtn, renderBtn, status, template } from "../globals/project/menu";
+import { compBtn, compTitle, pbar, queueBtn, renderBtn, status, template, templateControl } from "../globals/project/menu";
 // import { libItemsInFolder, libItemsReg, regSafe } from "../tools/ae";
 import { findLayers, getPreComps, libItemsInFolder, libItemsReg, regSafe } from "../tools/ae";
 import { ITab } from "../uiGroupTemplates";
@@ -10,6 +10,7 @@ import { addLinkedPrecomps, prerequisites } from "../legacy/legacyFunctionality"
 import { fontStylesMaster } from "../globals/legacySupport";
 import { setText } from "../legacy/legacyTextFunctions";
 import fillTemplate from "../legacy/legacyFillTemplate";
+import stringify from "fast-safe-stringify";
 
 export type RenderOp = "compOnly" | "aeQueueOnly" | "queueOnly" | "renderAlso";
 
@@ -61,6 +62,8 @@ export class Renderer implements IRenderer {
     }
 
     if (prerequisites(this.templateChoice, this.panel) === -1) return;
+
+    project.log(stringify(this.panel, undefined, undefined, { depthLimit: 2, edgesLimit: 2 }));
 
     const ORcompFolder: FolderItem = libItemsReg(
       Number(this.templateChoice.name.match(/[0-9]+$/g)[0]),
@@ -170,14 +173,23 @@ export class Renderer implements IRenderer {
         (layer.property("Source Text") as Property).expressionEnabled
       ) {
         const orExp = (layer.property("Source Text") as Property).expression,
+          expressionLayer = orExp.match(/layer\(".*?"\).text.sourceText/)[0].slice(7, -18),
           expressionComp = orExp.match(/comp\(".*?"\)/)[0].slice(6, -2);
         let newExp = orExp;
 
-        const textValue = layer.text.sourceText.valueAtTime(0, false);
+        let textValue = layer.text.sourceText.valueAtTime(0, false).text;
+
+        project.log("===========");
+        project.log(`Replacing expression on "${layer.name}"`);
+
+        const expressionSourceText = templateControl.getTemplateValue({fullTitle: expressionLayer});
+
+        if(expressionSourceText) textValue = expressionSourceText;
 
         if (expressionComp === ORcomp.name) {
           const orReg = new RegExp(regSafe(ORcomp.name), "g");
           newExp = orExp.replace(orReg, comp.name);
+          textValue = textValue + "";
         } else {
           customEach(preComps, function (item) {
             if (expressionComp === item.name) {
@@ -189,16 +201,21 @@ export class Renderer implements IRenderer {
           });
         }
 
+        project.log(`Exp -layer: "${expressionLayer}"`);
+        project.log(`Exp --text: "${expressionSourceText}"`);
+        project.log(`Exp --text: "${textValue}"`);
+        project.log("===========\n");
+
         (layer.property("Source Text") as Property).expression = newExp;
 
         layer.text.sourceText.expressionEnabled = false;
         setText({
           textLayer: layer,
           comp: compItem,
-          newText: textValue.text,
+          newText: textValue,
           fontStyles: this.fontStyles,
           panel: this.panel,
-        });
+        }, true);
         layer.text.sourceText.expressionEnabled = true;
       }
     }

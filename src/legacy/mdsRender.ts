@@ -15,35 +15,37 @@ import { findLayers, getPreComps, libItemsInFolder, libItemsReg, regSafe } from 
 import { colorize, hexToRgb } from "../tools/colors";
 import { arrIndex, customEach } from "../tools/legacyTools";
 import { fontStylesMaster, allEditableLayers } from "../globals/legacySupport";
+import { locateOrLoadFile } from "../tools/fs";
+import { RenderOp } from "../classes/Renderer";
+// import stringify from "fast-safe-stringify";
 
-function sa_262_ii(templateChoice:TabbedPanel, renderOp, outFile) {
-
-  let externalImageList = [];
+function sa_262_ii(templateChoice: TabbedPanel, renderOp: RenderOp, outFile?: string) {
   let imageList = [];
   let fontStyles = {};
 
-  const windows = $.os.indexOf("Windows") !== -1,
-    slash = windows ? "\\" : "/",
-    wSpace = windows ? " " : "\\ ";
-
-  const rmCmd = (path) =>
-    windows ? "del /f \"" + path + "\"" : "rm " + path.replace(/(?:\\.)+|( )/g, "\\ ");
-
-  project.log("We’re doing something!");
-  status.text = "Yes, we are doing something";
+  status.text = "Preparing to render...";
 
   mdsRender(templateChoice, renderOp);
 
   function mdsRender(templateChoice, renderOp) {
     try {
       imageList = clone(template[templateChoice.name]["content_" + templateChoice.text]);
+      project.log("imageList: " + (imageList as any).ss_type);
     } catch (e) {
       status.text = e;
     }
 
-    var ORcompFolder = libItemsReg(Number(templateChoice.name.match(/[0-9]+$/g)[0]), "Folder", 1);
+    const ORcompFolder: FolderItem = libItemsReg(
+      Number(templateChoice.name.match(/[0-9]+$/g)[0]),
+      "Folder",
+      1
+    ) as FolderItem;
     status.text = "Found Comp Folder";
-    var ORcomp = libItemsInFolder(regSafe(templateChoice.text), ORcompFolder, "Composition")[0];
+    const ORcomp = libItemsInFolder(
+      regSafe(templateChoice.text),
+      ORcompFolder,
+      "Composition"
+    )[0] as CompItem;
     status.text = "Found Original Comp";
 
     if (prerequisites(templateChoice) === -1) return;
@@ -52,7 +54,7 @@ function sa_262_ii(templateChoice:TabbedPanel, renderOp, outFile) {
     pbar.value = 25;
     status.text = templateChoice.text;
 
-    var comp = ORcomp.duplicate();
+    const comp = ORcomp.duplicate();
 
     fontStyles = fontStylesMaster[ORcomp.id];
 
@@ -60,16 +62,16 @@ function sa_262_ii(templateChoice:TabbedPanel, renderOp, outFile) {
     comp.name = compTitle.txt.text !== "" ? compTitle.txt.text : ORcomp.name;
 
     status.text = "Renamed Comp '" + comp.name + "'";
-    var compFolder = app.project.items.addFolder(comp.name);
+    const compFolder = app.project.items.addFolder(comp.name);
     status.text = "Created Folder '" + comp.name + "'";
-    var userComps = libItemsReg(/User Comps/g, "Folder")[0];
+    let userComps = libItemsReg(/User Comps/g, "Folder")[0];
     if (userComps == undefined) userComps = app.project.items.addFolder("User Comps");
 
     status.text = "Found or Created 'User Comps' Folder";
 
     //delete existing folder if needed
     if (libItemsInFolder("^" + regSafe(comp.name) + "$", userComps, "Folder").length > 0) {
-      var matchList = libItemsInFolder("^" + regSafe(comp.name) + "$", userComps, "Folder");
+      const matchList = libItemsInFolder("^" + regSafe(comp.name) + "$", userComps, "Folder");
       customEach(matchList, function (match) {
         match.remove();
       });
@@ -77,38 +79,24 @@ function sa_262_ii(templateChoice:TabbedPanel, renderOp, outFile) {
     compFolder.parentFolder = userComps;
     comp.parentFolder = compFolder;
 
-    if (importExternal(compFolder) === -1) return;
-
     status.text = comp.name;
 
     addLinkedPrecomps(ORcompFolder, compFolder, comp);
 
     pbar.value = 40;
 
-    var retroLayers = [];
-
     //Get all compositions from any subfolder containing the word 'Precomps'
-    var preComps = getPreComps(compFolder);
+    const preComps: CompItem[] = getPreComps(compFolder);
+    const allComps = preComps;
+    allComps.push(comp);
 
     //Get all layers in preComps that are linked outward.
-    project.log("");
-    customEach(preComps, function (item) {
-      var retros = findLayers(/<<.*>>/g, item),
-        retrols = findLayers(/![A-Z][a-z]*l[a-z]*\s/g, item),
-        allSubs = findLayers(/.*/g, item);
-      customEach(retros, function (ritem) {
-        project.log(ritem.name);
-        retroLayers.push({ layer: ritem, comp: item });
-      });
-      customEach(retrols, function (rlitem) {
-        project.log(rlitem.name);
-        retroLayers.push({ layer: rlitem, comp: item });
-      });
-      
-      //        status.text = 'about to start loop';
-      customEach(allSubs, function (layr) {
-        relinkExp(layr);
-        retroLayers.push({ layer: layr, comp: item });
+    status.text = "Relinking Expressions";
+
+    allComps.forEach((compItem) => {
+      const allLayers = findLayers(/.*/g, compItem) as Layer[];
+      allLayers.forEach((subLayer) => {
+        relinkExp(subLayer, compItem);
       });
     });
     project.log("");
@@ -117,21 +105,22 @@ function sa_262_ii(templateChoice:TabbedPanel, renderOp, outFile) {
     fillTemplate(comp, compFolder, templateChoice, renderOp);
 
     //relink other expressions
-    function relinkExp(layr) {
-      for (var i = 1; i <= layr.property("Effects").numProperties; i++) {
-        var matchName = layr.property("Effects").property(i).matchName;
-
+    function relinkExp(layer:Layer, compItem:CompItem) {
+      for (let i = 1; i <= (layer.property("Effects") as PropertyGroup).numProperties; i++) {
+        const matchName = layer.property("Effects").property(i).matchName;
+        
         if (matchName == "ADBE Fill" || matchName == "ADBE Color Control") {
-          if (layr.property("Effects").property(i).property("Color").expressionEnabled) {
-            var orExp = layr.property("Effects").property(i).property("Color").expression,
-              expressionComp = orExp.match(/comp\(".*?"\)/)[0].slice(6, -2),
-              newExp = orExp;
+          const colorProperty:Property = layer.property("Effects").property(i).property("Color") as Property;
+          if (colorProperty.expressionEnabled) {
+            const orExp = colorProperty.expression,
+              expressionComp = (orExp.match(/comp\(".*?"\)/) || [""])[0].slice(6, -2);
+            let newExp = orExp;
 
-            var exReg = new RegExp(regSafe(expressionComp), "g");
+            const exReg = new RegExp(regSafe(expressionComp), "g");
             if (expressionComp === ORcomp.name) {
               newExp = orExp.replace(exReg, comp.name);
             } else {
-              customEach(preComps, function (item) {
+              customEach(preComps, function (item: CompItem) {
                 if (expressionComp === item.name) {
                   item.name = "[" + comp.name + "] " + item.name;
                   newExp = orExp.replace(exReg, item.name);
@@ -141,23 +130,23 @@ function sa_262_ii(templateChoice:TabbedPanel, renderOp, outFile) {
               });
             }
 
-            layr.property("Effects").property(i).property("Color").expression = newExp;
+            (layer.property("Effects").property(i).property("Color") as Property).expression = newExp;
           }
         }
-      }
-    }
 
-    //Go through the retro links and link them to new comp
-    customEach(retroLayers, function (item) {
-      project.log(`The END: ${item.layer.name}`);
-      if (item.layer.property("Source Text") !== undefined && item.layer.property("Source Text").expressionEnabled) {
-        project.log(item.layer.name);
-        var orExp = item.layer.property("Source Text").expression,
-          expressionComp = orExp.match(/comp\(".*?"\)/)[0].slice(6, -2),
-          newExp = orExp;
+      }
+      
+      if (
+        layer instanceof TextLayer &&
+        layer.property("Source Text") !== undefined &&
+        (layer.property("Source Text") as Property).expressionEnabled
+      ) {
+        const orExp = (layer.property("Source Text") as Property).expression,
+          expressionComp = orExp.match(/comp\(".*?"\)/)[0].slice(6, -2);
+        let newExp = orExp;
 
         if (expressionComp === ORcomp.name) {
-          var orReg = new RegExp(regSafe(ORcomp.name), "g");
+          const orReg = new RegExp(regSafe(ORcomp.name), "g");
           newExp = orExp.replace(orReg, comp.name);
         } else {
           customEach(preComps, function (item) {
@@ -170,32 +159,15 @@ function sa_262_ii(templateChoice:TabbedPanel, renderOp, outFile) {
           });
         }
 
-        item.layer.property("Source Text").expression = newExp;
+        (layer.property("Source Text") as Property).expression = newExp;
 
-        var layerName = newExp
-            .match(/"!T.*(?=")/)[0]
-            .split(/"!T[a-z]*/g)[1]
-            .replace(/(^\s*)|(\s*$)/g, "");
-            
-        const hasTabName = /\[.+\]/g.test(layerName);
-        let tabName:string = "";
+        const textValue = layer.text.sourceText.valueAtTime(0, false);
 
-        if (hasTabName) {
-          tabName = layerName.match(/\[.+\]/g)[0].replace(/[[\]]/g, "");
-          layerName = layerName.replace(/\[.+\](\s)+/g, "");
-        } else {
-          tabName = "Text Input";
-        }
-
-        var textValue = item.layer.text.sourceText.valueAtTime(0, false);
-
-        item.layer.text.sourceText.expressionEnabled = false;
-        setText(item.layer, item.comp, textValue);
-        item.layer.text.sourceText.expressionEnabled = true;
+        layer.text.sourceText.expressionEnabled = false;
+        setText(layer, compItem, textValue);
+        layer.text.sourceText.expressionEnabled = true;
       }
-
-      status.text = "step 5: " + item.layer.name;
-    });
+    }
 
     pbar.value = 100;
     status.text = "Script Finished";
@@ -267,60 +239,65 @@ percentNeeded = maximumNum / layerNum * 100;\
     status.text = "Starting to fill the template";
 
     //Get all layers that are tagged as editable
-    var editableLayers = findLayers(/^!T|^!I|^!V|^!C|^!G|^!A/g, comp);
+    const editableLayers = findLayers(/^!T|^!I|^!V|^!C|^!G|^!A/g, comp) as Layer[];
     /* var retroLayers = [];*/
 
     //Get all compositions from any subfolder containing the word 'Precomps'
-    var preComps = getPreComps(compFolder);
+    const preComps = getPreComps(compFolder);
 
     //Get all layers in preComps that are tagged as editable and push them to the main array
-    for (var i = 0; i < preComps.length; i++) {
-      var editables = findLayers(/^!T|^!I|^!V|^!C|^!G|^!A/g, preComps[i]);
+    for (let i = 0; i < preComps.length; i++) {
+      const editables = findLayers(/^!T|^!I|^!V|^!C|^!G|^!A/g, preComps[i]);
 
-      for (var z = 0; z < editables.length; z++) {
+      for (let z = 0; z < editables.length; z++) {
         editableLayers.push(editables[z]);
       }
     }
 
     status.text = "Ready to fill layers";
     //Go through all editable layers and replace content
-    for (var e = 0; e < editableLayers.length; e++) {
+    for (let e = 0; e < editableLayers.length; e++) {
       const layer = editableLayers[e];
       project.log(`Replacing content on layer '${layer.name}'`);
       replaceContent(layer);
     }
+    
+    project.log("Content replaced, sending to render");
 
     sendtoRender(comp, renderOp);
 
     function replaceContent(layer) {
       status.text = "filling first layer";
 
-      var typeMatches = /^![A-Z][a-z]*\(.*\)/.test(layer.name)
-          ? layer.name.match(/^![A-Z][a-z]*\(.*\)/g)
-          : layer.name.match(/^![A-Z][a-z]*/g),
-        typeHeader = typeMatches[typeMatches.length - 1],
-        varType = typeHeader.match(/^![A-Z]/g)[0],
-        typeOptions = typeHeader.match(/[a-z]/g),
-        layerField,
-        terminalReg = new RegExp(regSafe(typeHeader), "g"),
-        tabObj = {
-          T: "Text Input",
-          I: "Image",
-          V: "Video",
-          C: "Colors",
-          G: "Group",
-          F: "Font Style",
-        },
-        tabDefault = tabObj[varType.replace("!", "")];
+      const typeMatches = /^![A-Z][a-z]*\(.*\)/.test(layer.name)
+        ? layer.name.match(/^![A-Z][a-z]*\(.*\)/g)
+        : layer.name.match(/^![A-Z][a-z]*/g);
+      const  typeHeader = typeMatches[typeMatches.length - 1];
+      const varType:VarType = typeHeader.match(/^![A-Z]/g)[0];
+
+      const terminalReg = new RegExp(regSafe(typeHeader), "g");
+      const tabObj = {
+        T: "Text Input",
+        I: "Image",
+        V: "Video",
+        C: "Colors",
+        G: "Group",
+        F: "Font Style",
+        A: "Audio",
+      };
+      const tabDefault = tabObj[varType.replace("!", "")];
+
+      let typeOptions = typeHeader.match(/[a-z]/g);
+      let layerField;
 
       if (arrIndex(typeOptions, "l") !== -1 || varType === "!F") return;
 
       if (typeOptions == null || typeOptions == undefined) typeOptions = [];
       status.text = "variables switched";
 
-      var layerName:string = layer.name.split(terminalReg)[1].replace(/(^\s*)|(\s*$)/g, "");
-      const hasTabName:boolean = /\[.+\]/g.test(layerName);
-      let tabName:string = "";
+      let layerName: string = layer.name.split(terminalReg)[1].replace(/(^\s*)|(\s*$)/g, "");
+      const hasTabName: boolean = /\[.+\]/g.test(layerName);
+      let tabName = "";
 
       status.text = "layer name defined: " + layerName;
 
@@ -336,7 +313,7 @@ percentNeeded = maximumNum / layerNum * 100;\
       status.text = "checking if group";
       if (varType === "!G") {
         if (arrIndex(typeOptions, "v") !== -1) {
-          var preCompLayers = findLayers(">> " + layerName + " <<", comp),
+          const preCompLayers = findLayers(">> " + layerName + " <<", comp),
             onOrOff = imageList[camelCase(tabName)][camelCase(layerName)].value;
 
           customEach(preCompLayers, function (item) {
@@ -350,9 +327,9 @@ percentNeeded = maximumNum / layerNum * 100;\
       if (varType === "!C") {
         //If a color layer, get color effects
         status.text = "Looping through colors: " + tabName;
-        for (var u = 1; u <= layer("Effects").numProperties; u++) {
+        for (let u = 1; u <= layer("Effects").numProperties; u++) {
           status.text = "Setting color #" + u;
-          var nameData = layer("Effects").property(u).name;
+          const nameData = layer("Effects").property(u).name;
           layerField = imageList[camelCase(tabName)][camelCase(nameData)];
           status.text = "Setting color #" + u + ": " + layerField.txt.text;
           if (layerField.txt.text === "") continue;
@@ -362,16 +339,18 @@ percentNeeded = maximumNum / layerNum * 100;\
       }
 
       layerField = imageList[camelCase(tabName)][camelCase(layerName)];
-
+      
       status.text = "checking if text layer";
       if (varType === "!T") {
-        var thisText = layerField.txt.text;
+        project.log("Set the text!");
+        const thisText = layerField.txt.text;
         setText(layer, comp, thisText);
       }
 
       status.text = "checking if media layer";
       if ((varType === "!I" || varType === "!V") && layerField.media.text !== "") {
-        var orSize = {
+        project.log("Image or Video layers");
+        const orSize = {
             width: layer.width * (layer.scale.value[0] / 100),
             height: layer.height * (layer.scale.value[1] / 100),
           },
@@ -386,8 +365,8 @@ percentNeeded = maximumNum / layerNum * 100;\
           orPer = [
             layer.transform.anchorPoint.value[0] / layer.width,
             layer.transform.anchorPoint.value[1] / layer.height,
-          ],
-          innerComp = comp,
+          ];
+        let innerComp = comp,
           heightOrWidth = "width",
           ratio;
 
@@ -424,7 +403,7 @@ percentNeeded = maximumNum / layerNum * 100;\
 
         //If set to 'fill' (f), then put a mask around the original shape and fill it
         if (arrIndex(typeOptions, "f") !== -1) {
-          var newMask = layer.Masks.addProperty("Mask"),
+          const newMask = layer.Masks.addProperty("Mask"),
             newMaskShape = newMask.property("maskShape"),
             newShape = newMaskShape.value,
             // anch = layer.transform.anchorPoint.value,
@@ -451,11 +430,10 @@ percentNeeded = maximumNum / layerNum * 100;\
       }
 
       status.text = "checking if audio";
-      project.log(varType);
-      if(varType === "!A") {
+      if (varType === "!A") {
         let testText = layerField;
-        testText = testText.media ? testText.media: undefined;
-        testText = testText.text ? testText.text: undefined;
+        testText = testText.media ? testText.media : undefined;
+        testText = testText.text ? testText.text : undefined;
 
         project.log(`!A: ${testText}`);
       }
@@ -464,7 +442,7 @@ percentNeeded = maximumNum / layerNum * 100;\
       }
 
       //Check to see if the layer needs to be turned on or off
-      if (layerField.visCheck !== undefined) layer.enabled = Boolean(layerField.visCheck.value);
+      if (layerField.visibilityToggle !== undefined) layer.enabled = Boolean(layerField.visibilityToggle.value);
 
       return;
     }
@@ -483,21 +461,21 @@ percentNeeded = maximumNum / layerNum * 100;\
   // ====
   function setText(textLayer, comp, newText) {
     status.text = "setting text: " + regSafe(newText);
-    var layerProp = textLayer.property("Source Text");
-    var layerTextDoc = layerProp.value;
-    var boxSize = layerTextDoc.boxText
+    const layerProp = textLayer.property("Source Text");
+    const layerTextDoc = layerProp.value;
+    const boxSize = layerTextDoc.boxText
       ? { width: layerTextDoc.boxTextSize[0], height: layerTextDoc.boxTextSize[1] }
       : undefined;
-    var rectSize = layerTextDoc.boxText ? textLayer.sourceRectAtTime(0, false) : undefined;
-    var alignment = ["c", "c"];
+    const rectSize = layerTextDoc.boxText ? textLayer.sourceRectAtTime(0, false) : undefined;
+    let alignment = ["c", "c"];
     // var scale = textLayer.transform.scale.value[0] / 100;
-    var fontRatio = layerTextDoc.fontSize / layerTextDoc.leading;
+    const fontRatio = layerTextDoc.fontSize / layerTextDoc.leading;
 
     //Check for font styles
 
     status.text = "checking for font styles";
     if (/\(.*\)/.test(textLayer.name)) {
-      var styleName = textLayer.name.match(/\(.*\)/)[0].slice(1, -1);
+      const styleName = textLayer.name.match(/\(.*\)/)[0].slice(1, -1);
 
       if (
         fontStyles[camelCase(styleName + " Style")] !== undefined &&
@@ -592,7 +570,7 @@ percentNeeded = maximumNum / layerNum * 100;\
       alignment = anchorPoint(textLayer, "box");
 
       //Determine how many lines of text should fit
-      var maxLines = Math.floor(layerTextDoc.boxTextSize[1] / layerTextDoc.leading);
+      const maxLines = Math.floor(layerTextDoc.boxTextSize[1] / layerTextDoc.leading);
 
       //Set the text to the new text and make the text box so large that it's bound to fit.
       layerTextDoc.text = newText;
@@ -601,8 +579,8 @@ percentNeeded = maximumNum / layerNum * 100;\
 
       if (alignment[0] === "c" && textLayer.sourceRectAtTime(0, false).height < rectSize.height) {
         //Center the text if it's not the full height and the anchor is the center
-        var layerPosition = textLayer.position.value;
-        var adjust = (rectSize.height - textLayer.sourceRectAtTime(0, false).height) / 2;
+        const layerPosition = textLayer.position.value;
+        const adjust = (rectSize.height - textLayer.sourceRectAtTime(0, false).height) / 2;
         textLayer.position.setValue([
           layerPosition[0],
           layerPosition[1] + adjust,
@@ -662,13 +640,13 @@ percentNeeded = (percentNeeded < 100) ? percentNeeded : 100;\
   // ANCHOR POINT FUNCTION (FOR USE WITH TEXT, THIS MOVES THE ANCHOR POINT TO A REASONABLE PLACE)
   // ====
   function anchorPoint(layer, bound) {
-    var comp = layer.containingComp;
-    var curTime = comp.time;
-    var layerAnchor = layer.anchorPoint.value;
-    var x;
-    var y;
-    var cor = ["c", "c"];
-    var rect = layer.sourceRectAtTime(curTime, false);
+    const comp = layer.containingComp;
+    const curTime = comp.time;
+    const layerAnchor = layer.anchorPoint.value;
+    let x;
+    let y;
+    const cor = ["c", "c"];
+    const rect = layer.sourceRectAtTime(curTime, false);
 
     switch (layer.sourceText.value.justification) {
     case ParagraphJustification.RIGHT_JUSTIFY:
@@ -765,12 +743,12 @@ percentNeeded = (percentNeeded < 100) ? percentNeeded : 100;\
       }
     }
 
-    var xAdd = (x - layerAnchor[0]) * (layer.scale.value[0] / 100);
-    var yAdd = (y - layerAnchor[1]) * (layer.scale.value[1] / 100);
+    const xAdd = (x - layerAnchor[0]) * (layer.scale.value[0] / 100);
+    const yAdd = (y - layerAnchor[1]) * (layer.scale.value[1] / 100);
 
     layer.anchorPoint.setValue([x, y]);
 
-    var layerPosition = layer.position.value;
+    const layerPosition = layer.position.value;
 
     layer.position.setValue([layerPosition[0] + xAdd, layerPosition[1] + yAdd, layerPosition[2]]);
 
@@ -782,9 +760,9 @@ percentNeeded = (percentNeeded < 100) ? percentNeeded : 100;\
 
     //var nameOfFile = outFolder.txt//(fileName.txt.text === '') ? composition.name : fileName.txt.text;
 
-    var resultFile = new File(outFile || outFolder.txt.text); // + slash + nameOfFile);
-    var renderQueue = app.project.renderQueue;
-    var render = renderQueue.items.add(composition);
+    const resultFile = new File(outFile || outFolder.txt.text); // + slash + nameOfFile);
+    const renderQueue = app.project.renderQueue;
+    const render = renderQueue.items.add(composition);
     render.outputModules[1].file = resultFile;
 
     if (renderOp === "aeQueueOnly") return;
@@ -811,29 +789,29 @@ percentNeeded = (percentNeeded < 100) ? percentNeeded : 100;\
 
   function addLinkedPrecomps(folderName, newFolder, composition) {
     status.text = "looking for original precomp folder";
-    var ORprecomps = libItemsInFolder(/Precomps/g, folderName, "Folder")[0];
+    const ORprecomps = libItemsInFolder(/Precomps/g, folderName, "Folder")[0];
     if (ORprecomps == undefined) return;
-    var newPrecomps = [];
+    const newPrecomps = [];
     status.text = "found original precomp folder";
-    var precompFolder = newFolder.items.addFolder(ORprecomps.name);
+    const precompFolder = newFolder.items.addFolder(ORprecomps.name);
     status.text = "made new precomp folder";
 
     function copyPrecompFolder(oldLocation, newLocation) {
-      for (var i = 1; i <= oldLocation.items.length; i++) {
+      for (let i = 1; i <= oldLocation.items.length; i++) {
         status.text = "looking for compositions " + i;
         if (oldLocation.items[i].typeName === "Composition") {
-          var newComp = oldLocation.items[i].duplicate();
+          const newComp = oldLocation.items[i].duplicate();
           newComp.name = oldLocation.items[i].name;
           newComp.parentFolder = newLocation;
           newPrecomps.push(newComp);
-          var replaceLayer1 = findLayers(regSafe(">> " + newComp.name + " <<"), composition);
+          const replaceLayer1 = findLayers(regSafe(">> " + newComp.name + " <<"), composition);
 
           if (replaceLayer1.length == 0) continue;
           customEach(replaceLayer1, function (layerRep) {
             layerRep.replaceSource(newComp, false);
           });
         } else if (oldLocation.items[i].typeName === "Folder") {
-          var newFolder = newLocation.items.addFolder(oldLocation.items[i].name);
+          const newFolder = newLocation.items.addFolder(oldLocation.items[i].name);
           copyPrecompFolder(oldLocation.items[i], newFolder);
         }
       }
@@ -841,13 +819,16 @@ percentNeeded = (percentNeeded < 100) ? percentNeeded : 100;\
 
     copyPrecompFolder(ORprecomps, precompFolder);
 
-    for (var z = 0; z < newPrecomps.length; z++) {
+    for (let z = 0; z < newPrecomps.length; z++) {
       status.text = "pre precomps " + z;
 
-      for (var u = 0; u < newPrecomps.length; u++) {
-        var replaceCount = 1;
+      for (let u = 0; u < newPrecomps.length; u++) {
+        let replaceCount = 1;
         if (u === z) continue;
-        var replaceLayer = findLayers(regSafe(">> " + newPrecomps[u].name + " <<"), newPrecomps[z]);
+        const replaceLayer = findLayers(
+          regSafe(">> " + newPrecomps[u].name + " <<"),
+          newPrecomps[z]
+        );
         status.text = "checking for " + newPrecomps[u].name + " in " + newPrecomps[z].name;
 
         if (replaceLayer.length == 0) continue;
@@ -867,13 +848,12 @@ percentNeeded = (percentNeeded < 100) ? percentNeeded : 100;\
   // ====
   function prerequisites(templateName) {
     status.text = "Checking Prerequisites";
-    externalImageList = [];
     status.text = "Checking for images";
 
-    var editableLayers = allEditableLayers[templateName.name];
+    const editableLayers = allEditableLayers[templateName.name];
 
-    for (var z = 0; z < editableLayers.length; z++) {
-      var layer = editableLayers[z];
+    for (let z = 0; z < editableLayers.length; z++) {
+      const layer = editableLayers[z];
       if (/^!T[a-z]*/g.test(layer.name) && layer.position.numKeys > 0) {
         alert(
           "Layer Setup Error:\
@@ -898,19 +878,19 @@ The image layer \"" +
 
     // var templateChildren = imageList.children;
 
-    var templateChildren = template[templateName.name]["content_" + templateName.text].children;
-    for (var i = 0; i < templateChildren.length; i++) {
-      var childChildren = templateChildren[i].children;
+    const templateChildren = template[templateName.name]["content_" + templateName.text].children;
+    for (let i = 0; i < templateChildren.length; i++) {
+      const childChildren = templateChildren[i].children;
 
-      for (var u = 0; u < childChildren.length; u++) {
+      for (let u = 0; u < childChildren.length; u++) {
         if (childChildren[u].text === "Visible") continue;
 
-        var layerRef = imageList[templateChildren[i].name][childChildren[u].name];
+        const layerRef = imageList[templateChildren[i].name][childChildren[u].name];
 
         if (layerRef.media !== undefined) {
-          if (imageTest(layerRef.media, "media file") === -1) return -1;
+          if (imagePreparation(layerRef.media, "media file") === -1) return -1;
         } else if (layerRef.audio !== undefined) {
-          if (imageTest(layerRef.audio, "audio file") === -1) return -1;
+          if (imagePreparation(layerRef.audio, "audio file") === -1) return -1;
         } else if (layerRef.color !== undefined) {
           if (colorCheck(layerRef.txt.text) !== -1) {
             layerRef.txt.text = colorCheck(layerRef.txt.text);
@@ -926,7 +906,7 @@ The image layer \"" +
     function colorCheck(colour) {
       if (colour === "" || /^#{0,1}[0-9a-fA-F]{3,6} *$|[0-9]+, *[0-9]+, *[0-9]+ */g.test(colour)) {
         if (/^#{0,1}[0-9a-fA-F]{3,6} *$/.test(colour)) {
-          var newColor = hexToRgb(/#/.test(colour) ? colour : "#" + colour);
+          const newColor = hexToRgb(/#/.test(colour) ? colour : "#" + colour);
           return newColor.r + ", " + newColor.g + ", " + newColor.b;
         } else {
           return colour;
@@ -937,124 +917,15 @@ The image layer \"" +
       }
     }
 
-    function imageTest(imgT, fileT) {
+    function imagePreparation(imgT, fileT) {
       status.text = "Checking: " + imgT.text;
-      if (/[\\\/]/g.test(imgT.text)) {
-        externalImageList.push(imgT);
-      } else if (imgT.text !== "" && libItemsReg(regSafe(imgT.text), "Footage").length === 0) {
-        alert("Could not find " + fileT + " '" + imgT.text + "'");
-        pbar.value = 0;
+      const fileName = locateOrLoadFile(imgT.text);
+      if(!fileName) {
+        alert(`Could not find ${fileT} '${imgT.text}'`);
         return -1;
       }
-      status.text = "is this the problem?";
-    }
-  }
 
-  // IMPORT EXTERNAL IMAGES
-  // ====
-  function importExternal(cfolder) {
-    for (var i = 0; i < externalImageList.length; i++) {
-      var path = externalImageList[i].text,
-        loadAttempt = 0;
-
-      if (/\.bmp$/i.test(path)) loadAttempt = 1;
-
-      status.text = "Loading External File: " + path.match(/[^\/\\]+\.([A-z]+)/g)[0];
-
-      const tryToLoad = function (loadPath) {
-        var io = new ImportOptions(File(loadPath));
-        if (io.canImportAs(ImportAsType.FOOTAGE)) {
-          //Change the field to just show the filename for later use
-          externalImageList[i].text = new File(loadPath).name; //io.name; //(new File(path)).name;
-
-          var fileLocation = String(new File(path).parent).replace(/%20/g, wSpace) + slash;
-          var scriptLocation = String(new File($.fileName).parent).replace(/%20/g, wSpace);
-
-          try {
-            io.importAs = ImportAsType.FOOTAGE;
-          } catch (e) {
-            alert("Couldn't import");
-          }
-
-          var newObject;
-
-          try {
-            newObject = app.project.importFile(io);
-            newObject.name = externalImageList[i].text;
-            newObject.parentFolder = cfolder;
-
-            externalImageList[i].text = newObject.id;
-          } catch (e) {
-            //status.text = 'Load error. Try as .bmp if image';
-            if (loadAttempt === 0) {
-              status.text = "Load error. Try as .bmp if image";
-              //If we didn't already try it, try duplicating and importing as .bmp
-              var read_file = new File(loadPath);
-              try {
-                loadAttempt = 1;
-                read_file.copy(read_file.fsName.replace(/\.(gif|jpg|jpeg|tiff|png)$/i, ".bmp"));
-                if (
-                  tryToLoad(read_file.fsName.replace(/\.(gif|jpg|jpeg|tiff|png)$/i, ".bmp")) !== -1
-                )
-                  status.text = "successfully loadeded as .bmp";
-              } catch (e) {
-                alert(e);
-              }
-            } else if (loadAttempt === 1) {
-              status.text = "Load error. Try as .webp if image";
-
-              if (!/\.bmp$/i.test(path)) system.callSystem(rmCmd(loadPath));
-
-              try {
-                loadAttempt = 2;
-
-                var extension = /\.png/i.test(path) ? "_copy.png" : ".png",
-                  convCommand = windows
-                    ? "\"" +
-                      scriptLocation.replace("/c/", "C:\\").replace("/", "\\") +
-                      slash +
-                      "dwebp\" \"" +
-                      path +
-                      "\" -o \"" +
-                      path.replace(/\.(gif|jpg|jpeg|tiff|png|bmp)$/i, extension) +
-                      "\""
-                    : scriptLocation +
-                      slash +
-                      "dwebp " +
-                      path.replace(/(?:\\.)+|( )/g, "\\ ") +
-                      " -o " +
-                      path
-                        .replace(/(?:\\.)+|( )/g, "\\ ")
-                        .replace(/\.(gif|jpg|jpeg|tiff|png|bmp)$/i, extension);
-
-                system.callSystem(convCommand);
-
-                if (tryToLoad(path.replace(/\.(gif|jpg|jpeg|tiff|png|bmp)$/i, extension)) !== -1)
-                  status.text = "successfully converted webp to .png";
-              } catch (e) {
-                alert(e);
-              }
-            } else {
-              if (loadAttempt === 2) system.callSystem(rmCmd(loadPath));
-              alert("Could not import " + String(new File(path).name));
-              alert(e);
-              pbar.value = 0;
-              return -1;
-            }
-          }
-          return 1;
-        } else {
-          alert("cannot import " + String(new File(path).name));
-          pbar.value = 0;
-          return -1;
-        }
-      }
-
-      if (tryToLoad(path) !== -1) {
-        status.text = "loaded external " + i;
-      } else {
-        return -1;
-      }
+      imgT.text = fileName;
     }
   }
 }
