@@ -6,6 +6,7 @@ interface TextGroup extends TreeView {
 
 interface BrowseGroup extends TreeView {
   label: StaticText;
+  name: string;
   txt: EditText;
   browse: Button;
 }
