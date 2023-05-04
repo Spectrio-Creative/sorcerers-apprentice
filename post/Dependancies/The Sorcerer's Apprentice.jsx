@@ -32,7 +32,7 @@
          //Defaults
          
          myPanel.grp.groupOne.scriptButton.onClick = function() {
-                app.executeCommand(app.findMenuCommandId("sorcerers_apprentice_script.jsx"));
+                app.executeCommand(app.findMenuCommandId("sorcerers_apprentice.jsx"));
              myPanel.grp.groupOne.scriptButton.text = randomText();
              }
 

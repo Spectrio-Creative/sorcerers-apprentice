@@ -10,7 +10,7 @@ function addTextGroup(gName, label, tab, inText, typeOptions) {
         multiline = (arrIndex(typeOptions, 'm') !== -1) ? true : false,
         visible = (arrIndex(typeOptions, 'v') !== -1) ? true : false,
         h = multiline ? 60 : 25,
-        visCheck = !visible ? "" : "visCheck: Checkbox {text:'',  alignment: ['left','bottom'], preferredSize: [-1, 19], value: " + inText[1] + "}, \
+        visibilityToggle = !visible ? "" : "visibilityToggle: Checkbox {text:'',  alignment: ['left','bottom'], preferredSize: [-1, 19], value: " + inText[1] + "}, \
         ";
     sizes = !visible ? sizes : [82, sizes[1]];
     return "group { \
@@ -20,7 +20,7 @@ function addTextGroup(gName, label, tab, inText, typeOptions) {
         alignChildren: ['left','center'],\
         spacing: 10,\
         margins: 0,\
-        " + visCheck + "label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
+        " + visibilityToggle + "label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
         txt: EditText { text: '" + inText[0] + "', preferredSize:[" + sizes[1] + "," + h + "], alignment: ['left','fill'], properties: {multiline: "+ multiline +"}}\
     }";
 }
@@ -47,7 +47,7 @@ function addGroupV(gName, label, tab, inText, opts) {
     opts = opts || ['n'];
     var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90],
         visible = (arrIndex(opts, 'v') !== -1) ? true : false,
-        visCheck = !visible ? "" : "visCheck: Checkbox {text:'',  alignment: ['left','center'], preferredSize: [-1, 15], value: 'Visible'}, \
+        visibilityToggle = !visible ? "" : "visibilityToggle: Checkbox {text:'',  alignment: ['left','center'], preferredSize: [-1, 15], value: 'Visible'}, \
         ";
     sizes = !visible ? sizes : [82, sizes[1]];
     
@@ -58,7 +58,7 @@ function addGroupV(gName, label, tab, inText, opts) {
         alignChildren: ['left','center'],\
         spacing: 10,\
         margins: 0,\
-        " + visCheck + "label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
+        " + visibilityToggle + "label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
         img: EditText { text: '" + inText[0] + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
         browse: Button { text: 'Browse', preferredSize:[" + sizes[2] + ",25]}\
     }";
@@ -69,7 +69,7 @@ function addMediaGroup(gName, label, tab, inText, opts) {
     opts = opts || ['n'];
     var sizes = (tab === 'tab') ? [110,202,90] : [91,278,90],
         visible = (arrIndex(opts, 'v') !== -1) ? true : false,
-        visCheck = !visible ? "" : "visCheck: Checkbox {text:'',  alignment: ['left','center'], preferredSize: [-1, 15], value: " + inText[1] + "}, \
+        visibilityToggle = !visible ? "" : "visibilityToggle: Checkbox {text:'',  alignment: ['left','center'], preferredSize: [-1, 15], value: " + inText[1] + "}, \
         ";
     sizes = !visible ? sizes : [82, sizes[1]];
     
@@ -80,7 +80,7 @@ function addMediaGroup(gName, label, tab, inText, opts) {
         alignChildren: ['left','center'],\
         spacing: 10,\
         margins: 0,\
-        " + visCheck + "label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
+        " + visibilityToggle + "label: StaticText { text:'" + label + "', preferredSize: [" + sizes[0] + ", -1]}, \
         img: EditText { text: '" + inText[0] + "', preferredSize:[" + sizes[1] + ",25], alignment: ['left','fill']}\
         browse: Button { text: 'Browse', preferredSize:[" + sizes[2] + ",25]}\
     }";
@@ -1681,7 +1681,7 @@ function fillTemplate(comp, compFolder, templateChoice, renderOp) {
         }
         
         //Check to see if the layer needs to be turned on or off
-        if(layerField.visCheck !== undefined) layer.enabled = Boolean(layerField.visCheck.value);
+        if(layerField.visibilityToggle !== undefined) layer.enabled = Boolean(layerField.visibilityToggle.value);
         
         return;
     }
