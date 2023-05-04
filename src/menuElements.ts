@@ -1,4 +1,4 @@
-import { scriptVersion } from "../package.json";
+import { version as scriptVersion } from "../package.json";
 
 // START UI CREATION
 // MDS
@@ -8,7 +8,7 @@ function initMain(title) {
   main.text = title;
   main.preferredSize.width = 510;
   main.orientation = "column";
-  main.alignChildren = ["center", "top"];
+  main.alignChildren = "center";
   main.spacing = 10;
   main.margins = 16;
   return main;

@@ -1,17 +1,17 @@
 // TO DO: Replace with polyfill
-function trim(str) {
+export function trim(str) {
   return str.replace(/(^\s*)|(\s*$)/g, "");
 }
 
 //Convert hex to rgb
-function hexToRgb(hex) {
+export function hexToRgb(hex) {
   // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
   hex = hex.replace(shorthandRegex, function (m, r, g, b) {
     return r + r + g + g + b + b;
   });
 
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? {
       r: parseInt(result[1], 16),
@@ -22,13 +22,13 @@ function hexToRgb(hex) {
 }
 
 //Convert rgb to hex
-function rgbToHex(rgb) {
+export function rgbToHex(rgb) {
   if (Array.isArray(rgb) === false) {
     rgb = rgb.split(/ *, */);
   }
 
-  var elToHex = function (el) {
-    var hex = Number(el).toString(16);
+  const elToHex = function (el) {
+    let hex = Number(el).toString(16);
 
     if (hex.length < 2) {
       hex = "0" + hex;
@@ -39,8 +39,8 @@ function rgbToHex(rgb) {
 }
 
 //convert rbg to decimals
-function colorize(rgbCode) {
-  var colorCodes = rgbCode.match(/[0-9]+/g),
+export function colorize(rgbCode:string):[number, number, number, number] {
+  const colorCodes = rgbCode.match(/[0-9]+/g),
     // alpha = colorCodes.length,
     vals = [
       colorCodes[0] == undefined ? 255 : Number(trim(colorCodes[0])),
@@ -52,8 +52,8 @@ function colorize(rgbCode) {
 }
 
 //convert rbg to decimals
-function decToRgb(decimal) {
-  var alpha = decimal.length === 4 ? true : false;
+export function decToRgb(decimal) {
+  let alpha = decimal.length === 4 ? true : false;
   if (alpha && decimal[3] === 1) alpha = false;
   return (
     Math.round(decimal[0] * 255) +
@@ -65,27 +65,67 @@ function decToRgb(decimal) {
   );
 }
 
-function colorpicker(original_color) {
-  var hexToRGB = function (hex) {
-    var r = hex >> 16;
-    var g = (hex >> 8) & 0xff;
-    var b = hex & 0xff;
+export function colorpicker(original_color) {
+  const hexToRGB = function (hex) {
+    const r = hex >> 16;
+    const g = (hex >> 8) & 0xff;
+    const b = hex & 0xff;
     return [r, g, b];
   };
 
-  var color_decimal =
+  const color_decimal =
     $.os.indexOf("Windows") !== -1
-      ? $.colorPicker()
-      : $.colorPicker("0x" + rgbToHex(decToRgb(original_color)));
+      ? $.colorPicker(0)
+      : $.colorPicker(("0x" + rgbToHex(decToRgb(original_color))) as any);
   $.writeln(color_decimal);
-  var color_hexadecimal = color_decimal.toString(16);
+  const color_hexadecimal = color_decimal.toString(16);
   $.writeln(color_hexadecimal);
-  var color_rgb = hexToRGB(parseInt(color_hexadecimal, 16));
+  const color_rgb = hexToRGB(parseInt(color_hexadecimal, 16));
   $.writeln(color_rgb);
-  var result_color = [color_rgb[0] / 255, color_rgb[1] / 255, color_rgb[2] / 255];
+  const result_color = [color_rgb[0] / 255, color_rgb[1] / 255, color_rgb[2] / 255];
   $.writeln(result_color);
   return result_color;
   //   return color_rgb;
 }
 
-export { colorize, hexToRgb, decToRgb, rgbToHex, colorpicker };
+export const GoodBoyNinjaColorPicker = (
+  startValue: [number, number, number] | [number, number, number, number] = [1, 1, 1]
+) => {
+  // find the active comp
+  const comp = app.project.activeItem;
+  if (!comp || !(comp instanceof CompItem)) {
+    alert("Please open a comp first");
+    return [];
+  }
+
+  // add a temp null;
+  const newNull = comp.layers.addNull();
+  const newColorControl = (newNull("ADBE Effect Parade") as any).addProperty("ADBE Color Control");
+  const theColorProp = newColorControl("ADBE Color Control-0001");
+
+  // shy and turn eyeball off
+  newNull.shy = true;
+  newNull.enabled = false;
+  newNull.name = "tempColorPicker";
+
+  // set the value given by the function arguments
+  theColorProp.setValue(startValue);
+
+  // prepare to execute
+  const editValueID = 2240; // or app.findMenuCommandId("Edit Value...");
+  theColorProp.selected = true;
+  app.executeCommand(editValueID);
+
+  // harvest the result
+  const result = theColorProp.value;
+
+  // remove the null
+  if (newNull) {
+    newNull.remove();
+  }
+
+  // if the user click cancel, the function will return the start value but as RGBA. In that case, return null
+  const startValueInRgba = [startValue[0], startValue[1], startValue[2], startValue[3] || 1];
+
+  return result.toString() == startValueInRgba.toString() ? null : result;
+};

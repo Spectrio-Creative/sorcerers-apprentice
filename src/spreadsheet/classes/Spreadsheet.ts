@@ -4,7 +4,7 @@ import { getSpreadsheet } from "../../tools/spreadsheet/tools";
 
 export interface Spreadsheet {
   file:File;
-  obj:{[key:string]:any};
+  obj:GenericObject[];
   logSheet: (text?:string) => void;
   getNewSpreadsheet: () => void;
 }

@@ -1,6 +1,18 @@
-const createInitialDialog = (version) => {
+export interface InitialDialog {
+  version: string;
+  canceled:boolean;
+  success:boolean;
+  canExport:boolean; 
+  exportType: ExportType;
+  location: string;
+  checkLocation: (location:string|null) => boolean;
+  show:()=> void;
+  getExportType:()=>ExportType;
+}
+
+const createInitialDialog = (version = "0.0.0") => {
   return {
-    version: version || "0.0.0",
+    version: version,
     canceled: false,
     success: false,
     canExport: false,
@@ -21,16 +33,16 @@ const createInitialDialog = (version) => {
 
       // DIALOG
       // ======
-      var dialog = new Window("dialog");
+      const dialog = new Window("dialog");
       dialog.text = "The Sorcerer’s Apprentice";
       dialog.orientation = "column";
-      dialog.alignChildren = ["center", "top"];
+      dialog.alignChildren = "center";
       dialog.spacing = 10;
       dialog.margins = 16;
 
       // GROUP1
       // ======
-      var group1 = dialog.add("group", undefined, { name: "group1" });
+      const group1 = dialog.add("group", undefined, { name: "group1" });
       group1.orientation = "column";
       group1.alignChildren = ["left", "top"];
       group1.spacing = 10;
@@ -38,17 +50,17 @@ const createInitialDialog = (version) => {
 
       // PANEL1
       // ======
-      var panel1 = group1.add("panel", undefined, undefined, { name: "panel1" });
+      const panel1 = group1.add("panel", undefined, undefined, { name: "panel1" });
       panel1.text = `The Sorcerer‘s Apprentice v${this.version}`;
       panel1.preferredSize.width = 380;
       panel1.orientation = "column";
-      panel1.alignChildren = ["left", "top"];
+      panel1.alignChildren = "left";
       panel1.spacing = 10;
       panel1.margins = [10, 15, 10, 10];
 
       // EXPORTMODEGROUP
       // ===============
-      var exportModeGroup = panel1.add("group", undefined, { name: "exportModeGroup" });
+      const exportModeGroup = panel1.add("group", undefined, { name: "exportModeGroup" });
       exportModeGroup.orientation = "row";
       exportModeGroup.alignChildren = ["left", "center"];
       exportModeGroup.spacing = 10;
@@ -56,7 +68,7 @@ const createInitialDialog = (version) => {
 
       // EXPORTMODETEXTGROUP
       // ===================
-      var exportModeTextGroup = exportModeGroup.add("group", undefined, {
+      const exportModeTextGroup = exportModeGroup.add("group", undefined, {
         name: "exportModeTextGroup",
       });
       exportModeTextGroup.preferredSize.width = 175;
@@ -66,15 +78,15 @@ const createInitialDialog = (version) => {
       exportModeTextGroup.spacing = 10;
       exportModeTextGroup.margins = 0;
 
-      var exportModeText = exportModeTextGroup.add("statictext", undefined, undefined, {
+      const exportModeText = exportModeTextGroup.add("statictext", undefined, undefined, {
         name: "exportModeText",
       });
       exportModeText.text = "Export Mode";
 
       // EXPORTMODEGROUP
       // ===============
-      var exportMode_array = ["Traditional", "Spreadsheet"];
-      var exportMode = exportModeGroup.add("dropdownlist", undefined, undefined, {
+      const exportMode_array = ["Traditional", "Spreadsheet"];
+      const exportMode = exportModeGroup.add("dropdownlist", undefined, undefined, {
         name: "exportMode",
         items: exportMode_array,
       });
@@ -82,22 +94,21 @@ const createInitialDialog = (version) => {
 
       // FINISHED
       // ========
-      var finished = dialog.add("group", undefined, { name: "finished" });
+      const finished = dialog.add("group", undefined, { name: "finished" });
       finished.orientation = "row";
       finished.alignChildren = ["center", "top"];
       finished.spacing = 10;
       finished.margins = 0;
 
-      var cont = finished.add("button", undefined, undefined, { name: "continue" });
+      const cont = finished.add("button", undefined, undefined, { name: "continue" });
       cont.onClick = () => {
-        // this.screenChoice = screenChoices_array[screenChoices.selection.index];
-        this.exportType = exportMode_array[exportMode.selection.index];
+        this.exportType = exportMode_array[(exportMode.selection as ListItem).index];
         this.success = true;
         dialog.close();
       };
       cont.text = "CONTINUE";
 
-      var cancel = finished.add("button", undefined, undefined, { name: "cancel" });
+      const cancel = finished.add("button", undefined, undefined, { name: "cancel" });
       cancel.onClick = () => {
         this.success = false;
         this.canceled = true;
@@ -108,14 +119,10 @@ const createInitialDialog = (version) => {
       dialog.show();
     },
 
-    getScreenChoice: function () {
-      return this.screenChoice;
-    },
-
     getExportType: function () {
       return this.exportType;
     },
-  };
+  } as InitialDialog;
 };
 
 export { createInitialDialog };

@@ -1,6 +1,22 @@
 import { ___ } from "../globals/document";
 
-const createFolderTree = () => {
+export interface FolderTree {
+  root: Folder;
+  aeProject: File;
+  name: string;
+  createProjectFolder: () => void;
+  createFolder: (location: string) => Folder;
+  location: (location: string) => string | false;
+  locationFallback: (location: string) => string;
+  createFile: (filename: string, location: string) => File;
+  copyFile: (fileToCopy: File, copyLocation: string, callback?: (newFile: File) => any) => void;
+  addFileFromString: (fileData: string, filename: string, location?: string) => File;
+  addLocation: (id: string, prompt?: string) => Folder;
+  addFileFromDialog: () => void;
+  appendToFileFromString: (fileData: string, location: string, filename: string) => File;
+}
+
+const createFolderTree = (): FolderTree => {
   return {
     root: app.project.file.parent,
     aeProject: app.project.file,
@@ -12,8 +28,8 @@ const createFolderTree = () => {
       );
     },
 
-    createFolder: function (locationString) {
-      const newFolder = new Folder(locationString);
+    createFolder: function (location: string) {
+      const newFolder = new Folder(location);
       newFolder.create();
       return newFolder;
     },
@@ -27,7 +43,7 @@ const createFolderTree = () => {
     },
 
     locationFallback: function (location) {
-      let locationString = this.location(location);
+      const locationString = this.location(location);
       return locationString ? locationString : location;
     },
 
@@ -43,18 +59,18 @@ const createFolderTree = () => {
       if (callback) callback(newFile);
     },
 
-    addFileFromString: function (string, filename, location) {
+    addFileFromString: function (fileData: string, filename: string, location?: string) {
       filename = filename || "test.txt";
       const internalLocation = this.location(location || "resources");
       location = internalLocation || location;
       const newFile = new File(`${location}${___}${filename}`);
       newFile.open("W");
-      newFile.write(string);
+      newFile.write(fileData);
       newFile.close();
       return newFile;
     },
 
-    addLocation: function (id, prompt) {
+    addLocation: function (id: string, prompt?: string) {
       if (!id) return;
       const folder = Folder.selectDialog(prompt);
       if (folder) this[`_${id}`] = folder;

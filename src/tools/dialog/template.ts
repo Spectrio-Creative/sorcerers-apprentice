@@ -1,8 +1,8 @@
 import extend from "just-extend";
 
-const mapMenu = (menu) => {
+const mapMenu = (menu: TabbedPanel) => {
   const map = Object.entries(menu);
-  const output = {};
+  const output: GenericObject = {};
   map.forEach(([key, val]) => {
     // If the value is an object
     // then it might be one we want
@@ -29,30 +29,41 @@ const mapMenu = (menu) => {
 
 // To Do: move these methods to a more sensable file location:
 
-const isMatch = (a, b, options) => {
-  options = options || {};
-  const op = extend({}, { case: "i", whitespace: "s" }, options);
-  if (typeof a !== "string" || typeof b !== "string") return false;
-  if (op.whitespace === "i" || op.whitespace === "ignore") {
+const isMatch = (
+  a:string,
+  b:string,
+  options?: {
+    whitespace?: "i" | "ignore" | "s" | "show";
+    case?: "i" | "insensitive" | "s" | "sensitive";
+    match?: "exact" | "partial"
+  }
+):boolean => {
+  if(typeof a !== "string" || typeof b !== "string") return false;
+  options = extend({}, { case: "i", whitespace: "s" }, options);
+  if (options.whitespace === "i" || options.whitespace === "ignore") {
     a = a.replace(/\W/g, "");
     b = b.replace(/\W/g, "");
   }
-  if (op.case === "i" || op.case === "insensitive") {
+  if (options.case === "i" || options.case === "insensitive") {
     a = a.toLowerCase();
     b = b.toLowerCase();
   }
-  if (op.match === "partial") {
+  if (options.match === "partial") {
     return a.includes(b);
   }
   return a === b;
 };
 
-const findPathByKey = (obj, key, options) => {
+const findPathByKey = (
+  obj: { [key: string]: any },
+  key?: string,
+  options?: { pathInProgress?: string; allFullPaths?: boolean; includes?: string }
+):string[] => {
   options = extend({}, { pathInProgress: "" }, options);
   const entries = Object.entries(obj);
   const output = [];
   entries.forEach(([k, v]) => {
-    if (isMatch(k, key, options)) {
+    if (isMatch(k, key)) {
       output.push(`${options.pathInProgress}${k}`);
     }
 
@@ -61,7 +72,7 @@ const findPathByKey = (obj, key, options) => {
       const newOptions = extend({}, options, { pathInProgress: path });
       const result = findPathByKey(v, key, newOptions);
       output.push(...result);
-    } else if(options.allFullPaths) {
+    } else if (options.allFullPaths) {
       output.push(`${options.pathInProgress}${k}`);
     }
   });
@@ -72,8 +83,8 @@ const findPathByKey = (obj, key, options) => {
   return filtered;
 };
 
-const getFilePaths = (obj) => {
-  return (findPathByKey(obj, undefined, {allFullPaths: true}));
+const getFilePaths = (obj: { [key: string]: any }):string[] => {
+  return findPathByKey(obj, undefined, { allFullPaths: true });
 };
 
 export { mapMenu, findPathByKey, getFilePaths };

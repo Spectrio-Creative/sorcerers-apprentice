@@ -1,4 +1,4 @@
-import { convertCSVArrayToObject } from "./convertCSVArrayToObject";
+import { csvToJSON } from "./convertCSVArrayToObject";
 
 function clean(arr) {
   const newArr = [];
@@ -10,29 +10,27 @@ function clean(arr) {
   return newArr;
 }
 
-const getSpreadsheet = (csvFile: File) => {
-  let outObj: { [key: string]: any };
+const getSpreadsheet = (csvFile: File): GenericObject[] => {
   if (csvFile != null) {
     try {
-      // open file
       const fileOK = csvFile.open("r");
-      // const thisFile = inputFile;
-      const textAccumulator: string[] = [];
       if (fileOK) {
         let text: string;
+        let textAccumulatorString = "";
         while (!csvFile.eof) {
           text = csvFile.readln();
-
-          textAccumulator.push(
-            text
-              .replace(/,(?!(?:[^"]|"[^"]*")*$)/g, "\\;")
-              .replace(/\\n(?!(?:[^"]|"[^"]*")*$)/g, "\\m")
-          );
+          textAccumulatorString += `\n${text}`;
         }
 
-        outObj = convertCSVArrayToObject(textAccumulator);
+        const outObj: GenericObject[] = csvToJSON(textAccumulatorString, {
+          transformHeader: (header) => header.toLowerCase(),
+          skipShortLines: true,
+          transform: (value) => value.trim(),
+        });
 
         csvFile.close();
+
+        return outObj;
       } else {
         alert("File open failed!");
       }
@@ -45,7 +43,7 @@ const getSpreadsheet = (csvFile: File) => {
     alert("No CSV file selected.");
   }
 
-  return outObj;
+  return [];
 };
 
 export { clean, getSpreadsheet };

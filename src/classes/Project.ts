@@ -1,21 +1,20 @@
-import { createFolderTree } from "./FolderTree";
-import { createInitialDialog } from "./InitialDialog";
+import { createFolderTree, FolderTree } from "./FolderTree";
+import { createInitialDialog, InitialDialog } from "./InitialDialog";
 import dateFormat from "dateformat";
 import { ___ } from "../globals/document";
 import extend from "just-extend";
-import { roundTo } from "../tools/math";
 import { menuTitle } from "../globals/project/menu";
 
-interface Project {
+export interface ProjectUnique {
   canceled: boolean;
   startTime: Date;
-  stopWatch: { [key: string]: any };
-  logCounters: { [key: string]: any };
+  stopWatch: { [key: string]: Date };
+  logCounters: { [key: string]: number };
   fileName: string;
-  exportType: "Traditional" | "Spreadsheet";
-  initialDialog: any;
+  exportType: ExportType;
+  initialDialog: InitialDialog;
   version: string;
-  initialize: (version: string) => void;
+  initialize: (version: string) => boolean;
   setFileName: (fileName: string) => void;
   cancel: () => void;
   createLog: (content: string) => void;
@@ -27,9 +26,11 @@ interface Project {
   split: (timerName: string, reset: boolean) => void;
 }
 
+export interface Project extends FolderTree, ProjectUnique {}
+
 const createProject = (fileName: string): Project => {
   const folderTree = createFolderTree();
-  const projectDetails: Project = {
+  const projectDetails: ProjectUnique = {
     canceled: false,
     startTime: new Date(),
     stopWatch: {},
@@ -124,7 +125,7 @@ const createProject = (fileName: string): Project => {
       const now = new Date();
       const diff = now.getTime() - watch.getTime();
       if (reset && timerName) this.startTimer(timerName, now);
-      return roundTo(diff / 1000, 100);
+      return Math.roundTo(diff / 1000, 100);
     },
   };
 

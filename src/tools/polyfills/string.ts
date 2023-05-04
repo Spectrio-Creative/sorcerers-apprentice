@@ -1,6 +1,7 @@
 declare global {
   interface String {
     matchFirst: (match:string|RegExp) => string;
+    trimmer: () => string;
   }
 }
 
@@ -53,6 +54,18 @@ function setUpStringMethods() {
         }
         return padString.slice(0,targetLength) + String(this);
       }
+    };
+  }
+
+  if (!String.prototype.trim) {
+    String.prototype.trim = function () {
+      return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
+    };
+  }
+
+  if (!String.prototype.trimmer) {
+    String.prototype.trimmer = function () {
+      return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
     };
   }
 }

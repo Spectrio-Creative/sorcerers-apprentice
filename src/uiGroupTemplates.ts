@@ -1,7 +1,17 @@
 // UI Group Templates to use in the UI Set up
 // ============
 
-function addTextGroup(groupName:string, label:string, tab = "", inText:[string, boolean] = ["", true], typeOptions:string[] = ["n"]) {
+export function addTextGroup(
+  groupName: string,
+  label: string,
+  tab?: "" | "tab",
+  inText?: [string, boolean],
+  typeOptions?: string[]
+) {
+  tab = tab || "";
+  inText = inText || ["", true];
+  typeOptions = typeOptions || ["n"];
+
   let sizes = tab === "tab" ? [110, 302] : [91, 378];
   const multiline = typeOptions.indexOf("m") !== -1 ? true : false;
   const visible = typeOptions.indexOf("v") !== -1 ? true : false;
@@ -40,7 +50,15 @@ function addTextGroup(groupName:string, label:string, tab = "", inText:[string, 
     }`;
 }
 
-function addBrowseGroup(groupName:string, label:string, tab:"tab"|"" = "", inText:[string, boolean] = ["", true]) {
+export function addBrowseGroup(
+  groupName: string,
+  label: string,
+  tab?: "tab" | "",
+  inText?: [string, boolean]
+) {
+  tab = tab || "";
+  inText = inText || ["", true];
+
   const sizes = tab === "tab" ? [110, 202, 90] : [91, 278, 90];
 
   return `group { 
@@ -69,9 +87,19 @@ function addBrowseGroup(groupName:string, label:string, tab:"tab"|"" = "", inTex
     }`;
 }
 
-function addMediaGroup(groupName:string, label:string, tab:string, inText:[string, boolean] = ["", true], opts:string[] = ["n"]) {
+export function addMediaGroup(
+  groupName: string,
+  label: string,
+  tab?: "" | "tab",
+  inText?: [string, boolean],
+  typeOptions?: string[]
+) {
+  tab = tab || "";
+  inText = inText || ["", true];
+  typeOptions = typeOptions || ["n"];
+
   let sizes = tab === "tab" ? [110, 202, 90] : [91, 278, 90];
-  const visible = opts.indexOf( "v") !== -1 ? true : false;
+  const visible = typeOptions.indexOf("v") !== -1 ? true : false;
   const visibilityToggle = `visibilityToggle: Checkbox {
     text:'',
     alignment: ['left','center'],
@@ -108,7 +136,10 @@ function addMediaGroup(groupName:string, label:string, tab:string, inText:[strin
     }`;
 }
 
-function addColorGroup(groupName:string, label:string, tab:string, inText = "") {
+export function addColorGroup(groupName: string, label: string, tab?: "" | "tab", inText?: string) {
+  tab = tab || "";
+  inText = inText || "";
+
   const sizes = tab === "tab" ? [110, 202, 90] : [91, 278, 90];
   return `group { 
         name: '${groupName}',
@@ -137,32 +168,54 @@ function addColorGroup(groupName:string, label:string, tab:string, inText = "") 
     }`;
 }
 
-function addTab(tabName:string, label:string) {
+export interface ITab extends Tab {
+  text: string;
+  name: string;
+  ss_type: string;
+  orientation: string;
+  spacing: number;
+  margins: number;
+  alignChildren: string;
+}
+
+export interface InnerTab extends Tab {
+  name: string;
+  ss_type: string;
+  alignChildren: string;
+  preferredSize: Dimension;
+  margins: number;
+  alignment: [string, string];
+}
+
+export function addTab(tabName: string, label: string) {
   return `tab {
         text: '${label}', 
         name: '${tabName}', 
         ss_type: 'Tab', 
         orientation: 'column', 
-        spacing: 10, margins: 10, 
-        alignChildren: ['left','top'],
+        spacing: 10,
+        margins: 10, 
+        alignChildren: 'left',
     }`;
 }
 
-function addTabbedPannel(tabName:string) {
+export interface OuterTabbedPanel extends TabbedPanel {
+  name: string;
+  ss_type: string;
+  alignChildren: string;
+  preferredSize: Dimension;
+  margins: number;
+  alignment: [string, string];
+  children: InnerTab[];
+}
+
+export function addTabbedPannel(tabName: string) {
   return `tabbedpanel {
         name: '${tabName}', 
         ss_type: 'Tabbed Pannel', 
         alignChildren: 'fill', 
-        preferredSize: [455, -1], margins: 0, 
+        preferredSize: [455, -1],
+        margins: 0, 
         alignment: ['fill','top'],
     }`;
 }
-
-export default {
-  addBrowseGroup,
-  addColorGroup,
-  addMediaGroup,
-  addTab,
-  addTabbedPannel,
-  addTextGroup,
-};

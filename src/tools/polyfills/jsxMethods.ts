@@ -8,7 +8,7 @@ declare global {
   }
 
   interface Math {
-    roundTo: (float: number, dec: number) => number;
+    roundTo: (num: number, dec: number) => number;
   }
 }
 
@@ -18,7 +18,7 @@ function extendExtendscript() {
     func();
   };
 
-  Math.roundTo = (float, dec) => Math.round(float * dec) / dec;
+  Math.roundTo = (num, dec) => Math.round(num * dec) / dec;
 
   setUpArrayMethods();
   setUpStringMethods();

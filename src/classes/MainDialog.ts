@@ -1,5 +1,5 @@
 import { project } from "../globals/globals";
-import ui from "../uiGroupTemplates";
+import * as ui from "../uiGroupTemplates";
 
 const createMainDialog = () => {
   // UI Group Templates to use in the UI Set up
@@ -30,8 +30,8 @@ const createMainDialog = () => {
   title.text = `The Sorcerer's Apprentice (v${version})`;
   title.alignment = ["fill", "center"];
 
-  const compTitle = header.add(ui.addTextGroup("compTitle", "Comp Title:"));
-  const outFolder = header.add(ui.addBrowseGroup("outFolder", "Output File"));
+  const compTitle = header.add(ui.addTextGroup("compTitle", "Comp Title:") as "treeview") as TextGroup;
+  const outFolder = header.add(ui.addBrowseGroup("outFolder", "Output File") as "treeview") as BrowseGroup;
 
   // TEMPLATE PANEL (THIS IS WHERE ALL THE GENERATED FIELDS WILL GO)
   // ========
