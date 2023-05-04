@@ -38,4 +38,4 @@ jobs:
         user: ${{ secrets.sftp_username }}
         password: ${{ secrets.sftp_password }}
         local: "./docs/.vuepress/dist/"
-        remote: "/var/www/html/documentation/sorcerer-script"
+        remote: "/var/www/html/documentation/sorcerers-apprentice/"
