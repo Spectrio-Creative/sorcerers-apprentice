@@ -2,10 +2,13 @@ import { defaultTheme } from "@vuepress/theme-default";
 import { searchPlugin } from "@vuepress/plugin-search";
 // import { containerPlugin } from '@vuepress/plugin-container'
 
+const base = process.env.NODE_ENV === "production" ? "/documentation/sorcerers-apprentice/" : "/";
+
 module.exports = {
   title: "The Sorcerer’s Apprentice (the docs)",
   description: "For templating projects like telling brooms to fill buckets",
-  base: "/documentation/sorcerers-apprentice/",
+  base,
+  head: [["link", { rel: "icon", href: `${base}favicon.ico` }]],
   theme: defaultTheme({
     home: "/",
     navbar: [

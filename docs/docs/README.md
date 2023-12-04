@@ -6,13 +6,11 @@ Installed like any other AE script; download the both the script and the UI Pane
 
 Once both the script and the UI Panel are installed, restart AE (if it’s open) and open the `Sorcerer’s Apprentice.jsx` from the bottom of the ‘Window’ menu. You can then doc the panel wherever works for you and run the script from young Mickey’s magic button.
 
-Starting with version 2.3.0, you are advised to also install the Google “dwebp” CLI app. You can do so by [Downloading it](https://github.com/Spectrio-Creative/sorcerers-apprentice/releases/latest) and placing it in the same folder as the main script file. In the event that the script cannot load an image file, it will try to convert it from a .webp to a .png*.
-
 ::: warning
-_*This was a workaround that was added to the script because of After Effects’ limited support for .webp files. After Effects has since increased support for .webp files and this_ should _no longer be needed._
+_Starting with version 2.3.0, if you are running an older version of After Effects, it is recommended that you also install the Google “dwebp” CLI app. You can do so by [Downloading it](https://github.com/Spectrio-Creative/sorcerers-apprentice/releases/latest) and placing it in the same folder as the main script file. In the event that the script cannot load an image file, it will try to convert it from a .webp to a .png._
 :::
-::: tip
-_Note: In order for the script to be able to troubleshoot unsupported .webp files (a common problem with MDS projects), you must give it permission to write files. You can do this my going to Preferences > Scripting & Expressions in After Effects and checking the “Allow Scripts to Write Files and Access Network” box._
+::: warning
+_Note: If you are running an older version of After Effects, in order for the script to be able to troubleshoot the unsupported .webp files, you must give the script permission to write files. You can do this my going to Preferences > Scripting & Expressions in After Effects and checking the “Allow Scripts to Write Files and Access Network” box._
 :::
 
 ## Render Types
@@ -21,7 +19,9 @@ Since version 3.0.0 of the script, there has been two available methods for rend
 
 ## Creating a Template CSV
 
-In order to render templates with the _**spreadsheet**_ mode, it’s important to have a .csv file that’s properly formatted itself. The easiest way to insure that the spreadsheet is properly formatted is to work off of spreadsheets exported from the script. To export spreadsheets, first open the _AE_ file that contains the project template you wish to work with, then run the script, choose the "spreadsheet" export mode, then select "CREATE CSV(S)". You will then be able to select the folder you wish to export them to and it will create spreadsheets from all the templates present within the open project.
+In order to render templates with the _**spreadsheet**_ mode, it’s important to have a .csv file that’s properly formatted itself. The easiest way to insure that the spreadsheet is properly formatted is to work off of spreadsheets exported from the script.
+
+To export spreadsheets, first open the _AE_ file that contains the project template you wish to work with, then run the script, choose the "spreadsheet" export mode, then select "CREATE CSV(S)". You will then be able to select the folder you wish to export them to and it will create spreadsheets from all the templates present within the open project.
 
 ![](../images/spreadsheet.jpg) |  ![](../images/spreadsheet_create_csv.jpg)
 :-------------------------:|:-------------------------:
