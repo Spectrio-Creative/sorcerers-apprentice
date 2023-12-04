@@ -19,7 +19,7 @@ Within your template composition, you must specify which layers you wish to be e
 
 `!T`: for [Text Layers](../text-layer/)  
 `!I`: for [Image Layers](../image-layer/)  
-`!V`: for Video Layers (but shorthand for [Image Layers](../image-layer/))  
+`!V`: for Video Layers (shorthand for [Image Layers](../image-layer/))  
 `!G`: for [Group Tag](#group-tag)  
 `!C`: for [Color Control Layers](#color-control-layer)  
 `!A`: for [Audio Layers](../audio-layer/)
