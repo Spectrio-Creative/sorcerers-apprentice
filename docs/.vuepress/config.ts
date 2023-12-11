@@ -2,7 +2,7 @@ import { defaultTheme } from "@vuepress/theme-default";
 import { searchPlugin } from "@vuepress/plugin-search";
 // import { containerPlugin } from '@vuepress/plugin-container'
 
-const base = process.env.NODE_ENV === "production" ? "/documentation/sorcerers-apprentice/" : "/";
+const base = process.env.NODE_ENV === "production" ? "/creative/tools/sorcerers-apprentice/" : "/";
 
 module.exports = {
   title: "The Sorcerer’s Apprentice (the docs)",
@@ -33,6 +33,7 @@ module.exports = {
     },
   }),
   plugins: [
+    '@vuepress/last-updated',
     searchPlugin({
       // options
     }),
