@@ -20,4 +20,8 @@ title: Home
 
 If you're only here to nab the newest version of the script, it's [just here](https://github.com/Spectrio-Creative/sorcerers-apprentice/releases/latest).
 
-Otherwise, this microsite should contain all the info on how to install & use the Sorcerer's Apprentice Script for AE. Use the menu on the left to find what you're looking for and if you have any questions, feature requests, etc please reach out to Adam Howard via Skype, RingCentral, or email [adamh@spectrio.com](mailto:adamh@spectrio.com).
+Otherwise, this microsite should contain information on how to set up an AE project to use the Sorcerer's Apprentice Script as well as information that should help with troubleshooting issues you might have along the way. 
+
+I am actively working to improve the script as well as the documentation of the script, so if anything is missing or unclear in the documentation, please reach out to Adam Howard via Skype, RingCentral, or email [adamh@spectrio.com](mailto:adamh@spectrio.com).
+
+For feature requests or bugs, please either reach out to Adam Howard or open an issue on [github](https://github.com/Spectrio-Creative/sorcerers-apprentice/issues)
