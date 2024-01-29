@@ -29,7 +29,7 @@ const showSpreadSheetInfo = () => {
   infoPanel1.orientation = "column";
   infoPanel1.alignChildren = "left";
   infoPanel1.spacing = 10;
-  infoPanel1.margins = [20, 15, 20, 10];
+  infoPanel1.margins = [20, 15, 20, 10] as Margins;
 
   const csvExport = infoPanel1.add("statictext", undefined, undefined, {
     name: "csvExport",

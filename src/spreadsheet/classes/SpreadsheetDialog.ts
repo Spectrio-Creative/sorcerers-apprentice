@@ -157,7 +157,7 @@ const createSpreadsheetDialog = (exportables: GenericObject = {}) => {
       panel1.orientation = "column";
       panel1.alignChildren = "left";
       panel1.spacing = 10;
-      panel1.margins = [20, 15, 20, 10];
+      panel1.margins = [20, 15, 20, 10] as Margins;
 
       // EXPORTMODEGROUP
       // ===============
@@ -201,7 +201,7 @@ const createSpreadsheetDialog = (exportables: GenericObject = {}) => {
       additionalOptions.orientation = "row";
       additionalOptions.alignChildren = ["left", "center"];
       additionalOptions.spacing = 10;
-      additionalOptions.margins = [0, 0, 0, 10];
+      additionalOptions.margins = [0, 0, 0, 10] as Margins;
 
       const singleCsv = additionalOptions.add("checkbox", undefined, undefined, { name: "singleCsv" });
       singleCsv.text = "Single CSV*";

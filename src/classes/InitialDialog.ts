@@ -56,7 +56,7 @@ const createInitialDialog = (version = "0.0.0") => {
       panel1.orientation = "column";
       panel1.alignChildren = "left";
       panel1.spacing = 10;
-      panel1.margins = [10, 15, 10, 10];
+      panel1.margins = [10, 15, 10, 10] as Margins;
 
       // EXPORTMODEGROUP
       // ===============

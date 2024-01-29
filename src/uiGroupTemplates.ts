@@ -172,19 +172,19 @@ export interface ITab extends Tab {
   text: string;
   name: string;
   ss_type: string;
-  orientation: string;
+  orientation: _Orientation;
   spacing: number;
-  margins: number;
-  alignChildren: string;
+  margins: _Margins;
+  alignChildren: _AlignmentProperty;
 }
 
 export interface InnerTab extends Tab {
   name: string;
   ss_type: string;
-  alignChildren: string;
+  alignChildren: _AlignmentProperty;
   preferredSize: Dimension;
-  margins: number;
-  alignment: [string, string];
+  margins: _Margins;
+  alignment: _AlignmentProperty;
 }
 
 export function addTab(tabName: string, label: string) {
@@ -202,10 +202,10 @@ export function addTab(tabName: string, label: string) {
 export interface OuterTabbedPanel extends TabbedPanel {
   name: string;
   ss_type: string;
-  alignChildren: string;
+  alignChildren: _AlignmentProperty;
   preferredSize: Dimension;
-  margins: number;
-  alignment: [string, string];
+  margins: Margins;
+  alignment: _AlignmentProperty;
   children: InnerTab[];
 }
 

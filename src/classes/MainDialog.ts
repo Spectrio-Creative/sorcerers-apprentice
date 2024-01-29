@@ -36,9 +36,7 @@ const createMainDialog = () => {
   // TEMPLATE PANEL (THIS IS WHERE ALL THE GENERATED FIELDS WILL GO)
   // ========
   const template:TabbedPanel = mds.add("tabbedpanel", undefined, undefined, { name: "template" });
-  template.alignChildren = "fill";
   template.preferredSize.width = 479;
-  template.margins = 0;
   template.alignment = ["fill", "top"];
 
   // OPTIONS
