@@ -1,4 +1,4 @@
-import { camelCase } from "case-anything";
+import camelCase from "just-camel-case";
 import { status } from "../globals/project/menu";
 import { regSafe } from "../tools/ae";
 import { project } from "../globals/globals";

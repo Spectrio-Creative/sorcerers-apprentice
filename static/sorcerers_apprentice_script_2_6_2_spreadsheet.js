@@ -3,7 +3,6 @@ import { project, renderMain } from "../src/globals/globals";
 import { createSpreadsheetDialog } from "../src/spreadsheet/classes/SpreadsheetDialog";
 import { TraditionalRenderDialog } from "../src/classes/TraditionalRenderDialog";
 import { sa_262_ii } from "../src/legacy/mdsRender";
-import { camelCase } from "case-anything";
 import { colorize, decToRgb, GoodBoyNinjaColorPicker } from "../src/tools/colors";
 import { colorBtn, browserBtn } from "../src/tools/buttonFunctions";
 import { libItemsInFolder, findLayers, libItemsReg, regSafe, getPreComps } from "../src/tools/ae";

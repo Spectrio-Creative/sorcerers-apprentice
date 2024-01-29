@@ -1,4 +1,4 @@
-import { camelCase } from "case-anything";
+import camelCase from "just-camel-case";
 import { status } from "../globals/project/menu";
 import { findLayers, getPreComps, libItemsReg, regSafe } from "../tools/ae";
 import { arrIndex, customEach } from "../tools/legacyTools";

@@ -1,4 +1,4 @@
-import { camelCase } from "case-anything";
+import camelCase from "just-camel-case";
 import { findLayers, getPreComps, libItemsInFolder, libItemsReg, regSafe } from "../tools/ae";
 import { addColorGroup, addMediaGroup, addTab, addTabbedPannel, addTextGroup } from "../uiGroupTemplates";
 import { browserBtn, colorBtn } from "../tools/buttonFunctions";

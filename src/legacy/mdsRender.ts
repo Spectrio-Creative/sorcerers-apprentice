@@ -1,4 +1,4 @@
-import { camelCase } from "case-anything";
+import camelCase from "just-camel-case";
 import clone from "just-clone";
 import { project } from "../globals/globals";
 import {
