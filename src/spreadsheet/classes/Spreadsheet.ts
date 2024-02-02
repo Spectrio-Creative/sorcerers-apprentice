@@ -1,5 +1,5 @@
 import stringify from "fast-safe-stringify";
-import { project } from "../../globals/globals";
+import { project } from "../../globals/project/project";
 import { getSpreadsheet } from "../../tools/spreadsheet/tools";
 
 // export interface Spreadsheet {

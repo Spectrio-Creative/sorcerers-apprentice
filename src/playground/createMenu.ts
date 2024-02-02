@@ -1,4 +1,4 @@
-import { TemplateMain } from "../classes/TemplateMain";
+import { TemplateMain } from "../classes/template/TemplateMain";
 import { TraditionalRenderDialog } from "../classes/TraditionalRenderDialog";
 import { prepare } from "../tools/setup";
 

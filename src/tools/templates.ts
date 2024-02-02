@@ -1,9 +1,9 @@
-import { Template } from "../classes/Template";
-import { FieldBaseOptions, FieldOption, FieldType } from "../classes/Field";
+import type { TemplateOptions } from "../classes/template/Template";
+import { FieldBaseOptions, FieldOption, FieldType } from "../classes/template/field/Field";
 import { findLayers, libItemsInFolder } from "./ae";
 
-export const findTemplatesInFolders = (folders: FolderItem[]): Template[] => {
-  const templateFolders = [] as Template[];
+export const findTemplatesInFolders = (folders: FolderItem[]): TemplateOptions[] => {
+  const templateFolders = [] as TemplateOptions[];
   folders.forEach((folder) => {
     for (let i = 1; i <= folder.items.length; i++) {
       if (folder.items[i].typeName == "Composition" && folder.items[i].name === folder.name) {
@@ -11,7 +11,7 @@ export const findTemplatesInFolders = (folders: FolderItem[]): Template[] => {
 
         if (compArr.length > 0 && findLayers(/^!T|^!I|^!V|^!C|^!G|^!F|^!A/g, compArr[0]).length > 0) {
           templateFolders.push(
-            new Template({
+            ({
               name: folder.name,
               id: folder.id,
               comp: folder.items[i] as CompItem,

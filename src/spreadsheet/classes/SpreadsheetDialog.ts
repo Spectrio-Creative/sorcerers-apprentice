@@ -9,7 +9,7 @@ import { getFilePaths, mapMenu } from "../../tools/dialog/template";
 import { parseTabTitle } from "../../tools/library/sorcererDictionary";
 import { showSpreadSheetInfo } from "../info";
 import { createSpreadsheet, Spreadsheet } from "./Spreadsheet";
-import { renderMain } from "../../globals/globals";
+import { renderMain } from "../../globals/project/renderMain";
 import { capitalCase } from "../../tools/text";
 import { status } from "../../globals/project/status";
 

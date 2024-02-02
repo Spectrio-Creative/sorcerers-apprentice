@@ -2,7 +2,7 @@ import camelCase from "just-camel-case";
 // import { status } from "../globals/project/menu";
 import { status } from "../globals/project/status";
 import { regSafe } from "../tools/ae";
-import { project } from "../globals/globals";
+import { project } from "../globals/project/project";
 
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////

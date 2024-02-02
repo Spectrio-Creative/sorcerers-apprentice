@@ -1,4 +1,4 @@
-import { addColorGroup } from "../dialogElements";
+import { addColorGroup } from "../../../dialogElements";
 import { FieldBase, FieldBaseOptions } from "./Field";
 
 export class FieldColor extends FieldBase {

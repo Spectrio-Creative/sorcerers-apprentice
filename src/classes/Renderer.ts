@@ -1,6 +1,6 @@
-import { project } from "../globals/globals";
+import { project } from "../globals/project/project";
 // import { status } from "../globals/project/menu";
-import { compBtn, compTitle, pbar, queueBtn, renderBtn, template, templateControl } from "../globals/project/menu";
+import { compBtn, compTitle, pbar, queueBtn, renderBtn, template } from "../globals/project/menu";
 import { status } from "../globals/project/status";
 // import { libItemsInFolder, libItemsReg, regSafe } from "../tools/ae";
 import { findLayers, getPreComps, libItemsInFolder, libItemsReg, regSafe } from "../tools/ae";
@@ -11,6 +11,7 @@ import { fontStylesMaster } from "../globals/legacySupport";
 import { setText } from "../legacy/legacyTextFunctions";
 import fillTemplate from "../legacy/legacyFillTemplate";
 import stringify from "fast-safe-stringify";
+import { templateControl } from "../globals/project/templateControl";
 
 export type RenderOp = "compOnly" | "aeQueueOnly" | "queueOnly" | "renderAlso";
 
@@ -73,7 +74,7 @@ export class Renderer implements IRenderer {
     status.set("Found Comp Folder");
     const ORcomp = libItemsInFolder(regSafe(this.templateChoice.text), ORcompFolder, "Composition")[0] as CompItem;
     status.set("Found Original Comp");
-    
+
     project.log("\n===========\n");
     pbar.value = 25;
     status.set(this.templateChoice.text);
@@ -96,7 +97,7 @@ export class Renderer implements IRenderer {
     //delete existing folder if needed
     if (libItemsInFolder("^" + regSafe(comp.name) + "$", userComps, "Folder").length > 0) {
       const matchList = libItemsInFolder("^" + regSafe(comp.name) + "$", userComps, "Folder");
-      matchList.forEach(match => {
+      matchList.forEach((match) => {
         match.remove();
       });
     }
@@ -181,16 +182,16 @@ export class Renderer implements IRenderer {
         project.log("===========");
         project.log(`Replacing expression on "${layer.name}"`);
 
-        const expressionSourceText = templateControl.getTemplateValue({fullTitle: expressionLayer});
+        const expressionSourceText = templateControl.getTemplateValue({ fullTitle: expressionLayer });
 
-        if(expressionSourceText) textValue = expressionSourceText;
+        if (expressionSourceText) textValue = expressionSourceText;
 
         if (expressionComp === ORcomp.name) {
           const orReg = new RegExp(regSafe(ORcomp.name), "g");
           newExp = orExp.replace(orReg, comp.name);
           textValue = textValue + "";
         } else {
-          preComps.forEach(item => {
+          preComps.forEach((item) => {
             if (expressionComp === item.name) {
               item.name = "[" + comp.name + "] " + item.name;
               newExp = orExp.replace(expressionComp, item.name);
@@ -208,13 +209,16 @@ export class Renderer implements IRenderer {
         (layer.property("Source Text") as Property).expression = newExp;
 
         layer.text.sourceText.expressionEnabled = false;
-        setText({
-          textLayer: layer,
-          comp: compItem,
-          newText: textValue,
-          fontStyles: this.fontStyles,
-          panel: this.panel,
-        }, true);
+        setText(
+          {
+            textLayer: layer,
+            comp: compItem,
+            newText: textValue,
+            fontStyles: this.fontStyles,
+            panel: this.panel,
+          },
+          true
+        );
         layer.text.sourceText.expressionEnabled = true;
       }
     }

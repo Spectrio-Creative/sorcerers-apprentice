@@ -1,7 +1,7 @@
-import { findLayers, getPreComps } from "../tools/ae";
-import { addTab, addTabbedPannel } from "../uiGroupTemplates";
-import { FieldBase } from "./Field";
-import { makeFieldBase } from "./constructors";
+import { findLayers, getPreComps } from "../../tools/ae";
+import { addTab, addTabbedPannel } from "../../uiGroupTemplates";
+import { FieldBase } from "./field/Field";
+import { makeFieldBase } from "../constructors";
 
 export interface TemplateOptions {
   name?: string;

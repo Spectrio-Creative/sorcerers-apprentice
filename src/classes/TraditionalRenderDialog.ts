@@ -1,4 +1,4 @@
-import { renderMain } from "../globals/globals";
+import { renderMain } from "../globals/project/renderMain";
 import {
   mds,
   menuTitle as title,

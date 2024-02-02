@@ -1,6 +1,14 @@
-import { clean } from "./tools";
+export function clean<T>(arr: T[]): T[] {
+  const newArr = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] !== "" && arr[i] !== null && arr[i] !== undefined) {
+      newArr.push(arr[i]);
+    }
+  }
+  return newArr;
+}
 
-function convertCSVArrayToObject(strArray: string[]) {
+export function convertCSVArrayToObject(strArray: string[]) {
   let keys = strArray[0].split(",");
   const newObj = [];
 
@@ -29,7 +37,7 @@ interface ConverterOptions {
   skipShortLines?: boolean;
 }
 
-const givenOrDefault = (options: ConverterOptions) => {
+export function givenOrDefault(options: ConverterOptions) {
   options = options || {};
   options.delineator = options.delineator || ",";
   options.quotes = options.quotes || "\"";
@@ -37,9 +45,9 @@ const givenOrDefault = (options: ConverterOptions) => {
   options.transform = options.transform || ((value) => value);
   options.transformHeader = options.transformHeader || ((header) => header);
   return options;
-};
+}
 
-export const csvToJSON = (csvString: string, options?: ConverterOptions) => {
+export function csvToJSON(csvString: string, options?: ConverterOptions) {
   const { skipShortLines, quotes, delineator, transformHeader, transform } = givenOrDefault(options);
   const lineBreak = "LINE_BREAK";
   const delineatorBreak = "DELINEATOR_BREAK";
@@ -78,6 +86,4 @@ export const csvToJSON = (csvString: string, options?: ConverterOptions) => {
   }
 
   return json;
-};
-
-export { convertCSVArrayToObject };
+}

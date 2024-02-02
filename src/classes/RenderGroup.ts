@@ -1,5 +1,5 @@
 // import { template } from '../globals/project/menu';
-import { project } from "../globals/globals";
+import { project } from "../globals/project/project";
 import { template } from "../globals/project/menu";
 import { status } from "../globals/project/status";
 import { ITab } from "../uiGroupTemplates";

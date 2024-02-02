@@ -1,5 +1,4 @@
 import { createMainDialog } from "../../classes/MainDialog";
-import { TemplateControl } from "../../classes/template/dialog/TemplateControl";
 
 export const {
   mds,
@@ -14,4 +13,3 @@ export const {
   status,
 } = createMainDialog();
 
-export const templateControl = new TemplateControl();

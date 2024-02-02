@@ -1,6 +1,6 @@
-import { libItemsReg } from "../tools/ae";
-import { findTemplatesInFolders } from "../tools/templates";
-import { createMainDialog } from "./MainDialog";
+import { libItemsReg } from "../../tools/ae";
+import { findTemplatesInFolders } from "../../tools/templates";
+import { createMainDialog } from "../MainDialog";
 import { Template } from "./Template";
 
 export interface TemplateTab {
@@ -25,7 +25,7 @@ export class TemplateMain {
 
   findTemplateFolders() {
     const folders = libItemsReg(/templates/gi, "Folder") as FolderItem[];
-    this.templates = findTemplatesInFolders(folders);
+    this.templates = findTemplatesInFolders(folders).map((template) => new Template(template));
   }
 
   printNames() {

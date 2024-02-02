@@ -1,4 +1,4 @@
-import { project } from "../globals/globals";
+import { version as projectVersion } from "../globals/project/version";
 import * as ui from "../uiGroupTemplates";
 
 const createMainDialog = () => {
@@ -26,7 +26,7 @@ const createMainDialog = () => {
   header.alignment = ["fill", "top"];
 
   const title = header.add("statictext", undefined, undefined, { name: "title" });
-  const version = (project && project.version) ? project.version : "0";
+  const version = projectVersion || "0";
   title.text = `The Sorcerer's Apprentice (v${version})`;
   title.alignment = ["fill", "center"];
 

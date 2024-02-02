@@ -5,7 +5,7 @@ import { setText } from "./legacyTextFunctions";
 import { RenderOp } from "../classes/Renderer";
 import { imgExpression, sendtoRender } from "./legacyFunctionality";
 import { colorize } from "../tools/colors";
-import { project } from "../globals/globals";
+import { project } from "../globals/project/project";
 
 export interface ITemplateOptions {
   comp: CompItem;

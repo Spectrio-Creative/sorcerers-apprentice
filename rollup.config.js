@@ -1,20 +1,20 @@
 import json from "@rollup/plugin-json";
-import { getBabelOutputPlugin } from "@rollup/plugin-babel";
+// import { getBabelOutputPlugin } from "@rollup/plugin-babel";
 // import eslint from "@rollup/plugin-eslint";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { string } from "rollup-plugin-string";
 // import cleanup from 'rollup-plugin-cleanup';
-// import findUnused from "rollup-plugin-unused";
+import findUnused from "rollup-plugin-unused";
 import include from "rollup-plugin-include";
 import typescript from "@rollup/plugin-typescript";
-import stripComments from "./plugins/strip";
+// import stripComments from "./plugins/strip";
 
 // rollup.config.js
 export default {
   input: process.env.ENTRY || "src/main.ts",
   output: {
-    file: process.env.OUTPUT || "build/sorcerers_apprentice.jsx",
+    file: process.env.OUTPUT || "build/sorcerers_apprentice.js",
     format: "esm",
     sourcemap: false,
   },
@@ -23,6 +23,7 @@ export default {
     // process.env.ENTRY
     //   ? findUnused({ exclude: ["src/**"] })
     //   : findUnused({ exclude: ["src/playground.js", "**/_*.js"] }),
+    findUnused({ exclude: ["src/playground.js", "**/_*.js"] }),
     typescript(),
     nodeResolve(),
     commonjs({
@@ -36,7 +37,7 @@ export default {
     json(),
     include(),
     // cleanup(),
-    getBabelOutputPlugin({ presets: ["extendscript"] }),
-    stripComments(),
+    // getBabelOutputPlugin({ presets: ["extendscript"] }),
+    // stripComments(),
   ],
 };

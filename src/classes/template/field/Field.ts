@@ -1,4 +1,4 @@
-import { parseLayerName } from "../tools/templates";
+import { parseLayerName } from "../../../tools/templates";
 
 export type FieldType = "Text" | "Media" | "Color" | "Group" | "Font" | "Audio";
 

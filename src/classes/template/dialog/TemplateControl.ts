@@ -1,4 +1,4 @@
-import { project } from "../../../globals/globals";
+import { project } from "../../../globals/project/project";
 import { template } from "../../../globals/project/menu";
 import set from "just-safe-set";
 import get from "just-safe-get";

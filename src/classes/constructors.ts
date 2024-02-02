@@ -1,11 +1,11 @@
 import { parseLayerName } from "../tools/templates";
-import { FieldBase } from "./Field";
-import { FieldAudio } from "./FieldAudio";
-import { FieldColor } from "./FieldColor";
-import { FieldFont } from "./FieldFont";
-import { FieldGroup } from "./FieldGroup";
-import { FieldMedia } from "./FieldMedia";
-import { FieldText } from "./FieldText";
+import { FieldBase } from "./template/field/Field";
+import { FieldAudio } from "./template/field/FieldAudio";
+import { FieldColor } from "./template/field/FieldColor";
+import { FieldFont } from "./template/field/FieldFont";
+import { FieldGroup } from "./template/field/FieldGroup";
+import { FieldMedia } from "./template/field/FieldMedia";
+import { FieldText } from "./template/field/FieldText";
 
 export const makeFieldBase = (layer: Layer) => {
   const parsed = parseLayerName(layer.name);

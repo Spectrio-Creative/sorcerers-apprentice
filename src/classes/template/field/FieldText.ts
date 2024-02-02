@@ -1,4 +1,4 @@
-import { addTextGroup } from "../dialogElements";
+import { addTextGroup } from "../../../dialogElements";
 import { FieldBase, FieldBaseOptions } from "./Field";
 
 export class FieldText extends FieldBase {

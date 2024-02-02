@@ -1,4 +1,4 @@
-import { TemplateMain } from "../classes/TemplateMain";
+import { TemplateMain } from "../classes/template/TemplateMain";
 
 import { parseLayerName } from "../tools/templates";
 

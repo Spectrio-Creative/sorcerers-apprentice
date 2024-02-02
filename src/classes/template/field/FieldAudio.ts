@@ -1,10 +1,10 @@
-import { addMediaGroup } from "../dialogElements";
+import { addMediaGroup } from "../../../dialogElements";
 import { FieldBase, FieldBaseOptions } from "./Field";
 
-export class FieldMedia extends FieldBase {
+export class FieldAudio extends FieldBase {
   constructor(layer: Layer, options?: FieldBaseOptions) {
     super(layer, options);
-    this.type = "Media";
+    this.type = "Audio";
   }
 
   createMenuField(tab: Tab) {

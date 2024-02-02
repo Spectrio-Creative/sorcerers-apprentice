@@ -5,6 +5,7 @@ import { ___ } from "../globals/document";
 import extend from "just-extend";
 import { menuTitle } from "../globals/project/menu";
 import { version as scriptVersion } from "../../package.json";
+import { setVersion, version as projectVersion } from "../globals/project/version";
 
 export interface ProjectUnique {
   canceled: boolean;
@@ -41,7 +42,9 @@ const createProject = (fileName: string): Project => {
     initialDialog: createInitialDialog(),
     version: scriptVersion || "0.0.0",
     initialize: function (version) {
-      version = version || "0.0.1";
+      if (version) setVersion(version);
+
+      version = version || projectVersion || "0.0.1";
       this.version = version;
 
       menuTitle.text = `The Sorcerer's Apprentice (v${version})`;
