@@ -1,8 +1,4 @@
 // SEARCH IN FOLDER FOR ITEM
-
-// import { setText } from "../legacy/legacyTextFunctions";
-// import { customEach } from "../tools";
-
 // ====
 export function libItemsInFolder(reg: RegExp | string | number, folderObj: FolderItem, iType) {
   const resultsArr: _ItemClasses[] = [];

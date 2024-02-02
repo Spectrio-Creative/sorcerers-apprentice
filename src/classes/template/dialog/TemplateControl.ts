@@ -1,81 +1,8 @@
-import extend from "just-extend";
 import { project } from "../../../globals/globals";
 import { template } from "../../../globals/project/menu";
 import set from "just-safe-set";
 import get from "just-safe-get";
-
-export const isMatch = (
-  a: string,
-  b: string,
-  options?: {
-    whitespace?: "i" | "ignore" | "s" | "show";
-    case?: "i" | "insensitive" | "s" | "sensitive";
-    match?: "exact" | "partial";
-  }
-): boolean => {
-  if (typeof a !== "string" || typeof b !== "string") return false;
-  options = extend({}, { case: "i", whitespace: "s" }, options);
-  if (options.whitespace === "i" || options.whitespace === "ignore") {
-    a = a.replace(/\W/g, "");
-    b = b.replace(/\W/g, "");
-  }
-  if (options.case === "i" || options.case === "insensitive") {
-    a = a.toLowerCase();
-    b = b.toLowerCase();
-  }
-  if (options.match === "partial") {
-    return a.includes(b);
-  }
-  return a === b;
-};
-
-export const findPathByKey = (
-  obj: GenericObject,
-  key?: string,
-  options?: { pathInProgress?: string; allFullPaths?: boolean; includes?: string }
-): string[] => {
-  options = extend({}, { pathInProgress: "" }, options);
-  const entries = Object.entries(obj);
-  const output = [];
-  entries.forEach(([k, v]) => {
-    if (isMatch(k, key)) {
-      output.push(`${options.pathInProgress}${k}`);
-    }
-
-    if (typeof v === "object") {
-      const path = options.pathInProgress + (Array.isArray(obj) ? `[${k}].` : `${k}.`);
-      const newOptions = extend({}, options, { pathInProgress: path });
-      const result = findPathByKey(v, key, newOptions);
-      output.push(...result);
-    } else if (options.allFullPaths) {
-      output.push(`${options.pathInProgress}${k}`);
-    }
-  });
-
-  const filtered = options.includes ? output.filter((path) => new RegExp(options.includes, "i").test(path)) : output;
-  return filtered;
-};
-
-export const parseCategoryTitle = (fullTitle: string) => {
-  if (typeof fullTitle !== "string") return;
-  // const matcher = /(?:![A-Z][a-z]*\s*(?:\([\w ]+\))?\s)?(?:\[(.*)\])?\s*(.*)/;
-  let title = fullTitle;
-
-  const typeMatch = /!([A-Z])([a-z]*)/;
-  const groupMatch = /(?:\[(.*)\])/;
-  const sectionMatch = /(?:\((.*)\))/;
-
-  const [_typeMatch, type, subtype] = title.match(typeMatch) || [];
-  title = title.replace(typeMatch, "").trim();
-
-  const [_groupMatch, group] = title.match(groupMatch) || [];
-  title = title.replace(groupMatch, "").trim();
-
-  const [_sectionMatch, section] = title.match(sectionMatch) || [];
-  title = title.replace(sectionMatch, "").trim();
-
-  return { input: fullTitle, type, subtype, group, section, title };
-};
+import { findPathByKey, parseCategoryTitle } from "../../../tools/dialog/template";
 
 interface TemplateLookup {
   compName?: string;

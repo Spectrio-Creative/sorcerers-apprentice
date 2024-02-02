@@ -1,6 +1,7 @@
 // import { template } from '../globals/project/menu';
 import { project } from "../globals/globals";
-import { status, template } from "../globals/project/menu";
+import { template } from "../globals/project/menu";
+import { status } from "../globals/project/status";
 import { ITab } from "../uiGroupTemplates";
 import { Renderer } from "./Renderer";
 
@@ -39,7 +40,7 @@ export class RenderGroup {
 
   createRenderersFromTemplate() {
     project.log("createRenderersFromTemplate");
-    status.text = "createRenderersFromTemplate";
+    status.set("createRenderersFromTemplate");
 
     Object.keys(template).forEach((templateKey) => {
       if (!templateReg.test(templateKey)) return;
@@ -50,7 +51,7 @@ export class RenderGroup {
 
   alertUserOfAllRenderers() {
     project.log("alertUserOfAllRenderers");
-    status.text = "alertUserOfAllRenderers";
+    status.set("alertUserOfAllRenderers");
 
     const rendererNames = Object.keys(this.renderers);
     const rendererNamesString = rendererNames.join(", ");

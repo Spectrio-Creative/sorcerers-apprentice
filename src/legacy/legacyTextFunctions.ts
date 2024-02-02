@@ -1,5 +1,6 @@
 import camelCase from "just-camel-case";
-import { status } from "../globals/project/menu";
+// import { status } from "../globals/project/menu";
+import { status } from "../globals/project/status";
 import { regSafe } from "../tools/ae";
 import { project } from "../globals/globals";
 
@@ -27,7 +28,7 @@ export function setText({
   fontStyles,
   panel,
 }: ITextSetOptions, debug = false) {
-  status.text = "setting text: " + regSafe(newText);
+  status.innerText = "setting text: " + regSafe(newText);
   if(debug) {
     project.log("setting text: " + regSafe(newText));
   }
@@ -46,7 +47,7 @@ export function setText({
 
   //Check for font styles
 
-  status.text = "checking for font styles";
+  status.innerText = "checking for font styles";
   if (/\(.*\)/.test(textLayer.name)) {
     const styleName = textLayer.name.match(/\(.*\)/)[0].slice(1, -1);
 
@@ -60,13 +61,13 @@ export function setText({
   }
 
   if (newText === "") {
-    status.text = "Blank - skipping resize";
+    status.innerText = "Blank - skipping resize";
     layerTextDoc.text = newText;
     layerProp.setValue(layerTextDoc);
     return;
   }
   if (!layerTextDoc.boxText) {
-    status.text = "No use of point text - skipping resize";
+    status.innerText = "No use of point text - skipping resize";
     layerTextDoc.text = newText;
     layerProp.setValue(layerTextDoc);
     return;
@@ -94,12 +95,12 @@ export function setText({
       textLayer.transform.anchorPoint.setValue([
         textLayer.transform.anchorPoint.value[0] + boxSize.width * 4.5,
         textLayer.transform.anchorPoint.value[1],
-      ] as any);
+      ]);
     } else if (alignment[1] === "r") {
       textLayer.transform.anchorPoint.setValue([
         textLayer.transform.anchorPoint.value[0] + boxSize.width * 9,
         textLayer.transform.anchorPoint.value[1],
-      ] as any);
+      ]);
     }
 
     //Add the scale expression then resize the box to fit the new text
@@ -123,14 +124,14 @@ export function setText({
       textLayer.transform.anchorPoint.setValue([
         textLayer.transform.anchorPoint.value[0] - (boxSize.width * 5 - layerTextDoc.boxTextSize[0] / 2),
         textLayer.transform.anchorPoint.value[1],
-      ] as any);
+      ]);
     if (alignment[1] === "r")
       textLayer.transform.anchorPoint.setValue([
         textLayer.transform.anchorPoint.value[0] - (boxSize.width * 10 - layerTextDoc.boxTextSize[0]),
         textLayer.transform.anchorPoint.value[1],
-      ] as any);
+      ]);
   } else {
-    status.text = "Paragraph text takes longer";
+    status.innerText = "Paragraph text takes longer";
 
     //==== // ======== // ====//
     //====                ====//
@@ -165,7 +166,7 @@ export function setText({
       //Center the text if it's not the full height and the anchor is the center
       const layerPosition = textLayer.position.value;
       const adjust = (rectSize.height - textLayer.sourceRectAtTime(0, false).height) / 2;
-      textLayer.position.setValue([layerPosition[0], layerPosition[1] + adjust, layerPosition[2]] as any);
+      textLayer.position.setValue([layerPosition[0], layerPosition[1] + adjust, layerPosition[2]]);
     } 
     
     // if (layerTextDoc.baselineLocs.length / 4 > maxLines) {
@@ -194,32 +195,29 @@ export function setText({
 
 // EXPRESSION TO USE ON TEXT LAYERS
 // ====
+function addComment(comment: string) {
+  return `// ${comment}`;
+}
 function textExpression(minTextSize, maxWidth) {
   if (minTextSize === "skip" || maxWidth === "skip") return "";
-  return (
-    "// This lets us get the width of the textbox containing your content.\
-layerWidth = thisLayer.sourceRectAtTime(time).width;\
-layerHeight = thisLayer.sourceRectAtTime(time).height;\
-\
-// This lets us get the width of the current composition.\
-compWidth = thisComp.width;\
-\
-// we want to set the width to a little over 100%;\
-maximumWidth = compWidth * " +
-    maxWidth +
-    ";\
-\
-// but we don't want it to be too big if it's a short line\
-maximumHeight = " +
-    minTextSize +
-    ";\
-// Get the ratio\
-forWidth = maximumWidth / layerWidth * 100;\
-forHeight = maximumHeight / layerHeight * 100;\
-percentNeeded = (forWidth > forHeight) ? forHeight : forWidth;\
-percentNeeded = (percentNeeded < 100) ? percentNeeded : 100;\
-[percentNeeded, percentNeeded]"
-  );
+  return `${addComment("This lets us get the width of the textbox containing your content.")}
+layerWidth = thisLayer.sourceRectAtTime(time).width;
+layerHeight = thisLayer.sourceRectAtTime(time).height;
+
+${addComment("This lets us get the width of the current composition.")}
+compWidth = thisComp.width;
+
+${addComment("we want to set the width to a little over 100%.")}
+maximumWidth = compWidth * ${maxWidth};
+
+${addComment("but we don't want it to be too big if it's a short line.")}
+maximumHeight = ${minTextSize};
+${addComment("Get the ratio.")}
+forWidth = maximumWidth / layerWidth * 100;
+forHeight = maximumHeight / layerHeight * 100;
+percentNeeded = (forWidth > forHeight) ? forHeight : forWidth;
+percentNeeded = (percentNeeded < 100) ? percentNeeded : 100;
+[percentNeeded, percentNeeded]`;
 }
 
 // ANCHOR POINT FUNCTION (FOR USE WITH TEXT, THIS MOVES THE ANCHOR POINT TO A REASONABLE PLACE)

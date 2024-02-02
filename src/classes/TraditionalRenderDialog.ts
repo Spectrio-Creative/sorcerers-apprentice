@@ -70,7 +70,6 @@ export class TraditionalRenderDialog {
         mds.close();
         return;
       }
-      // sa_262_ii(template.selection, "compOnly");
 
       const renderer = renderMain.getRenderer((template.selection as InnerTab).name);
       renderer.renderOp = "compOnly";
@@ -89,8 +88,6 @@ export class TraditionalRenderDialog {
         return;
       }
 
-      // sa_262_ii(template.selection, "queueOnly");
-
       const renderer = renderMain.getRenderer((template.selection as InnerTab).name);
       renderer.renderOp = "queueOnly";
       renderer.outFile = outFolder.txt.text;
@@ -108,8 +105,6 @@ export class TraditionalRenderDialog {
         alert("Please select an output folder");
         return;
       }
-
-      // sa_262_ii(template.selection, "renderAlso");
 
       const renderer = renderMain.getRenderer((template.selection as InnerTab).name);
       renderer.renderOp = "renderAlso";

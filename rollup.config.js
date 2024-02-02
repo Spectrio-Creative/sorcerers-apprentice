@@ -8,6 +8,7 @@ import { string } from "rollup-plugin-string";
 // import findUnused from "rollup-plugin-unused";
 import include from "rollup-plugin-include";
 import typescript from "@rollup/plugin-typescript";
+import stripComments from "./plugins/strip";
 
 // rollup.config.js
 export default {
@@ -36,5 +37,6 @@ export default {
     include(),
     // cleanup(),
     getBabelOutputPlugin({ presets: ["extendscript"] }),
+    stripComments(),
   ],
 };

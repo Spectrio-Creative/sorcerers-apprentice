@@ -1,4 +1,5 @@
-import { compTitle, status } from "../globals/project/menu";
+import { compTitle } from "../globals/project/menu";
+import { status } from "../globals/project/status";
 import { GoodBoyNinjaColorPicker, colorize, decToRgb } from "./colors";
 
 // COLOR BUTTON SETUP
@@ -18,7 +19,7 @@ export function browserBtn(inputFld: Button) {
 
   const parent = inputFld.parent as BrowseGroup;
 
-  status.text = parent.name;
+  status.set(parent.name);
 
   let textLocation = "media";
   if (parent.txt !== undefined) {
@@ -36,7 +37,7 @@ export function browserBtn(inputFld: Button) {
         //fileF = folder.execute();*/
     fileF = file.saveDlg();
   } else {
-    fileF = File.openDialog(parent.name, false);
+    fileF = File.openDialog(parent.name, "*.*", false);
   }
 
   if (fileF !== null) parent[textLocation].text = fileF.fsName;

@@ -9,7 +9,7 @@ export interface FolderTree {
   location: (location: string) => string | false;
   locationFallback: (location: string) => string;
   createFile: (filename: string, location: string) => File;
-  copyFile: (fileToCopy: File, copyLocation: string, callback?: (newFile: File) => any) => void;
+  copyFile: (fileToCopy: File, copyLocation: string, callback?: (newFile: File) => void) => void;
   addFileFromString: (fileData: string, filename: string, location?: string) => File;
   addLocation: (id: string, prompt?: string) => Folder;
   addFileFromDialog: () => void;

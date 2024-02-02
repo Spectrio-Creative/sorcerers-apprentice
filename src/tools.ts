@@ -1,17 +1,3 @@
-export function customEach(arr, callback) {
-  for (let i = 0; i < arr.length; i++) {
-    callback(arr[i], i);
-  }
-}
-
-export function arrIndex(arr, str) {
-  if (arr === null) return -1;
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] == str) return i;
-  }
-  return -1;
-}
-
 export function copyObj(src) {
   const target = {};
   for (const prop in src) {

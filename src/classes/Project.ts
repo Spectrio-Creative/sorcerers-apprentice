@@ -4,6 +4,7 @@ import dateFormat from "dateformat";
 import { ___ } from "../globals/document";
 import extend from "just-extend";
 import { menuTitle } from "../globals/project/menu";
+import { version as scriptVersion } from "../../package.json";
 
 export interface ProjectUnique {
   canceled: boolean;
@@ -38,7 +39,7 @@ const createProject = (fileName: string): Project => {
     fileName: fileName || "",
     exportType: "Traditional",
     initialDialog: createInitialDialog(),
-    version: "0.0.0",
+    version: scriptVersion || "0.0.0",
     initialize: function (version) {
       version = version || "0.0.1";
       this.version = version;

@@ -7,6 +7,7 @@ import { browserBtn } from "./tools/buttonFunctions";
 import { TraditionalRenderDialog } from "./classes/TraditionalRenderDialog";
 import { createSpreadsheetDialog } from "./spreadsheet/classes/SpreadsheetDialog";
 import { allEditableLayers } from "./globals/legacySupport";
+import { TemplateMain } from "./classes/TemplateMain";
 
 const main = () => {
   prepare();
@@ -37,4 +38,21 @@ const main = () => {
   }
 };
 
-main();
+$.write(main);
+$.write(getMenuInfo);
+
+prepare();
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getMenuInfo() {
+  // const templates = populateTemplates(template);
+  // const tabs = [];
+  // for (let i = 0; i < templates.length; i++) {
+  //   tabs.push(poplateTabs(templates[i], template));
+  // }
+  // return { templates, tabs };
+  // const renderDialog = new TraditionalRenderDialog();
+  const template = new TemplateMain();
+
+  return JSON.stringify(template.getOverview());
+}

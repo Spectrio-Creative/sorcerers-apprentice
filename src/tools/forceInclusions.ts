@@ -9,13 +9,15 @@ function forceInclusions() {
   // class Y extends X requires both
   // Object.create and Object.defineProperties
   const boogle = { fish: "fingers" };
-
   const newArr = ["fish"];
-  console.log(Array.isArray(newArr));
+  $.write(Array.isArray(newArr));
+  $.write("fish".charAt(0));
 
-  console.log("fish".charAt(0));
-
-  const object1 = {};
+  const object1 = {} as {
+    property1: { value: number; writeable: boolean };
+    property2: string;
+    betaProp: string;
+  };
   Object.defineProperty(object1, "betaProp", {
     enumerable: false,
     configurable: false,
@@ -30,10 +32,10 @@ function forceInclusions() {
     },
     property2: {},
   });
-  console.log(object1.property1);
+  $.write(object1.property1);
 
   const doubleBoo = Object.create(boogle);
-  console.log(doubleBoo.fish);
+  $.write(doubleBoo.fish);
 }
 
 export { forceInclusions };

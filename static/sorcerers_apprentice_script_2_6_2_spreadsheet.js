@@ -1,24 +1,9 @@
-import * as ui from "../src/uiGroupTemplates";
 import { project, renderMain } from "../src/globals/globals";
 import { createSpreadsheetDialog } from "../src/spreadsheet/classes/SpreadsheetDialog";
 import { TraditionalRenderDialog } from "../src/classes/TraditionalRenderDialog";
-import { sa_262_ii } from "../src/legacy/mdsRender";
-import { colorize, decToRgb, GoodBoyNinjaColorPicker } from "../src/tools/colors";
-import { colorBtn, browserBtn } from "../src/tools/buttonFunctions";
-import { libItemsInFolder, findLayers, libItemsReg, regSafe, getPreComps } from "../src/tools/ae";
-import {
-  mds,
-  compTitle,
-  outFolder,
-  template,
-  compBtn,
-  queueBtn,
-  renderBtn,
-  pbar,
-  status,
-} from "../src/globals/project/menu";
-import { arrIndex } from "../src/tools/legacyTools";
-import { fontStylesMaster, allEditableLayers } from "../src/globals/legacySupport";
+import { browserBtn } from "../src/tools/buttonFunctions";
+import { outFolder, template } from "../src/globals/project/menu";
+import { allEditableLayers } from "../src/globals/legacySupport";
 import { poplateTabs, populateTemplates } from "../src/legacy/legacySetup";
 
 function sa_262() {

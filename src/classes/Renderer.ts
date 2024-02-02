@@ -1,10 +1,10 @@
 import { project } from "../globals/globals";
 // import { status } from "../globals/project/menu";
-import { compBtn, compTitle, pbar, queueBtn, renderBtn, status, template, templateControl } from "../globals/project/menu";
+import { compBtn, compTitle, pbar, queueBtn, renderBtn, template, templateControl } from "../globals/project/menu";
+import { status } from "../globals/project/status";
 // import { libItemsInFolder, libItemsReg, regSafe } from "../tools/ae";
 import { findLayers, getPreComps, libItemsInFolder, libItemsReg, regSafe } from "../tools/ae";
 import { ITab } from "../uiGroupTemplates";
-import { customEach } from "../tools/legacyTools";
 import clone from "just-clone";
 import { addLinkedPrecomps, prerequisites } from "../legacy/legacyFunctionality";
 import { fontStylesMaster } from "../globals/legacySupport";
@@ -33,7 +33,7 @@ export class Renderer implements IRenderer {
 
   constructor(templateChoice: ITab, renderOp?: RenderOp, outFile?: string) {
     project.log("Renderer constructor");
-    status.text = "Renderer constructor";
+    status.set("Renderer constructor");
 
     this.templateChoice = templateChoice;
     this.renderOp = renderOp || "compOnly";
@@ -44,13 +44,13 @@ export class Renderer implements IRenderer {
       "Folder",
       1
     ) as FolderItem;
-    status.text = "Found Comp Folder";
+    status.set("Found Comp Folder");
     this.originalComp = libItemsInFolder(regSafe(templateChoice.text), ORcompFolder, "Composition")[0] as CompItem;
-    status.text = "Found Original Comp";
+    status.set("Found Original Comp");
   }
 
   render() {
-    status.text = "Renderer render";
+    status.set("Renderer render");
     this.mdsRender();
   }
 
@@ -58,7 +58,7 @@ export class Renderer implements IRenderer {
     try {
       this.panel = clone(template[this.templateChoice.name]["content_" + this.templateChoice.text]);
     } catch (e) {
-      status.text = e;
+      status.set(e);
     }
 
     if (prerequisites(this.templateChoice, this.panel) === -1) return;
@@ -70,41 +70,40 @@ export class Renderer implements IRenderer {
       "Folder",
       1
     ) as FolderItem;
-    status.text = "Found Comp Folder";
+    status.set("Found Comp Folder");
     const ORcomp = libItemsInFolder(regSafe(this.templateChoice.text), ORcompFolder, "Composition")[0] as CompItem;
-    status.text = "Found Original Comp";
-
-    /*pbar.value = 0;
-    alert('Made it!'); return;*/
+    status.set("Found Original Comp");
+    
+    project.log("\n===========\n");
     pbar.value = 25;
-    status.text = this.templateChoice.text;
+    status.set(this.templateChoice.text);
 
     const comp = ORcomp.duplicate();
 
     this.fontStyles = fontStylesMaster[ORcomp.id];
 
-    status.text = "Duplicated Comp";
+    status.set("Duplicated Comp");
     comp.name = compTitle.txt.text !== "" ? compTitle.txt.text : ORcomp.name;
 
-    status.text = "Renamed Comp '" + comp.name + "'";
+    status.set("Renamed Comp '" + comp.name + "'");
     const compFolder = app.project.items.addFolder(comp.name);
-    status.text = "Created Folder '" + comp.name + "'";
+    status.set("Created Folder '" + comp.name + "'");
     let userComps = libItemsReg(/User Comps/g, "Folder")[0];
     if (userComps == undefined) userComps = app.project.items.addFolder("User Comps");
 
-    status.text = "Found or Created 'User Comps' Folder";
+    status.set("Found or Created 'User Comps' Folder");
 
     //delete existing folder if needed
     if (libItemsInFolder("^" + regSafe(comp.name) + "$", userComps, "Folder").length > 0) {
       const matchList = libItemsInFolder("^" + regSafe(comp.name) + "$", userComps, "Folder");
-      customEach(matchList, function (match) {
+      matchList.forEach(match => {
         match.remove();
       });
     }
     compFolder.parentFolder = userComps;
     comp.parentFolder = compFolder;
 
-    status.text = comp.name;
+    status.set(comp.name);
 
     addLinkedPrecomps(ORcompFolder, compFolder, comp);
 
@@ -116,7 +115,7 @@ export class Renderer implements IRenderer {
     allComps.push(comp);
 
     //Get all layers in preComps that are linked outward.
-    status.text = "Relinking Expressions";
+    status.set("Relinking Expressions");
 
     allComps.forEach((compItem) => {
       const allLayers = findLayers(/.*/g, compItem) as Layer[];
@@ -152,7 +151,7 @@ export class Renderer implements IRenderer {
             if (expressionComp === ORcomp.name) {
               newExp = orExp.replace(exReg, comp.name);
             } else {
-              customEach(preComps, function (item: CompItem) {
+              preComps.forEach((item: CompItem) => {
                 if (expressionComp === item.name) {
                   item.name = "[" + comp.name + "] " + item.name;
                   newExp = orExp.replace(exReg, item.name);
@@ -191,7 +190,7 @@ export class Renderer implements IRenderer {
           newExp = orExp.replace(orReg, comp.name);
           textValue = textValue + "";
         } else {
-          customEach(preComps, function (item) {
+          preComps.forEach(item => {
             if (expressionComp === item.name) {
               item.name = "[" + comp.name + "] " + item.name;
               newExp = orExp.replace(expressionComp, item.name);
@@ -221,7 +220,7 @@ export class Renderer implements IRenderer {
     }
 
     pbar.value = 100;
-    status.text = "Script Finished";
+    status.set("Script Finished");
     compBtn.active = true;
     compBtn.active = false;
     renderBtn.enabled = false;

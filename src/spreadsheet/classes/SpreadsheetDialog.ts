@@ -1,15 +1,17 @@
-import { snakeCase, spaceCase } from "case-anything";
+// import { spaceCase } from "case-anything";
+import snakeCase from "just-snake-case";
 // import stringify from "fast-safe-stringify";
 import get from "just-safe-get";
 import set from "just-safe-set";
 import { project } from "../../globals/project/project";
-import { compTitle, status, template } from "../../globals/project/menu";
-// import { sa_262_ii } from "../../legacy/mdsRender";
+import { compTitle, template, status as menuStatus } from "../../globals/project/menu";
 import { getFilePaths, mapMenu } from "../../tools/dialog/template";
 import { parseTabTitle } from "../../tools/library/sorcererDictionary";
 import { showSpreadSheetInfo } from "../info";
 import { createSpreadsheet, Spreadsheet } from "./Spreadsheet";
 import { renderMain } from "../../globals/globals";
+import { capitalCase } from "../../tools/text";
+import { status } from "../../globals/project/status";
 
 export interface SpreadsheetDialog {
   canceled: boolean;
@@ -24,8 +26,7 @@ export interface SpreadsheetDialog {
   renderOptions: RenderOption[];
   checkLocation: (location: string | null) => boolean;
   iterateExportables: (
-    callbackfn: (value: [string, unknown], index: number, array: [string, unknown][]) => void,
-    thisArg?: any
+    callbackfn: (value: [string, unknown], index: number, array: [string, unknown][]) => void
   ) => void;
   printCSVs: () => void;
   show: () => void;
@@ -57,73 +58,77 @@ const createSpreadsheetDialog = (exportables: GenericObject = {}) => {
       Object.entries(this.exportables).forEach(onEach);
     },
 
+    // printSingleCSV: function (location: Folder, options: { prefix: string }) {},
+
     printCSVs: function () {
-      const csv = [];
       const templates = Object.keys(this.menuMap);
       const allPaths = getFilePaths(this.menuMap);
 
-      const prefix = app.project.file ? spaceCase(app.project.file.name.replace(".aep", "")) + " " : "";
+      const prefix = app.project.file ? snakeCase(app.project.file.name.replace(".aep", "")) + " " : "";
 
       const chooseLocation = project.addLocation("demo_csvs", "Choose folder for CSVs");
       if (!chooseLocation) return;
 
-      if (this.singleCSV) {
-        csv[0] = ["Template", "Comp Title", "Output File"];
+      const csv = [] as string[][][];
+      const titles = [] as string[];
+      templates.forEach((temp, i) => {
+        const sheetIndex = this.singleCSV ? 0 : i;
+        const templateCSV = (csv[sheetIndex] = csv[sheetIndex] || ([] as string[][]));
+        const templateHeaders = (templateCSV[0] = templateCSV[0] || ["Template", "Comp Title", "Output File"]);
+        const tempTitle = (parseTabTitle(temp) || { title: temp }).title;
 
-        templates.forEach((temp, i) => {
-          const index = i + 1;
-          csv[index] = [];
+        const rowIndex = this.singleCSV ? i + 1 : 1;
+        const templateValues = (templateCSV[rowIndex] = [tempTitle, tempTitle, "~/"]);
 
-          const tempTitle = (parseTabTitle(temp) || { title: temp }).title;
-          csv[index].push(tempTitle, tempTitle, "~/");
+        const paths = allPaths.filter((path) => path.includes(temp));
 
-          const paths = allPaths.filter((path) => path.includes(temp));
-          paths.forEach((path) => {
-            const pathParts = path.split(".");
-            if (pathParts.length < 4) return;
-            const [_tempName, _content, group, title] = pathParts;
+        paths.forEach((path) => {
+          const pathParts = path.split(".");
+          if (pathParts.length < 4) return;
+          const [_tempName, _content, group, title] = pathParts;
 
-            let capTitle = spaceCase(title);
-            capTitle = capTitle.charAt(0).toUpperCase() + capTitle.slice(1);
-            const val = get(template, `${path}.text`);
+          const capitalTitle = capitalCase(title);
+          const columnValue = get(template, `${path}.text`);
 
-            let columnIndex = csv[0].indexOf(`"[${group}] ${capTitle}"`);
-            if (columnIndex === -1) {
-              columnIndex = csv[0].length;
-              csv[0].push(`"[${group}] ${capTitle}"`);
-            }
-            csv[index][columnIndex] = `"${val}"`;
-          });
+          const header = `"[${group}] ${capitalTitle}"`;
+
+          // alert(`${header}
+          // title: ${title}
+          // group: ${group}
+          // capitalTitle: ${capitalTitle}`);
+
+          const columnIndex = templateHeaders.indexOf(header);
+
+          if (columnIndex !== -1) {
+            templateValues[columnIndex] = `"${columnValue}"`;
+            return;
+          }
+          templateHeaders.push(`"[${group}] ${capitalTitle}"`);
+          // Add value at same index as header
+          templateValues[templateHeaders.length - 1] = `"${columnValue}"`;
         });
-        const csvString = csv.reducer((t, c) => t + c.reducer((it, ic) => it + "," + (ic || "")) + "\n", "");
-        project.addFileFromString(csvString, `${snakeCase(prefix)}.csv`, "demo_csvs");
-        alert("Template csv exported!");
-      } else {
-        templates.forEach((temp, i) => {
-          const tempTitle = (parseTabTitle(temp) || { title: temp }).title;
-          csv[i] = [["Template"], [tempTitle]];
 
-          csv[i][0].push("Comp Title", "Output File");
-          csv[i][1].push(tempTitle, "~/");
+        titles.push(tempTitle);
+      });
 
-          const paths = allPaths.filter((path) => path.includes(temp));
-          paths.forEach((path) => {
-            const pathParts = path.split(".");
-            if (pathParts.length < 4) return;
-            const [_tempName, _content, group, title] = pathParts;
-            // spaceCase()
-            let capTitle = spaceCase(title);
-            capTitle = capTitle.charAt(0).toUpperCase() + capTitle.slice(1);
-            const val = get(template, `${path}.text`);
-
-            csv[i][0].push(`"[${group}] ${capTitle}"`);
-            csv[i][1].push(`"${val}"`);
-          });
-          const csvString = csv[i].reducer((t, c) => t + c.reducer((it, ic) => it + "," + ic) + "\n", "");
-          project.addFileFromString(csvString, `${snakeCase(prefix + tempTitle)}.csv`, "demo_csvs");
+      csv.forEach((sheet, i) => {
+        // Insure that all rows have the same number of columns
+        const maxColumns = sheet.reduce((max, row) => Math.max(max, row.length), 0);
+        sheet.forEach((row) => {
+          for (let i = 0; i < maxColumns; i++) {
+            row[i] = row[i] || "";
+          }
         });
-        alert(`${templates.length} template csv(s) exported!`);
-      }
+
+        const csvString = sheet.reducer((csv, row) => {
+          return csv + row.join(",") + "\n";
+        }, "");
+
+        const fileName = this.singleCSV ? `${snakeCase(prefix)}.csv` : `${snakeCase(prefix + titles[i])}.csv`;
+        project.addFileFromString(csvString, fileName, "demo_csvs");
+      });
+
+      this.singleCSV ? alert("Template csv exported!") : alert(`${templates.length} template csv(s) exported!`);
     },
 
     show: function () {
@@ -228,7 +233,7 @@ const createSpreadsheetDialog = (exportables: GenericObject = {}) => {
       this.status = panel1.add("statictext", undefined, undefined, { name: "status" });
       this.status.text = "Select a csv and press 'Go'! Or 'Create CSV(s)' to produce csvs from your templates";
       this.status.preferredSize.height = 18;
-      status.preferredSize.width = 368;
+      menuStatus.preferredSize.width = 368;
 
       // this.substatus = panel1.add("statictext", undefined, undefined, { name: "substatus" });
       // this.substatus.text = "---------------------------------------------------------";
@@ -285,7 +290,12 @@ const createSpreadsheetDialog = (exportables: GenericObject = {}) => {
       const allPaths = getFilePaths(this.menuMap);
 
       (this.spreadsheet as Spreadsheet).obj.forEach((v, i) => {
-        this.status.text = `Processing template #${i + 1}: ${v["comp title"]}`;
+        const statusBase = `Processing template #${i + 1}: ${v["comp title"]}`;
+        const removeListener = status.addListener((text) => {
+          this.status.text = `${statusBase} (${text})`;
+        });
+
+        this.status.text = statusBase;
 
         const matches = templateKeys.filter((temp) => new RegExp(`t${v.template}_[0-9]+`, "i").test(temp));
         if (matches.length < 1) {
@@ -297,7 +307,8 @@ const createSpreadsheetDialog = (exportables: GenericObject = {}) => {
 
         const spreadsheetFields = Object.entries(v);
 
-        spreadsheetFields.forEach(([key, value]) => {
+        spreadsheetFields.forEach(([key, value], index) => {
+          project.log(`${key}: ${value} (${index + 1} of ${spreadsheetFields.length})`);
           const visibilityToggle = /^\[([ x])\]/;
           const visibilityToggleTest = /^\[[ x]\]/;
           const rawValue = value;
@@ -340,10 +351,12 @@ const createSpreadsheetDialog = (exportables: GenericObject = {}) => {
         const renderer = renderMain.getRenderer(tempName);
         renderer.renderOp = this.renderOption;
         renderer.outFile = v["output file"];
+        project.log(`\nRendering row #${i + 1}: ${v["comp title"]}\n`);
         renderer.render();
 
-        // sa_262_ii(template[tempName], this.renderOp, v["output file"]);
         this.progressbar1.value = Math.floor((100 * (i + 1)) / this.spreadsheet.obj.length);
+
+        removeListener();
       });
 
       this.status.text = "Finished! Select another spreadsheet or click done.";

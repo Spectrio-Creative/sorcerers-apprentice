@@ -1,16 +1,16 @@
-import { outFolder, status, template } from "../globals/project/menu";
+import { outFolder, template } from "../globals/project/menu";
+import { status } from "../globals/project/status";
 import { allEditableLayers } from "../globals/legacySupport";
 import { hexToRgb } from "../tools/colors";
 import { locateOrLoadFile } from "../tools/fs";
 import { findLayers, libItemsInFolder, regSafe } from "../tools/ae";
-import { customEach } from "../tools/legacyTools";
 import { RenderOp } from "../classes/Renderer";
 
 // PREREQUISITE CHECKS
 // ====
 export function prerequisites(templateName, imageList) {
-  status.text = "Checking Prerequisites";
-  status.text = "Checking for images";
+  status.set("Checking Prerequisites");
+  status.set("Checking for images");
 
   const editableLayers = allEditableLayers[templateName.name];
 
@@ -73,7 +73,7 @@ The image layer "${layer.name}" contains scale keyframes. These will be overwrit
   }
 
   function imagePreparation(imgT, fileT) {
-    status.text = "Checking: " + imgT.text;
+    status.set("Checking: " + imgT.text);
     const fileName = locateOrLoadFile(imgT.text);
     if (!fileName) {
       alert(`Could not find ${fileT} '${imgT.text}'`);
@@ -85,17 +85,17 @@ The image layer "${layer.name}" contains scale keyframes. These will be overwrit
 }
 
 export function addLinkedPrecomps(folderName, newFolder, composition) {
-  status.text = "looking for original precomp folder";
+  status.set("looking for original precomp folder");
   const ORprecomps = libItemsInFolder(/Precomps/g, folderName, "Folder")[0];
   if (ORprecomps == undefined) return;
   const newPrecomps = [];
-  status.text = "found original precomp folder";
+  status.set("found original precomp folder");
   const precompFolder = newFolder.items.addFolder(ORprecomps.name);
-  status.text = "made new precomp folder";
+  status.set("made new precomp folder");
 
   function copyPrecompFolder(oldLocation, newLocation) {
     for (let i = 1; i <= oldLocation.items.length; i++) {
-      status.text = "looking for compositions " + i;
+      status.set("looking for compositions " + i);
       if (oldLocation.items[i].typeName === "Composition") {
         const newComp = oldLocation.items[i].duplicate();
         newComp.name = oldLocation.items[i].name;
@@ -104,7 +104,7 @@ export function addLinkedPrecomps(folderName, newFolder, composition) {
         const replaceLayer1 = findLayers(regSafe(">> " + newComp.name + " <<"), composition);
 
         if (replaceLayer1.length == 0) continue;
-        customEach(replaceLayer1, function (layerRep) {
+        (replaceLayer1 as AVLayer[]).forEach(layerRep => {
           layerRep.replaceSource(newComp, false);
         });
       } else if (oldLocation.items[i].typeName === "Folder") {
@@ -117,24 +117,24 @@ export function addLinkedPrecomps(folderName, newFolder, composition) {
   copyPrecompFolder(ORprecomps, precompFolder);
 
   for (let z = 0; z < newPrecomps.length; z++) {
-    status.text = "pre precomps " + z;
+    status.set("pre precomps " + z);
 
     for (let u = 0; u < newPrecomps.length; u++) {
       let replaceCount = 1;
       if (u === z) continue;
       const replaceLayer = findLayers(regSafe(">> " + newPrecomps[u].name + " <<"), newPrecomps[z]);
-      status.text = "checking for " + newPrecomps[u].name + " in " + newPrecomps[z].name;
+      status.set("checking for " + newPrecomps[u].name + " in " + newPrecomps[z].name);
 
       if (replaceLayer.length == 0) continue;
-      customEach(replaceLayer, function (preLayerRep) {
+      (replaceLayer as AVLayer[]).forEach(preLayerRep => {
         preLayerRep.replaceSource(newPrecomps[u], false);
-        status.text = "replaced " + replaceCount + " " + newPrecomps[u].name + " precomp";
+        status.set("replaced " + replaceCount + " " + newPrecomps[u].name + " precomp");
         replaceCount++;
       });
     }
   }
 
-  status.text = "precomps all linked";
+  status.set("precomps all linked");
   return;
 }
 

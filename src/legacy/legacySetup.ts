@@ -2,7 +2,6 @@ import camelCase from "just-camel-case";
 import { findLayers, getPreComps, libItemsInFolder, libItemsReg, regSafe } from "../tools/ae";
 import { addColorGroup, addMediaGroup, addTab, addTabbedPannel, addTextGroup } from "../uiGroupTemplates";
 import { browserBtn, colorBtn } from "../tools/buttonFunctions";
-import { arrIndex } from "../tools";
 import { decToRgb } from "../tools/colors";
 import { fontStylesMaster, allEditableLayers } from "../globals/legacySupport";
 
@@ -13,16 +12,16 @@ export interface IId {
 
 // POPULATE TEMPLATES MAIN FUNCTION (THIS CREATES THE TABS BUT DOES NOT FILL THEM)
 // ====
-export function populateTemplates(mainTab) {
+export function populateTemplates(mainTab: TabbedPanel) {
   const templateFolder = libItemsReg(/templates/gi, "Folder") as FolderItem[];
-  const templateFolders = [];
+  const templateFolders = [] as FolderItem[];
   const idArray: IId[] = [];
 
   for (let i = 0; i < templateFolder.length; i++) {
     checkFolder(templateFolder[i], idArray);
   }
 
-  const folderArray = [];
+  const folderArray = [] as { name: string, id: number }[];
 
   for (let u = 0; u < idArray.length; u++) {
     const folderObj = libItemsReg(idArray[u].id, "Folder", 1) as FolderItem;
@@ -36,7 +35,7 @@ export function populateTemplates(mainTab) {
   for (let i = 0; i < templateFolders.length; i++) {
     if (templateFolders[i].parentFolder.name === "User Comps") break;
     mainTab["t" + templateFolders[i].name + "_" + templateFolders[i].id] = mainTab.add(
-      addTab("t" + templateFolders[i].name + "_" + templateFolders[i].id, templateFolders[i].name)
+      addTab("t" + templateFolders[i].name + "_" + templateFolders[i].id, templateFolders[i].name) as "tab"
     );
     folderArray.push({
       name: templateFolders[i].name,
@@ -96,7 +95,7 @@ export function poplateTabs(templateName, mainTab) {
 
 // LOAD TABS : THIS CREATES THE FIELDS FOR THE EDITABLE LAYERS
 // ====
-function loadTabs(arrayToLoad, template, comp) {
+function loadTabs(arrayToLoad: Layer[], template, comp) {
   // Initialize font object
   fontStylesMaster[comp.id] = {};
 
@@ -106,14 +105,14 @@ function loadTabs(arrayToLoad, template, comp) {
       : arrayToLoad[i].name.match(/^![A-Z][a-z]*/g);
     const typeHeader = typeMatches[typeMatches.length - 1];
     const varType = typeHeader.match(/^![A-Z]/g)[0];
-    const typeOptions = typeHeader.match(/[a-z]/g);
+    const typeOptions = (typeHeader.match(/[a-z]/g) || []) as TypeOptions[];
     const terminalReg = new RegExp(regSafe(typeHeader), "g");
     const tabObj = {
       T: {
         tab: "Text Input",
         func: addTextGroup,
         inText: /!T/.test(varType)
-          ? [regSafe(arrayToLoad[i].text.sourceText.value.text), arrayToLoad[i].enabled]
+          ? [regSafe((arrayToLoad[i] as TextLayer).text.sourceText.value.text), arrayToLoad[i].enabled]
           : ["", arrayToLoad[i].enabled],
       },
       I: { tab: "Image", func: addMediaGroup, inText: ["", arrayToLoad[i].enabled] },
@@ -124,7 +123,9 @@ function loadTabs(arrayToLoad, template, comp) {
         tab: "Fonts",
         func: addTextGroup,
         inText: [
-          arrayToLoad[i].property("Source Text") !== null ? arrayToLoad[i].property("Source Text").value.font : "",
+          arrayToLoad[i].property("Source Text") !== null
+            ? (arrayToLoad[i].property("Source Text") as Property).value.font
+            : "",
           true,
         ],
       },
@@ -139,7 +140,7 @@ function loadTabs(arrayToLoad, template, comp) {
     const tabSpecified = /\[.+\]/g.test(groupData);
     let tabName: string;
     if (tabSpecified) {
-      tabName = groupData.match(/\[.+\]/g)[0].replace(/[\[\]]/g, "");
+      tabName = groupData.match(/\[.+\]/g)[0].replace(/[[\]]/g, "");
       groupData = groupData.replace(/\[.+\](\s)+/g, "");
     } else {
       tabName = tabDefault;
@@ -147,17 +148,17 @@ function loadTabs(arrayToLoad, template, comp) {
     const tabID = camelCase(tabName);
 
     //Check if tab exists and create if not (and ignore if linked subtag)
-    if (template[tabID] === undefined && arrIndex(typeOptions, "l") === -1)
+    if (template[tabID] === undefined && typeOptions.indexOf("l") === -1)
       template[tabID] = template.add(addTab(tabID, tabName));
 
     if (varType === "!C") {
       //If a color layer, get color effects
-      for (let u = 1; u <= arrayToLoad[i]("Effects").numProperties; u++) {
+      for (let u = 1; u <= (arrayToLoad[i]("Effects") as PropertyGroup).numProperties; u++) {
         const { name, matchName, enabled } = arrayToLoad[i]("Effects").property(u);
         if (matchName !== "ADBE Color Control" || !enabled) continue;
 
         template[tabID][camelCase(name)] = template[tabID].add(
-          tObj.func(camelCase(name), name, "tab", decToRgb(arrayToLoad[i].effect(name)("Color").value))
+          tObj.func(camelCase(name), name, "tab", decToRgb((arrayToLoad[i].effect(name)("Color") as Property).value))
         );
 
         // alert(template[tabID][camelCase(name)].picker);
@@ -182,7 +183,7 @@ function loadTabs(arrayToLoad, template, comp) {
 
     //If a group layer, do not generate fields
     if (varType === "!G") {
-      if (arrIndex(typeOptions, "v") !== -1) {
+      if (typeOptions.indexOf("v") !== -1) {
         const layer = findLayers(">> " + groupData + " <<", comp);
 
         template[tabID][camelCase(groupData)] = template[tabID].add("checkbox", undefined, undefined, {
@@ -213,12 +214,14 @@ function loadTabs(arrayToLoad, template, comp) {
           template[fontStylesMaster[comp.id][camelCase(styleName + " Style")]][
             camelCase(styleName + " Style")
           ].txt.text =
-            arrayToLoad[i].property("Source Text") !== null ? arrayToLoad[i].property("Source Text").value.font : "";
+            arrayToLoad[i].property("Source Text") !== null
+              ? (arrayToLoad[i].property("Source Text") as Property).value.font
+              : "";
         }
       }
     }
 
-    if (arrIndex(typeOptions, "l") === -1)
+    if (typeOptions.indexOf("l") === -1)
       template[tabID][camelCase(groupData)] = template[tabID].add(
         tObj.func(camelCase(groupData), groupData, "tab", tObj.inText, typeOptions)
       );
