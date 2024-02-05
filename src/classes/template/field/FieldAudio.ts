@@ -1,14 +1,21 @@
-import { addMediaGroup } from "../../../dialogElements";
+import { addTextGroup } from "../../../pluginTools/dialogElements";
 import { FieldBase, FieldBaseOptions } from "./Field";
 
 export class FieldAudio extends FieldBase {
+  avLayer: AVLayer;
+
   constructor(layer: Layer, options?: FieldBaseOptions) {
     super(layer, options);
     this.type = "Audio";
+    
+    this.avLayer = layer as AVLayer;
   }
 
   createMenuField(tab: Tab) {
-    this.menuField = tab.add(addMediaGroup(this.title, { tabbed: true, inputText: "" }) as "treeview");
+    const text = this.avLayer.source.name;
+    this.tabOptions.inputText = text;
+    this.tabOptions.button = true;
+    this.menuField = tab.add(addTextGroup(this.title, this.tabOptions) as "treeview") as unknown as ButtonGroup;
     // addMediaGroup
   }
 }

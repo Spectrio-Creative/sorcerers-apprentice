@@ -1,4 +1,4 @@
-import { libItemsReg } from "../../tools/ae";
+import { searchLibrary } from "../../tools/ae";
 import { findTemplatesInFolders } from "../../tools/templates";
 import { createMainDialog } from "../MainDialog";
 import { Template } from "./Template";
@@ -24,7 +24,7 @@ export class TemplateMain {
   }
 
   findTemplateFolders() {
-    const folders = libItemsReg(/templates/gi, "Folder") as FolderItem[];
+    const folders = searchLibrary(/templates/gi, {type: "Folder"}) as FolderItem[];
     this.templates = findTemplatesInFolders(folders).map((template) => new Template(template));
   }
 
@@ -44,15 +44,39 @@ export class TemplateMain {
   }
 
   createMenuPanel() {
-    const { mds, template } = createMainDialog();
+    const { mds, template, compBtn, queueBtn, renderBtn, title } = createMainDialog();
     this.menuPanel = template;
 
+    this.templates.forEach((template) => {
+      template.createMenuTab(this.menuPanel);
+
+      template.editableFields.forEach((field) => {
+        template.addFieldToMenu(field);
+      });
+    });
+
     mds.show();
+
+    const render = () => {
+      this.render(title.text.text);
+    };
+
+    compBtn.onClick = render;
+    queueBtn.onClick = render;
+    renderBtn.onClick = render;
   }
 
   getOverview() {
     return {
       templates: this.templates.map((template) => template.getOverview()),
     };
+  }
+
+  render(title: string) {
+    const templateTitle = (this.menuPanel.selection as Tab).text;
+    const template = this.templates.find((template) => template.name === templateTitle);
+    if (!template) return;
+
+    template.duplicate(title, true);
   }
 }

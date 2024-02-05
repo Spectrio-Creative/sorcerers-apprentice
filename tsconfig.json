@@ -1,8 +1,7 @@
 {
     "compilerOptions": {
-        "lib": ["ES2022"],
+        "lib": ["ESNext"],
         "target": "ES5",
-        "ignoreDeprecations": "5.0",
         "types": [
             "types-for-adobe/aftereffects/22.0"
         ],

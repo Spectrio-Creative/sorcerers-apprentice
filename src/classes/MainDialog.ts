@@ -1,5 +1,5 @@
 import { version as projectVersion } from "../globals/project/version";
-import * as ui from "../uiGroupTemplates";
+import * as ui from "../pluginTools/dialogElements";
 
 const createMainDialog = () => {
   // UI Group Templates to use in the UI Set up
@@ -30,12 +30,13 @@ const createMainDialog = () => {
   title.text = `The Sorcerer's Apprentice (v${version})`;
   title.alignment = ["fill", "center"];
 
-  const compTitle = header.add(ui.addTextGroup("compTitle", "Comp Title:") as "treeview") as TextGroup;
-  const outFolder = header.add(ui.addBrowseGroup("outFolder", "Output File") as "treeview") as BrowseGroup;
+  const compTitle = header.add(ui.addTextGroup("Comp Title:") as "treeview") as TextGroup;
+  const outFolder = header.add(ui.addTextGroup("Output File", { button: true }) as "treeview") as ButtonGroup;
+  // const outFolder = header.add(ui.addBrowseGroup("outFolder", "Output File") as "treeview") as BrowseGroup;
 
   // TEMPLATE PANEL (THIS IS WHERE ALL THE GENERATED FIELDS WILL GO)
   // ========
-  const template:TabbedPanel = mds.add("tabbedpanel", undefined, undefined, { name: "template" });
+  const template: TabbedPanel = mds.add("tabbedpanel", undefined, undefined, { name: "template" });
   template.preferredSize.width = 479;
   template.alignment = ["fill", "top"];
 
@@ -82,8 +83,7 @@ const createMainDialog = () => {
   return {
     mds,
     header,
-    title,
-    compTitle,
+    title: compTitle,
     outFolder,
     template,
     options,

@@ -1,4 +1,4 @@
-import { addTextGroup } from "../../../dialogElements";
+import { addTextGroup } from "../../../pluginTools/dialogElements";
 import { FieldBase, FieldBaseOptions } from "./Field";
 
 export class FieldFont extends FieldBase {

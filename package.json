@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "build": "rollup --config && node ./post/copyDependanciesToBuild.js",
-    "postbuild": "extendscriptr --script build/sorcerers_apprentice.js --output build/sorcerers_apprentice2.jsx && node postbuild.js",
+    "postbuild": "extendscriptr --script build/sorcerers_apprentice.js --output build/sorcerers_apprentice.jsx && node postbuild.js",
     "docs:build": "vuepress build docs",
     "docs:dev": "vuepress dev docs",
     "lint": "eslint src/",

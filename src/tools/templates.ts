@@ -1,23 +1,21 @@
-import type { TemplateOptions } from "../classes/template/Template";
+import { TemplateOptions } from "../classes/template/Template";
 import { FieldBaseOptions, FieldOption, FieldType } from "../classes/template/field/Field";
-import { findLayers, libItemsInFolder } from "./ae";
+import { searchComp } from "./ae";
 
 export const findTemplatesInFolders = (folders: FolderItem[]): TemplateOptions[] => {
   const templateFolders = [] as TemplateOptions[];
   folders.forEach((folder) => {
     for (let i = 1; i <= folder.items.length; i++) {
       if (folder.items[i].typeName == "Composition" && folder.items[i].name === folder.name) {
-        const compArr = libItemsInFolder(folder.name, folder, "Composition") as CompItem[];
+        const comp = folder.items[i] as CompItem;
 
-        if (compArr.length > 0 && findLayers(/^!T|^!I|^!V|^!C|^!G|^!F|^!A/g, compArr[0]).length > 0) {
-          templateFolders.push(
-            ({
-              name: folder.name,
-              id: folder.id,
-              comp: folder.items[i] as CompItem,
-              folder: folder,
-            })
-          );
+        if (searchComp(/^!T|^!I|^!V|^!C|^!G|^!F|^!A/g, comp, { recursive: true })?.length > 0) {
+          templateFolders.push({
+            name: folder.name,
+            id: folder.id,
+            comp: folder.items[i] as CompItem,
+            folder: folder,
+          });
         }
       }
 
@@ -72,4 +70,18 @@ export const fieldOptionMap: { [key: string]: FieldOption } = {
   n: "no-scale",
   s: "scale-down",
   l: "linked-subtag",
+};
+
+export const parseColorLayer = (layer: Layer): Property[] => {
+  const effects = layer("Effects") as PropertyGroup;
+
+  const colorEffects = [] as Property[];
+
+  for (let i = 0; i < effects.numProperties; i++) {
+    const effect = effects.property(i + 1);
+    if (effect.matchName !== "ADBE Color Control") continue;
+    colorEffects.push(effect as Property);
+  }
+
+  return colorEffects;
 };

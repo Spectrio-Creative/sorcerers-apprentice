@@ -1,3 +1,4 @@
+import { TabOptions } from "../../../pluginTools/dialogElements";
 import { parseLayerName } from "../../../tools/templates";
 
 export type FieldType = "Text" | "Media" | "Color" | "Group" | "Font" | "Audio";
@@ -20,6 +21,11 @@ export class FieldBase {
   group: string;
   tab: string;
   menuField: TreeView;
+  tabOptions: TabOptions = {
+    tabbed: true,
+    visible: true,
+    visibilityToggle: false,
+  } as TabOptions;
 
   constructor(layer: Layer, options?: FieldBaseOptions) {
     this.layer = layer;
@@ -30,9 +36,13 @@ export class FieldBase {
       this.title = options.title;
       this.group = options.group;
       this.tab = options.tab;
-      return;
-    }
-    this.parseLayerName();
+    } else this.parseLayerName();
+
+    this.tabOptions = {
+      tabbed: true,
+      visibilityToggle: this.options.includes("visible"),
+      visible: layer.enabled,
+    };
   }
 
   parseLayerName() {
@@ -57,8 +67,29 @@ export class FieldBase {
     };
   }
 
-  createMenuField(_tab: Tab) {
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  createMenuField(tab: Tab) {
     // this.menuField = tab.add(addMediaGroup(this.title, this.title, "tab") as "treeview");
     // addMediaGroup
+  }
+
+  browse() {
+    // Placeholder
+  }
+
+  getValue() {
+    // Placeholder
+  }
+
+  getSourceValue() {
+    // Placeholder
+  }
+
+  setValue(value: string) {
+    // Placeholder
+  }
+
+  setSourceValue(value: string) {
+    // Placeholder
   }
 }

@@ -1,171 +1,116 @@
-// SEARCH IN FOLDER FOR ITEM
-// ====
-export function libItemsInFolder(reg: RegExp | string | number, folderObj: FolderItem, iType) {
-  const resultsArr: _ItemClasses[] = [];
-
-  //Ensure that reg is a regular expression
-  if (typeof reg === "string" || typeof reg === "number") {
-    reg = new RegExp(`${reg}`, "g");
-  }
-
-  for (let i = 1; i <= folderObj.items.length; i++) {
-    if (reg.test(folderObj.items[i].name)) {
-      if (iType === undefined || iType === folderObj.items[i].typeName) {
-        resultsArr.push(folderObj.items[i]);
-      }
-    }
-  }
-  return resultsArr;
-}
-
-// SEARCH IN FOLDER FOR ITEM
-// ====
-export function libItemsInFolderRec(reg: RegExp | string | number, folderObj, iType) {
-  let resultsArr = [];
-
-  //Ensure that reg is a regular expression
-  if (typeof reg === "string" || typeof reg === "number") {
-    reg = new RegExp(`${reg}`, "g");
-  }
-
-  for (let i = 1; i <= folderObj.items.length; i++) {
-    if (iType !== "Folder" && folderObj.items[i].typeName === "Folder") {
-      resultsArr = resultsArr.concat(libItemsInFolderRec(reg, folderObj.items[i], iType));
-    }
-
-    if (reg.test(folderObj.items[i].name)) {
-      if (iType === undefined || iType === folderObj.items[i].typeName) {
-        resultsArr.push(folderObj.items[i]);
-      }
-    }
-  }
-  return resultsArr;
-}
-
-// GET PRECOMPS : THIS RETURNS ALL THE COMPS IN THE PRECOMP SUBFOLDER
-// ====
-export function getPreComps(folder: FolderItem): CompItem[] {
-  const preCompFolder = libItemsInFolder(/Precomps/g, folder, "Folder")[0];
-
-  if (preCompFolder == undefined) return [];
-  return libItemsInFolderRec(/[\s\S]+/g, preCompFolder, "Composition");
-}
-
-// FIND LAYER IN COMP
-// ====
-export function findLayers(reg: RegExp | string | number, compObj: CompItem, maxResult = Number.POSITIVE_INFINITY) {
-  //Ensure that reg is a regular expression
-  if (typeof reg === "string" || typeof reg === "number") {
-    reg = new RegExp(`${reg}`, "g");
-  }
-  const layerArr: Layer[] = [];
-  for (let i = 1; i <= compObj.layers.length; i++) {
-    if (reg.test(compObj.layers[i].name)) {
-      if (maxResult === 1) return compObj.layers[i];
-      layerArr.push(compObj.layers[i]);
-      if (layerArr.length === maxResult) break;
-    }
-  }
-  return layerArr;
-}
-
-// REGSAFE - escapes all special characters
-export function regSafe(regExString: string): string {
-  if (/^\d+$/.test(regExString)) {
-    return regExString;
-  }
-  return String(regExString).replace(/[^\w \t\f]|[\n\r]/g, function (match) {
-    return "\\" + match;
-  });
-}
+import { asRegEx } from "./regex";
 
 // FIND LIBRARY ITEMS BY NAME OR REGEX
 // iType = the desired file type
 // maxResult = the maximum results in the array. If 1, the object is returned instead of an array
 // ====
-export function libItemsReg(reg: RegExp | string | number, iType?: string, maxResult = Number.POSITIVE_INFINITY) {
-  let searcher = "name";
 
-  if (typeof reg === "number") {
-    searcher = "id";
-  }
-  //Ensure that reg is a regular expression
-  if (typeof reg === "string" || typeof reg === "number") {
-    reg = new RegExp(`${reg}`, "g");
-  }
-  const resultsArr: _ItemClasses[] = [];
+// This is locale-specific, so it's important to test it in the target locale
+export type ItemType = "Folder" | "Footage" | "Composition" | string;
 
-  for (let i = 1; i <= app.project.items.length; i++) {
-    if (reg.test(app.project.items[i][searcher])) {
-      if (iType === undefined || iType === app.project.items[i].typeName) {
-        if (maxResult === 1) return app.project.items[i];
-        resultsArr.push(app.project.items[i]);
-        if (resultsArr.length === maxResult) break;
-      }
-    }
-  }
-  return resultsArr;
+export interface LibrarySearchOptions {
+  type?: ItemType;
+  maxResult?: number;
+  parent?: FolderItem;
+  recursive?: boolean;
+  searchKey?: "name" | "id";
 }
 
-// export function relinkExp(layer: Layer, compItem: CompItem) {
-//   for (let i = 1; i <= (layer.property("Effects") as PropertyGroup).numProperties; i++) {
-//     const matchName = layer.property("Effects").property(i).matchName;
+const defaultOptions: LibrarySearchOptions = {
+  type: undefined,
+  maxResult: Number.POSITIVE_INFINITY,
+  parent: app.project.rootFolder,
+  recursive: true,
+  searchKey: undefined,
+};
 
-//     if (matchName == "ADBE Fill" || matchName == "ADBE Color Control") {
-//       const colorProperty: Property = layer.property("Effects").property(i).property("Color") as Property;
-//       if (colorProperty.expressionEnabled) {
-//         const orExp = colorProperty.expression,
-//           expressionComp = (orExp.match(/comp\(".*?"\)/) || [""])[0].slice(6, -2);
-//         let newExp = orExp;
+export function searchLibrary(search: RegExp | string | number, options: LibrarySearchOptions = defaultOptions) {
+  const { type, maxResult, parent, recursive, searchKey } = { ...defaultOptions, ...options };
+  const searcher = searchKey || (typeof search === "number" ? "id" : "name");
 
-//         const exReg = new RegExp(regSafe(expressionComp), "g");
-//         if (expressionComp === ORcomp.name) {
-//           newExp = orExp.replace(exReg, comp.name);
-//         } else {
-//           customEach(preComps, function (item: CompItem) {
-//             if (expressionComp === item.name) {
-//               item.name = "[" + comp.name + "] " + item.name;
-//               newExp = orExp.replace(exReg, item.name);
-//             } else if (expressionComp === item.name.replace("[" + comp.name + "] ", "")) {
-//               newExp = orExp.replace(exReg, item.name);
-//             }
-//           });
-//         }
+  //Ensure that reg is a regular expression
+  search = asRegEx(search);
 
-//         (layer.property("Effects").property(i).property("Color") as Property).expression = newExp;
-//       }
-//     }
-//   }
+  const results: _ItemClasses[] = [];
 
-//   if (
-//     layer instanceof TextLayer &&
-//     layer.property("Source Text") !== undefined &&
-//     (layer.property("Source Text") as Property).expressionEnabled
-//   ) {
-//     const orExp = (layer.property("Source Text") as Property).expression,
-//       expressionComp = orExp.match(/comp\(".*?"\)/)[0].slice(6, -2);
-//     let newExp = orExp;
+  for (let i = 1; i <= parent.items.length; i++) {
+    const item = parent.items[i];
+    if (search.test(`${item[searcher]}`)) {
+      if (type === undefined || type === item.typeName) {
+        if (maxResult === 1) return [item];
+        results.push(item);
+      }
+    }
 
-//     if (expressionComp === ORcomp.name) {
-//       const orReg = new RegExp(regSafe(ORcomp.name), "g");
-//       newExp = orExp.replace(orReg, comp.name);
-//     } else {
-//       customEach(preComps, function (item) {
-//         if (expressionComp === item.name) {
-//           item.name = "[" + comp.name + "] " + item.name;
-//           newExp = orExp.replace(expressionComp, item.name);
-//         } else if (expressionComp === item.name.replace("[" + comp.name + "] ", "")) {
-//           newExp = orExp.replace(expressionComp, item.name);
-//         }
-//       });
-//     }
+    if (results.length === maxResult) break;
 
-//     (layer.property("Source Text") as Property).expression = newExp;
+    if (!recursive || !(item instanceof FolderItem)) continue;
 
-//     const textValue = layer.text.sourceText.valueAtTime(0, false);
+    const innerResults = searchLibrary(search, { ...options, parent: item });
 
-//     layer.text.sourceText.expressionEnabled = false;
-//     setText(layer, compItem, textValue);
-//     layer.text.sourceText.expressionEnabled = true;
-//   }
-// }
+    // If the inner results are less than the max result, add them to the results array
+    while (results.length < maxResult && innerResults.length > 0) {
+      results.push(innerResults.shift());
+    }
+  }
+
+  return results;
+}
+
+export interface CompSearchOptions {
+  maxResult?: number;
+  recursive?: boolean;
+}
+
+const defaultCompOptions: CompSearchOptions = {
+  maxResult: Number.POSITIVE_INFINITY,
+  recursive: false,
+};
+
+export function searchComp(
+  search: RegExp | string | number,
+  comp: CompItem,
+  options: CompSearchOptions = defaultCompOptions
+) {
+  const { maxResult, recursive } = { ...defaultCompOptions, ...options };
+  search = asRegEx(search);
+
+  const results: Layer[] = [];
+
+  for (let i = 1; i <= comp.numLayers; i++) {
+    const layer = comp.layer(i);
+    if (search.test(`${layer.name}`)) {
+      if (maxResult === 1) return [layer];
+      results.push(layer);
+    }
+
+    if (results.length === maxResult) break;
+
+    const source = (layer as AVLayer).source;
+    if (!recursive || !(source instanceof CompItem)) continue;
+
+    const innerResults = searchComp(search, source, options);
+
+    while (results.length < maxResult && innerResults.length > 0) {
+      results.push(innerResults.shift());
+    }
+  }
+
+  return results;
+}
+
+export function copyFolderContents(input: FolderItem, output: FolderItem) {
+  for (let i = 1; i <= input.numItems; i++) {
+    const item = input.item(i);
+    if (item instanceof FolderItem) {
+      const newFolder = output.items.addFolder(item.name);
+      copyFolderContents(item, newFolder);
+    } else if (item instanceof CompItem) {
+      const newComp = item.duplicate();
+      newComp.parentFolder = output;
+      newComp.name = item.name;
+    } else {
+      alert(`Could not copy ${item.name} to folder ${output.name}.`);
+    }
+  }
+}
