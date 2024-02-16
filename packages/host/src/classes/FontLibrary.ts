@@ -37,4 +37,9 @@ export class FontLibrary {
   fontOptions(): string[] {
     return this.projectFonts.map((font) => font.font);
   }
+
+  refresh() {
+    this.projectFonts = [];
+    this.findFonts();
+  }
 }

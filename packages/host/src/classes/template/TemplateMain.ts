@@ -1,7 +1,7 @@
 import { fontLibrary } from "../../globals/project/fontLibrary";
+import { mediaLibrary } from "../../globals/project/mediaLibrary";
 import { searchLibrary } from "../../tools/project";
 import { findTemplatesInFolders } from "../../tools/templates";
-import { FontLibrary } from "../FontLibrary";
 import { createMainDialog } from "../MainDialog";
 import { Template } from "./Template";
 
@@ -36,12 +36,10 @@ export class TemplateMain {
   templates: Template[];
   menuPanel: TabbedPanel;
   panelEls: PanelElements;
-  fontLibrary: FontLibrary;
 
   constructor() {
     this.tabs = [];
     this.findTemplateFolders();
-    this.fontLibrary = fontLibrary;
   }
 
   findTemplateFolders() {
@@ -87,10 +85,23 @@ export class TemplateMain {
     this.panelEls.renderBtn.onClick = render;
   }
 
+  refresh() {
+    this.templates = [];
+    this.findTemplateFolders();
+
+    this.templates.forEach((template) => {
+      template.refresh();
+    });
+  }
+
   getOverview() {
+    this.refresh();
+    fontLibrary.refresh();
+    mediaLibrary.refresh();
     return {
       templates: this.templates.map((template) => template.getOverview()),
-      fonts: this.fontLibrary.projectFonts,
+      fonts: fontLibrary.projectFonts,
+      libraryAssets: mediaLibrary.mediaItems,
     };
   }
 

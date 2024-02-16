@@ -63,6 +63,7 @@ export class FieldBase {
       title: this.title,
       tag: this.tag,
       tab: this.tab,
+      value: this.value,
     };
   }
 

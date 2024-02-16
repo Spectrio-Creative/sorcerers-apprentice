@@ -89,4 +89,9 @@ export class Template {
       fields: editableOverview,
     };
   }
+
+  refresh() {
+    this.editableFields = [];
+    this.getEditableFields();
+  }
 }
