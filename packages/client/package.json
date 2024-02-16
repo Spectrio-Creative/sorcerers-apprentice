@@ -1,0 +1,24 @@
+{
+  "name": "svelte-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "postbuild": "node postbuild.js",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "terser": "^5.27.0",
+    "typescript": "^5.3.3",
+    "vite": "^4.4.12"
+  },
+  "dependencies": {
+    "font-list": "^1.5.1",
+    "font-manager": "https://github.com/q-lukasz/font-manager.git#issue-45--compile-error-mac-os-x--node-13-7",
+    "font-scanner": "^0.2.1",
+    "vanjs-core": "^1.2.8",
+    "vanjs-ext": "^0.2.0"
+  }
+}
