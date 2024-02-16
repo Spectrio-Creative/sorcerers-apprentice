@@ -1,56 +1,94 @@
-// import { version as scriptVersion } from "../package.json";
-// import { poplateTabs, populateTemplates } from "./legacy/legacySetup";
-// import { outFolder, template } from "./globals/project/menu";
-// import { templateControl } from "./globals/project/templateControl";
-// import { browserBtn } from "./tools/buttonFunctions";
-// import { TraditionalRenderDialog } from "./classes/TraditionalRenderDialog";
-// import { createSpreadsheetDialog } from "./spreadsheet/classes/SpreadsheetDialog";
-// import { allEditableLayers } from "./globals/legacySupport";
 import { TemplateMain } from "./classes/template/TemplateMain";
 import polyfill from "./tools/polyfill";
-// import { renderMain } from "./globals/project/renderMain";
-// import { project } from "./globals/project/project";
 
-// const main = () => {
-//   const initialized = project.initialize(scriptVersion);
-//   if (!initialized) return;
-
-//   const templateArray = populateTemplates(template);
-//   for (let i = 0; i < templateArray.length; i++) {
-//     poplateTabs(templateArray[i], template);
-//   }
-
-//   renderMain.createRenderersFromTemplate();
-
-//   outFolder.browse.onClick = function () {
-//     browserBtn(this);
-//   };
-
-//   templateControl.init();
-
-//   if (project.exportType === "Traditional") {
-//     const renderDialog = new TraditionalRenderDialog();
-//     renderDialog.show();
-//   }
-
-//   if (project.exportType === "Spreadsheet") {
-//     const spreadsheetDialog = createSpreadsheetDialog(allEditableLayers);
-//     spreadsheetDialog.show();
-//   }
-// };
 polyfill();
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const template = new TemplateMain();
 
-function getMenuInfo() {
+export function getMenuInfo() {
   return JSON.stringify(template.getOverview());
 }
 
-$.write(getMenuInfo());
+export function setValuesFromList(list: string) {
+  const parsed: InputTemplateValue[] = JSON.parse(list);
+  template.setValuesFromList(parsed);
+}
 
-template.createMenuPanel();
+export function showMenu() {
+  template.showMenuPanel();
+}
 
-// template.templates[1].duplicate("Test Three");
+const file = new File("~/Desktop/MenuInfo.json");
+file.open("w");
+file.write(getMenuInfo());
+file.close();
 
-// main();
+setValuesFromList(
+  JSON.stringify([
+    {
+      templateName: "Boogle Pie",
+      compName: "Boogle 2000",
+      fields: [
+        {
+          title: "A Whole Wheel of Fish",
+          type: "Text",
+          value: "Boogle 2000",
+        },
+        {
+          title: "Background",
+          type: "Media",
+          value: "stars.png",
+        },
+        {
+          title: "Font",
+          type: "Font",
+          value: "Arial",
+        },
+        {
+          title: "Hue",
+          type: "Color",
+          value: "rgb(255, 255, 255)",
+        },
+
+      ],
+    },
+    {
+      templateName: "Erything",
+      compName: "Erything 3000",
+      fields: [
+        {
+          title: "A Whole Wheel of Fish",
+          type: "Text",
+          value: "Space 8000",
+        },
+        {
+          title: "Text Color",
+          type: "Color",
+          value: "#4d9fa1",
+        },
+        {
+          title: "Second Color",
+          type: "Color",
+          value: "#7761be",
+        },
+        {
+          title: "Heading",
+          type: "Font",
+          value: "Montserrat-Thin",
+        },
+        {
+          title: "First Background",
+          type: "Media",
+          value: "mountain1.jpg",
+        },
+        {
+          title: "Second Background",
+          type: "Media",
+          value: "mountain2.jpg",
+        },
+      ]
+    }
+  ] as InputTemplateValue[])
+);
+
+// showMenu();

@@ -1,6 +1,12 @@
-import { searchComp } from "../../tools/ae";
+import { searchComp } from "../../tools/project";
+import { parseLayerName } from "../../tools/templates";
 import { Template } from "./Template";
 import { FieldRef } from "./field/FieldRef";
+import camelCase from "just-camel-case";
+
+export interface MappedInputFieldValue extends InputFieldValue {
+  fieldRef: FieldRef;
+}
 
 export class TemplateChild {
   name: string;
@@ -73,18 +79,86 @@ export class TemplateChild {
       const fieldLayer = field.layer;
       const fieldComp = fieldLayer.containingComp;
       const comp = this.compFromParentId(fieldComp.id);
-      const layer = searchComp(fieldLayer.name, comp)[0];
+      const layer = searchComp(fieldLayer.name, comp, { strict: true })[0];
       if (!layer) return;
 
       this.fieldRefs.push(new FieldRef(layer, field));
     });
   }
 
-  fillValues() {
-    alert(`Filling values for ${this.name}`);
+  fillValues(input?: InputFieldValue[]) {
+    if (input) {
+      this.fillValuesFromInput(input);
+    } else {
+      this.fillValuesFromRef();
+    }
+  }
+
+  fillValuesFromRef() {
+    const fontFields = this.fieldRefs.filter((ref) => ref.field.type === "Font");
+    const fontMap: GenericObject<string> = {};
+
+    fontFields.forEach((ref) => {
+      const value = ref.field.getValue();
+      fontMap[camelCase(ref.field.title)] = value;
+    });
+
     this.fieldRefs.forEach((ref) => {
-      alert(`Setting value for ${ref.field.title}`);
-      ref.setValueFromRef();
+      try {
+        ref.setLayerValue({ fontMap });
+      } catch (error) {
+        alert(`Error setting value for ${ref.field.title}.
+        ${error}`);
+      }
+    });
+  }
+
+  mapFieldsToInput(input: InputFieldValue[]): MappedInputFieldValue[] {
+    // TODO: This function could be more efficient
+    return input.map((inn) => {
+      const parsed = parseLayerName(inn.title, true);
+
+      const ref = (() => {
+        let filtered = this.fieldRefs.filter((ref) => new RegExp(parsed.title, "i").test(ref.field.title));
+        if (filtered.length === 0) return null;
+        if (filtered.length === 1) return filtered[0];
+        filtered = filtered.filter((ref) => ref.field.tab === parsed.tab);
+        if (filtered.length === 1) return filtered[0];
+        filtered = filtered.filter((ref) => ref.field.tag === parsed.tag);
+        if (filtered.length === 1) return filtered[0];
+        filtered = filtered.filter((ref) => ref.field.type === parsed.type);
+        if (filtered.length === 1) return filtered[0];
+        return null;
+      })();
+
+      if (!ref) {
+        alert(`Could not find a layer reference for ${inn.title}`);
+      }
+
+      return { ...inn, fieldRef: ref } as MappedInputFieldValue;
+    }).filter((val) => val.fieldRef);
+  }
+
+  fillValuesFromInput(input: InputFieldValue[]) {
+    const fields = this.mapFieldsToInput(input);
+
+    const fontFields = fields.filter((val) => val.fieldRef.field.type === "Font");
+    const fontMap: GenericObject<string> = {};
+
+    fontFields.forEach((val) => {
+      const value = val.value;
+      fontMap[camelCase(val.fieldRef.field.title)] = value;
+    });
+    
+    fields.forEach((val) => {
+      const value = val.value;
+      if (value) {
+        val.fieldRef.setLayerValue({ value, fontMap });
+      }
+    });
+
+    this.fieldRefs.forEach((ref) => {
+      ref.setFonts(fontMap);
     });
   }
 }

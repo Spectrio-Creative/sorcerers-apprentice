@@ -1,12 +1,11 @@
-import { addTextGroup } from "../../../pluginTools/dialogElements";
+import { addMenuField } from "../../../pluginTools/dialogElements";
 import { GoodBoyNinjaColorPicker, RGBA, decimalToRgb, rgbToHex } from "../../../tools/color";
 import { FieldBase, FieldBaseOptions } from "./Field";
 
 export class FieldColor extends FieldBase {
-  menuField: TextGroup;
+  menuField: ButtonGroup;
   effect: Property;
   color: Property;
-  value: RGBA;
 
   constructor(layer: Layer, effect: Property, options?: FieldBaseOptions) {
     super(layer, options);
@@ -15,11 +14,11 @@ export class FieldColor extends FieldBase {
     this.effect = effect;
     this.color = layer.effect(effect.name).property("Color") as Property;
     this.title = effect.name;
-    this.value = this.color.value;
+    this.value = `${this.color.value}`;
   }
 
   colorHex() {
-    return "#" + rgbToHex(decimalToRgb(this.value));
+    return "#" + rgbToHex(decimalToRgb(this.getRGBAValue()));
   }
 
   createMenuField(tab: Tab) {
@@ -27,15 +26,27 @@ export class FieldColor extends FieldBase {
     this.tabOptions.buttonText = "Picker";
     this.tabOptions.button = true;
 
-    this.menuField = tab.add(addTextGroup(this.title, this.tabOptions) as "treeview") as ButtonGroup;
+    this.menuField = tab.add(addMenuField(this.title, this.tabOptions) as "treeview") as ButtonGroup;
 
     this.menuField.browse.onClick = this.browse;
   }
 
   browse = () => {
-    const result = GoodBoyNinjaColorPicker(this.color.value);
+    const result = GoodBoyNinjaColorPicker(this.getRGBAValue());
 
-    this.value = result;
-    this.menuField.text.text = this.colorHex();
+    this.value = `${result}`;
+    this.menuField.input.text = this.colorHex();
   };
+
+  getRGBAValue(): RGBA {
+    const numbers = this.value
+      .split(",")
+      .map((v) => Number(v))
+      .filter((v) => !isNaN(v));
+
+    if (numbers.length === 3) numbers.push(1);
+    while (numbers.length > 4) numbers.pop();
+
+    return numbers as RGBA;
+  }
 }

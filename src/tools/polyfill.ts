@@ -12,4 +12,10 @@ export default function polyfill() {
       if (callback(this[i], i, this)) return this[i];
     }
   };
+
+  Array.prototype.findIndex = function <T>(callback: (value: T, index: number, array: T[]) => unknown) {
+    for (let i = 0; i < this.length; i++) {
+      if (callback(this[i], i, this)) return i;
+    }
+  };
 }

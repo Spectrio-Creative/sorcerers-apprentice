@@ -12,7 +12,8 @@
     "docs:build": "vuepress build docs",
     "docs:dev": "vuepress dev docs",
     "lint": "eslint src/",
-    "playground": "ENTRY=src/playground.ts OUTPUT=./build/playground.jsx rollup --config",
+    "playground": "ENTRY=src/playground.ts OUTPUT=./build/playground.js rollup --config",
+    "postplayground": "extendscriptr --script build/playground.js --output build/playground.jsx && node postbuild.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {

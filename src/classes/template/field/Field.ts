@@ -1,15 +1,13 @@
 import { TabOptions } from "../../../pluginTools/dialogElements";
 import { parseLayerName } from "../../../tools/templates";
 
-export type FieldType = "Text" | "Media" | "Color" | "Group" | "Font" | "Audio";
-
 export type FieldOption = "visible" | "background-size" | "fill-size" | "no-scale" | "scale-down" | "linked-subtag";
 
 export interface FieldBaseOptions {
   type: FieldType;
   options: FieldOption[];
   title: string;
-  group: string;
+  tag: string;
   tab: string;
 }
 
@@ -18,14 +16,15 @@ export class FieldBase {
   type: FieldType;
   options: FieldOption[] = [];
   title: string;
-  group: string;
+  tag: string;
   tab: string;
-  menuField: TreeView;
+  menuField: FieldGroup;
   tabOptions: TabOptions = {
     tabbed: true,
     visible: true,
     visibilityToggle: false,
   } as TabOptions;
+  value: string;
 
   constructor(layer: Layer, options?: FieldBaseOptions) {
     this.layer = layer;
@@ -34,7 +33,7 @@ export class FieldBase {
       this.type = options.type;
       this.options = options.options;
       this.title = options.title;
-      this.group = options.group;
+      this.tag = options.tag;
       this.tab = options.tab;
     } else this.parseLayerName();
 
@@ -49,10 +48,10 @@ export class FieldBase {
     const parsed = parseLayerName(this.layer.name);
     if (!parsed) return;
 
-    const { type, options, tab, group, title } = parsed;
+    const { type, options, tab, tag, title } = parsed;
     this.type = type;
     this.options = options;
-    this.group = group;
+    this.tag = tag;
     this.title = title;
     this.tab = tab;
   }
@@ -62,7 +61,7 @@ export class FieldBase {
       type: this.type,
       options: this.options,
       title: this.title,
-      group: this.group,
+      tag: this.tag,
       tab: this.tab,
     };
   }
@@ -73,12 +72,47 @@ export class FieldBase {
     // addMediaGroup
   }
 
+  onMenuChange = (event: UIEvent) => {
+    const target = event.target as EditText | DropDownList;
+    if (target instanceof DropDownList) {
+      const selection = target.selection;
+      if (selection instanceof ListItem) {
+        this.value = selection.text;
+        return;
+      }
+
+      const item = target.items[selection];
+      this.value = item.text;
+      return;
+    }
+
+    this.value = target.text;
+  };
+
+  addFieldListener() {
+    this.menuField.input.addEventListener("change", this.onMenuChange);
+  }
+
+  addFieldListenerAfterChange() {
+    const addListener = () => {
+      this.menuField.input.addEventListener("change", this.onMenuChange);
+    };
+
+    this.menuField.input.addEventListener("change", addListener);
+  }
+
+  removeFieldListener() {
+    while (this.menuField.input.removeEventListener("change", this.onMenuChange)) {
+      // Remove all change listeners
+    }
+  }
+
   browse() {
     // Placeholder
   }
 
   getValue() {
-    // Placeholder
+    return this.value;
   }
 
   getSourceValue() {
@@ -86,10 +120,13 @@ export class FieldBase {
   }
 
   setValue(value: string) {
-    // Placeholder
+    this.value = value;
+    const input = this.menuField.input;
+    if (input instanceof DropDownList) input.selection = input.find(value);
+    else input.text = value;
   }
 
-  setSourceValue(value: string) {
+  setSourceValue(value: string): void {
     // Placeholder
   }
 }

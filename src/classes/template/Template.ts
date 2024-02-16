@@ -1,5 +1,5 @@
 import { addTab, addTabbedPannel } from "../../pluginTools/dialogElements";
-import { searchComp, searchLibrary } from "../../tools/ae";
+import { searchComp, searchLibrary } from "../../tools/project";
 import { TemplateChild } from "./TemplateChild";
 import { FieldBase } from "./field/Field";
 import { makeFieldBase } from "./field/makeFieldBase";
@@ -74,12 +74,9 @@ export class Template {
     const templateChild = new TemplateChild(newFolder, this);
     this.children.push(templateChild);
 
-    alert(`Duplicated ${this.name} to ${name}.
-    \n${this.editableFields.length} fields were found.
-    \n${templateChild.folder.numItems} items were copied.
-    \nFilling values now?: ${fillValues}`);
-
     if (fillValues) templateChild.fillValues();
+
+    return templateChild;
   }
 
   getOverview() {

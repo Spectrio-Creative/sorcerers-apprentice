@@ -1,5 +1,7 @@
-import { searchLibrary } from "../../tools/ae";
+import { fontLibrary } from "../../globals/project/fontLibrary";
+import { searchLibrary } from "../../tools/project";
 import { findTemplatesInFolders } from "../../tools/templates";
+import { FontLibrary } from "../FontLibrary";
 import { createMainDialog } from "../MainDialog";
 import { Template } from "./Template";
 
@@ -13,18 +15,37 @@ export interface TemplateTab {
   alignment: _AlignmentProperty;
 }
 
+export interface PanelElements {
+  mds: Window;
+  header: Group;
+  title: TextGroup;
+  outFolder: ButtonGroup;
+  template: TabbedPanel;
+  options: Group;
+  compBtn: Button;
+  queueBtn: Button;
+  renderBtn: Button;
+  divider1: Panel;
+  stts: Group;
+  pbar: Progressbar;
+  status: StaticText;
+}
+
 export class TemplateMain {
   tabs: TemplateTab[] = [];
   templates: Template[];
   menuPanel: TabbedPanel;
+  panelEls: PanelElements;
+  fontLibrary: FontLibrary;
 
   constructor() {
     this.tabs = [];
     this.findTemplateFolders();
+    this.fontLibrary = fontLibrary;
   }
 
   findTemplateFolders() {
-    const folders = searchLibrary(/templates/gi, {type: "Folder"}) as FolderItem[];
+    const folders = searchLibrary(/templates/gi, { type: "Folder" }) as FolderItem[];
     this.templates = findTemplatesInFolders(folders).map((template) => new Template(template));
   }
 
@@ -43,9 +64,9 @@ export class TemplateMain {
     return templates;
   }
 
-  createMenuPanel() {
-    const { mds, template, compBtn, queueBtn, renderBtn, title } = createMainDialog();
-    this.menuPanel = template;
+  showMenuPanel() {
+    this.panelEls = createMainDialog();
+    this.menuPanel = this.panelEls.template;
 
     this.templates.forEach((template) => {
       template.createMenuTab(this.menuPanel);
@@ -55,21 +76,32 @@ export class TemplateMain {
       });
     });
 
-    mds.show();
+    this.panelEls.mds.show();
 
     const render = () => {
-      this.render(title.text.text);
+      this.render(this.panelEls.title.input.text);
     };
 
-    compBtn.onClick = render;
-    queueBtn.onClick = render;
-    renderBtn.onClick = render;
+    this.panelEls.compBtn.onClick = render;
+    this.panelEls.queueBtn.onClick = render;
+    this.panelEls.renderBtn.onClick = render;
   }
 
   getOverview() {
     return {
       templates: this.templates.map((template) => template.getOverview()),
+      fonts: this.fontLibrary.projectFonts,
     };
+  }
+
+  setValuesFromList(list: InputTemplateValue[]) {
+    list.forEach((template) => {
+      const found = this.templates.find((t) => t.name === template.templateName);
+      if (found) {
+        const tempChild = found.duplicate(template.compName);
+        tempChild.fillValues(template.fields);
+      }
+    });
   }
 
   render(title: string) {
@@ -77,6 +109,33 @@ export class TemplateMain {
     const template = this.templates.find((template) => template.name === templateTitle);
     if (!template) return;
 
-    template.duplicate(title, true);
+    template.duplicate(title || templateTitle, true);
+
+    // alert("finished");
+
+    this.panelEls.status.text = "Script Finished";
+    this.panelEls.compBtn.active = true;
+    this.panelEls.compBtn.active = false;
+    this.panelEls.renderBtn.enabled = false;
+    this.panelEls.compBtn.text = "DONE";
+    this.panelEls.queueBtn.text = "RESET";
+    this.panelEls.renderBtn.text = "TOTAL RESET";
+
+    const original = this.panelEls.compBtn.onClick;
+
+    this.panelEls.compBtn.onClick = () => {
+      this.panelEls.mds.close();
+    };
+
+    this.panelEls.queueBtn.onClick = () => {
+      this.panelEls.compBtn.onClick = original;
+      this.panelEls.queueBtn.onClick = original;
+      this.panelEls.renderBtn.onClick = original;
+
+      // Change the text back
+      this.panelEls.compBtn.text = "Render";
+      this.panelEls.queueBtn.text = "Queue";
+      this.panelEls.renderBtn.text = "Render All";
+    };
   }
 }

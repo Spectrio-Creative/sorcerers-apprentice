@@ -1,10 +1,4 @@
-interface TextGroup extends TreeView {
-  label: StaticText;
-  visibilityToggle?: Checkbox;
-  txt: EditText;
-}
-
-interface TextGroup extends TreeView {
+interface FieldGroup extends TreeView {
   name: string;
   ss_type: string;
   orientation: _Orientation;
@@ -13,12 +7,20 @@ interface TextGroup extends TreeView {
   alignChildren: _AlignmentProperty;
   visibilityToggle?: Checkbox;
   label: StaticText;
-  text: EditText;
+  input: EditText | DropDownList;
   browse?: Button;
+}
+
+interface TextGroup extends FieldGroup {
+  input: EditText;
 }
 
 interface ButtonGroup extends TextGroup {
   browse: Button;
+}
+
+interface DropdownGroup extends FieldGroup {
+  input: DropDownList;
 }
 
 interface ColorGroup extends TreeView {

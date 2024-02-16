@@ -9,9 +9,10 @@ export interface TabOptions {
   multiline?: boolean;
   button?: boolean;
   buttonText?: string;
+  options?: string[];
 }
 
-export function addTextGroup(label: string, options?: TabOptions) {
+export function addMenuField(label: string, options?: TabOptions) {
   const inText = options?.inputText || "";
 
   let labelWidth = 91;
@@ -60,6 +61,26 @@ export function addTextGroup(label: string, options?: TabOptions) {
     }`;
   }
 
+  let input = `input: EditText {
+    name:'txt',
+    ss_type: 'Text',
+    text: '${inText}',
+    preferredSize:[${textWidth},${textHeight}],
+    alignment: ['left','fill'],
+    properties: {
+      multiline: ${multiline}
+    }
+  }`;
+
+  if (options?.options) {
+    input = `input: DropDownList {
+      name:'txt',
+      ss_type: 'Dropdown',
+      preferredSize:[${textWidth},25],
+      alignment: ['left','fill'],
+    }`;
+  }
+
   return `group {
         name: 'Text: ${label}',
         ss_type: 'Text Group',
@@ -73,16 +94,7 @@ export function addTextGroup(label: string, options?: TabOptions) {
           text:'${label}', 
           preferredSize: [${labelWidth}, -1]
         }, 
-        text: EditText { 
-          name:'txt',
-          ss_type: 'Text',
-          text: '${inText}', 
-          preferredSize:[${textWidth},${textHeight}], 
-          alignment: ['left','fill'], 
-          properties: {
-            multiline: ${multiline}
-          }
-        },
+        ${input},
         ${button}
     }`;
 }

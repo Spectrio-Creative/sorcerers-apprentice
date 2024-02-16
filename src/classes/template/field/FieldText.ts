@@ -1,9 +1,9 @@
-import { addTextGroup } from "../../../pluginTools/dialogElements";
+import { addMenuField } from "../../../pluginTools/dialogElements";
 import { FieldBase, FieldBaseOptions } from "./Field";
 
 export class FieldText extends FieldBase {
   textLayer: TextLayer;
-  value: string;
+  menuField: TextGroup;
 
   constructor(layer: Layer, options?: FieldBaseOptions) {
     super(layer, options);
@@ -16,19 +16,12 @@ export class FieldText extends FieldBase {
   createMenuField(tab: Tab) {
     const text = this.getSourceValue();
     this.tabOptions.inputText = text;
-    this.menuField = tab.add(addTextGroup(this.title, this.tabOptions) as "treeview");
-  }
-
-  getValue() {
-    return this.value;
+    this.menuField = tab.add(addMenuField(this.title, this.tabOptions) as "treeview") as TextGroup;
+    this.addFieldListener();
   }
 
   getSourceValue() {
     return this.textLayer.sourceText.value.text;
-  }
-
-  setValue(value: string) {
-    this.value = value;
   }
 
   setSourceValue(value: string): void {

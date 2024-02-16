@@ -14,6 +14,7 @@ export interface LibrarySearchOptions {
   parent?: FolderItem;
   recursive?: boolean;
   searchKey?: "name" | "id";
+  strict?: boolean;
 }
 
 const defaultOptions: LibrarySearchOptions = {
@@ -22,6 +23,7 @@ const defaultOptions: LibrarySearchOptions = {
   parent: app.project.rootFolder,
   recursive: true,
   searchKey: undefined,
+  strict: false,
 };
 
 export function searchLibrary(search: RegExp | string | number, options: LibrarySearchOptions = defaultOptions) {
@@ -29,7 +31,7 @@ export function searchLibrary(search: RegExp | string | number, options: Library
   const searcher = searchKey || (typeof search === "number" ? "id" : "name");
 
   //Ensure that reg is a regular expression
-  search = asRegEx(search);
+  search = asRegEx(search, { strict: options.strict });
 
   const results: _ItemClasses[] = [];
 
@@ -60,11 +62,15 @@ export function searchLibrary(search: RegExp | string | number, options: Library
 export interface CompSearchOptions {
   maxResult?: number;
   recursive?: boolean;
+  strict?: boolean;
+  stringSearch?: boolean;
 }
 
 const defaultCompOptions: CompSearchOptions = {
   maxResult: Number.POSITIVE_INFINITY,
   recursive: false,
+  strict: false,
+  stringSearch: true,
 };
 
 export function searchComp(
@@ -73,7 +79,7 @@ export function searchComp(
   options: CompSearchOptions = defaultCompOptions
 ) {
   const { maxResult, recursive } = { ...defaultCompOptions, ...options };
-  search = asRegEx(search);
+  search = asRegEx(search, options);
 
   const results: Layer[] = [];
 
@@ -113,4 +119,18 @@ export function copyFolderContents(input: FolderItem, output: FolderItem) {
       alert(`Could not copy ${item.name} to folder ${output.name}.`);
     }
   }
+}
+
+export function openComps() {
+  const comps = [];
+  do {
+    comps.unshift(app.project.activeItem);
+    app.executeCommand(app.findMenuCommandId("Close"));
+  } while (app.project.activeItem != null && app.project.activeItem instanceof CompItem);
+
+  for (let i = 0; i < comps.length; i++) {
+    comps[i].openInViewer();
+  }
+
+  return comps;
 }

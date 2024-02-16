@@ -30,8 +30,8 @@ const createMainDialog = () => {
   title.text = `The Sorcerer's Apprentice (v${version})`;
   title.alignment = ["fill", "center"];
 
-  const compTitle = header.add(ui.addTextGroup("Comp Title:") as "treeview") as TextGroup;
-  const outFolder = header.add(ui.addTextGroup("Output File", { button: true }) as "treeview") as ButtonGroup;
+  const compTitle = header.add(ui.addMenuField("Comp Title:") as "treeview") as TextGroup;
+  const outFolder = header.add(ui.addMenuField("Output File", { button: true }) as "treeview") as ButtonGroup;
   // const outFolder = header.add(ui.addBrowseGroup("outFolder", "Output File") as "treeview") as BrowseGroup;
 
   // TEMPLATE PANEL (THIS IS WHERE ALL THE GENERATED FIELDS WILL GO)
