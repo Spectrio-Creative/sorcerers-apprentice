@@ -8,10 +8,8 @@
   "main": "index.js",
   "scripts": {
     "build": "rollup --config && node ./post/copyDependanciesToBuild.js",
-    "postbuild": "extendscriptr --script build/sorcerers_apprentice.js --output build/sorcerers_apprentice.jsx && node postbuild.js",
     "lint": "eslint src/",
-    "playground": "ENTRY=src/playground.ts OUTPUT=./build/playground.js rollup --config",
-    "postplayground": "extendscriptr --script build/playground.js --output build/playground.jsx && node postbuild.js",
+    "playground": "ENTRY=src/playground.ts OUTPUT=./build/playground.jsx rollup --config",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
@@ -19,7 +17,7 @@
     "@babel/core": "^7.23.9",
     "@babel/preset-env": "^7.23.9",
     "@babel/preset-typescript": "^7.23.3",
-    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-eslint": "^9.0.3",
     "@rollup/plugin-json": "^6.0.0",
@@ -29,6 +27,9 @@
     "@types/node": "^18.15.11",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.51.0",
+    "babel-plugin-transform-es3-member-expression-literals": "^6.22.0",
+    "babel-plugin-transform-es3-property-literals": "^6.22.0",
+    "babel-plugin-transform-es5-property-mutators": "^6.24.1",
     "babel-preset-extendscript": "^1.0.2",
     "case-anything": "^2.1.13",
     "dateformat": "^5.0.2",
