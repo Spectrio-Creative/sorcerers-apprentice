@@ -34,6 +34,9 @@ export class MediaLibrary {
         this.mediaItems.push(mediaItem);
       }
     }
+
+    // Sort alphabetically by name
+    this.mediaItems.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   refresh() {

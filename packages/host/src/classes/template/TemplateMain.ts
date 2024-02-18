@@ -44,7 +44,9 @@ export class TemplateMain {
 
   findTemplateFolders() {
     const folders = searchLibrary(/templates/gi, { type: "Folder" }) as FolderItem[];
-    this.templates = findTemplatesInFolders(folders).map((template) => new Template(template));
+    this.templates = findTemplatesInFolders(folders).map((template) => {
+      return new Template(template);
+    });
   }
 
   printNames() {
@@ -88,16 +90,9 @@ export class TemplateMain {
   refresh() {
     this.templates = [];
     this.findTemplateFolders();
-
-    this.templates.forEach((template) => {
-      template.refresh();
-    });
   }
 
-  getOverview() {
-    this.refresh();
-    fontLibrary.refresh();
-    mediaLibrary.refresh();
+  getStaleOverview() {
     return {
       templates: this.templates.map((template) => template.getOverview()),
       fonts: fontLibrary.projectFonts,
@@ -105,12 +100,34 @@ export class TemplateMain {
     };
   }
 
+  getOverview() {
+    // alert("Getting Overview");
+    try {
+      this.refresh();
+      fontLibrary.refresh();
+      mediaLibrary.refresh();
+      return {
+        templates: this.templates.map((template) => template.getOverview()),
+        fonts: fontLibrary.projectFonts,
+        libraryAssets: mediaLibrary.mediaItems,
+      };
+    } catch (error) {
+      alert("Error: " + error);
+      return {
+        templates: [],
+        fonts: [],
+        libraryAssets: [],
+      };
+    }
+  }
+
   setValuesFromList(list: InputTemplateValue[]) {
-    list.forEach((template) => {
-      const found = this.templates.find((t) => t.name === template.templateName);
+    list.forEach((input) => {
+      let found = this.templates.find((t) => t.id === input.templateId);
+      if (!found) found = this.templates.find((t) => t.name === input.templateName);
       if (found) {
-        const tempChild = found.duplicate(template.compName);
-        tempChild.fillValues(template.fields);
+        const tempChild = found.duplicate(input.compName);
+        tempChild.fillValues(input.fields);
       }
     });
   }

@@ -26,6 +26,9 @@ export class FontLibrary {
         }
       }
     }
+
+    // Sort alphabetically by name
+    this.projectFonts.sort((a, b) => a.font.localeCompare(b.font));
   }
 
   fontOptions(): string[] {

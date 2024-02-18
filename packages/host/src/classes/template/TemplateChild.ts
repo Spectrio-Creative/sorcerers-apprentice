@@ -37,6 +37,9 @@ export class TemplateChild {
         const newComp = item.duplicate();
         newComp.parentFolder = output;
         newComp.name = item.name;
+        if (item.id === this.parent.comp.id) {
+          newComp.name = this.name;
+        }
         this.idLookup[`${item.id}`] = newComp.id;
       } else {
         alert(`Could not copy ${item.name} to folder ${output.name}.`);

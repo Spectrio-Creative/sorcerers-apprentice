@@ -1,22 +1,68 @@
 import { TemplateMain } from "./classes/template/TemplateMain";
-import { testIt } from "./playground/tests";
+// import { testIt } from "./playground/tests";
 import polyfill from "./tools/polyfill";
 
 polyfill();
 
 const template = new TemplateMain();
 
-export function getMenuInfo() {
+function getMenuInfo() {
   return JSON.stringify(template.getOverview());
 }
 
-export function setValuesFromList(list: string) {
-  const parsed: InputTemplateValue[] = JSON.parse(list);
-  template.setValuesFromList(parsed);
+function writeOverview(location: string) {
+  const file = new File(location);
+  file.open("w");
+  file.write(JSON.stringify(template.getOverview()));
+  file.close();
+
+  return "OK";
 }
 
-export function showMenu() {
+function setValuesFromList(list: string) {
+  const parsed: InputTemplateValue[] = JSON.parse(list);
+  template.setValuesFromList(parsed);
+  return "OK";
+}
+
+function showMenu() {
   template.showMenuPanel();
 }
 
-testIt(template);
+function sayHello() {
+  alert("Hello from the host!");  
+}
+
+// function selectFile(type: "csv" | "other" = "other") {
+//   let file;
+//   if (type === "csv") {
+//     file = file.openDlg("Select a CSV file", "Comma Separated Values: *.csv");
+//   } else {
+//     file = file.openDlg("Select a file");
+//   }
+//   return file;
+// }
+
+// function selectFolder() {
+//   const folder = new Folder();
+//   folder = folder.selectDlg("Select a folder to save");
+//   return folder;
+// }
+
+// function printKeys(object: GenericObject<string[]>) {
+//   const keys = Object.keys(object);
+//   keys.forEach((key) => {
+//     alert(`${key}`);
+//     alert(`${key}: ${object[key]}`);
+//   });
+// }
+
+// The global functions get removed by the compiler if they are not used
+// This is a workaround to keep them in the final bundle
+$.write(`getMenuInfo: ${typeof getMenuInfo}`);
+$.write(`setValuesFromList: ${typeof setValuesFromList}`);
+$.write(`showMenu: ${typeof showMenu}`);
+$.write(`sayHello: ${typeof sayHello}`);
+$.write(`writeOverview: ${typeof writeOverview}`);
+
+// testIt(template);

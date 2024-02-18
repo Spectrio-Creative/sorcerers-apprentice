@@ -62,7 +62,7 @@ export class LayerText extends LayerBase {
     boxDocument.justification = this.textDocument.justification;
     boxProperty.setValue(boxDocument);
 
-    alignAnchorPoint(boxText as Layer, this.getAnchorAlignment(), { rectagle: boxRect });
+    alignAnchorPoint(boxText as Layer, this.getAnchorAlignment(), { rectangle: boxRect });
 
     boxText.position.setValue(this.textLayer.position.value);
 
