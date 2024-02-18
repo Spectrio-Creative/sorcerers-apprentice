@@ -1,8 +1,6 @@
 import { TabOptions } from "../../../pluginTools/dialogElements";
 import { parseLayerName } from "../../../tools/templates";
 
-export type FieldOption = "visible" | "background-size" | "fill-size" | "no-scale" | "scale-down" | "linked-subtag";
-
 export interface FieldBaseOptions {
   type: FieldType;
   options: FieldOption[];

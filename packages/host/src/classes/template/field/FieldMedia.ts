@@ -22,10 +22,7 @@ export class FieldMedia extends FieldBase {
     this.menuField.browse.onClick = this.browse;
     this.menuField.input.addEventListener("focus", this.focused);
     this.menuField.input.addEventListener("blur", this.unFocused);
-    //   this.removeFieldListener();
-    //   (obj.target as EditText).text = (obj.target as EditText).text.replace(/\*$/g, "");
-    //   // this.addFieldListener();
-    // });
+    
     this.addFieldListener();
   }
 

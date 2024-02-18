@@ -1,4 +1,3 @@
-import { RGB, RGBA } from "../../../tools/color";
 import { FieldColor } from "../field/FieldColor";
 import { LayerBase } from "./LayerBase";
 

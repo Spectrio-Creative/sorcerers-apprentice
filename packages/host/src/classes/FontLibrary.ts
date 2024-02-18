@@ -1,9 +1,3 @@
-export interface Font {
-  font: string;
-  fontFamily: string;
-  fontStyle: string;
-}
-
 export class FontLibrary {
   projectFonts: Font[] = [];
 

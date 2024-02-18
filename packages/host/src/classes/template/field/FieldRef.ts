@@ -1,5 +1,5 @@
 import camelCase from "just-camel-case";
-import { formatAsDecimal } from "../../../tools/color";
+import { formatAsDecimal } from "../../../../../shared/tools/color";
 import { LayerBase } from "../layer/LayerBase";
 import { LayerColor } from "../layer/LayerColor";
 import { LayerFont } from "../layer/LayerFont";

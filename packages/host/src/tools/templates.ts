@@ -1,5 +1,5 @@
 import { TemplateOptions } from "../classes/template/Template";
-import { FieldBaseOptions, FieldOption } from "../classes/template/field/Field";
+import { FieldBaseOptions } from "../classes/template/field/Field";
 import { searchComp } from "./project";
 
 export const findTemplatesInFolders = (folders: FolderItem[]): TemplateOptions[] => {

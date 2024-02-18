@@ -1,14 +1,3 @@
-export interface MediaItem {
-  name: string;
-  hasVideo: boolean;
-  hasAudio: boolean;
-  brokenLink: boolean;
-  file?: string;
-  fileName?: string;
-  libraryPath?: string;
-  typeName?: string;
-}
-
 export class MediaLibrary {
   mediaItems: MediaItem[] = [];
 

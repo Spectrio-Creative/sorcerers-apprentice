@@ -1,5 +1,6 @@
 import { addMenuField } from "../../../pluginTools/dialogElements";
-import { GoodBoyNinjaColorPicker, RGBA, decimalToRgb, rgbToHex } from "../../../tools/color";
+import { GoodBoyNinjaColorPicker } from "../../../tools/color";
+import { decimalToRgb, rgbToHex } from "../../../../../shared/tools/color";
 import { FieldBase, FieldBaseOptions } from "./Field";
 
 export class FieldColor extends FieldBase {
