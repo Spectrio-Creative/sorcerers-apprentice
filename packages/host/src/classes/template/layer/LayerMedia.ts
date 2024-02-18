@@ -65,9 +65,6 @@ export class LayerMedia extends LayerBase {
     const shape = mask.maskShape.value;
     const scale = this.avLayer.scale.value[0] / 100;
     const rect = getLayerRect(this.layer);
-    alert(`Compare the rectangles:
-    Original: ${JSON.stringify(this.originalRect)}
-    Current: ${JSON.stringify(rect)}`);
 
     shape.vertices = [
       [this.originalRect.left, this.originalRect.top],
