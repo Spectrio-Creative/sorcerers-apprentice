@@ -9,7 +9,8 @@ export const findTemplatesInFolders = (folders: FolderItem[]): TemplateOptions[]
       if (folder.items[i].typeName == "Composition" && folder.items[i].name === folder.name) {
         const comp = folder.items[i] as CompItem;
 
-        if (searchComp(/^!T|^!I|^!V|^!C|^!G|^!F|^!A/g, comp, { recursive: true })?.length > 0) {
+        const templateLayers = searchComp(/^!T|^!I|^!V|^!C|^!G|^!F|^!A/g, comp, { recursive: true });
+        if (templateLayers?.length > 0) {
           templateFolders.push({
             name: folder.name,
             id: folder.id,
