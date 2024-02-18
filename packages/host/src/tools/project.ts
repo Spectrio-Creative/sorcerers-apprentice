@@ -17,17 +17,17 @@ export interface LibrarySearchOptions {
   strict?: boolean;
 }
 
-const defaultOptions: LibrarySearchOptions = {
+const defaultOptions: () => LibrarySearchOptions = () => ({
   type: undefined,
   maxResult: Number.POSITIVE_INFINITY,
   parent: app.project.rootFolder,
   recursive: true,
   searchKey: undefined,
   strict: false,
-};
+});
 
-export function searchLibrary(search: RegExp | string | number, options: LibrarySearchOptions = defaultOptions) {
-  const { type, maxResult, parent, recursive, searchKey } = { ...defaultOptions, ...options };
+export function searchLibrary(search: RegExp | string | number, options: LibrarySearchOptions = defaultOptions()) {
+  const { type, maxResult, parent, recursive, searchKey } = { ...defaultOptions(), ...options };
   const searcher = searchKey || (typeof search === "number" ? "id" : "name");
 
   //Ensure that reg is a regular expression
