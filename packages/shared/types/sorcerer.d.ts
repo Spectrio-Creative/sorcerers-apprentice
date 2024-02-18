@@ -6,9 +6,14 @@ interface InputFieldValue {
   value: string;
 }
 
+type InputStatus = "Disabled" | "Ready" | "Processing" | "Complete";
+
 interface InputTemplateValue {
+  id: string;
+  templateId: number;
   templateName: string;
   compName?: string;
   outputFile?: string;
+  status?: InputStatus;
   fields: InputFieldValue[];
 }
