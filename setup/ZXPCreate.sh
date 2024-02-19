@@ -36,6 +36,12 @@ else
   fi
 fi
 
+# Check that signing certificate is present
+if [ ! -f "$script_dir/sorcerers-apprentice.p12" ]; then
+  echo "sorcerers-apprentice.p12 not found, email Adam at adamh@spectrio.com to get a copy, exiting"
+  exit 1
+fi
+
 # Remove the build directory if it exists
 rm -rf "$script_dir/../build"
 
