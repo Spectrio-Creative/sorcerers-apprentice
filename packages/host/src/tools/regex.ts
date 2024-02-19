@@ -2,11 +2,13 @@ export interface AsRegExOptions {
   strict?: boolean;
   stringSearch?: boolean;
   coerce?: boolean;
+  flags?: string;
 }
 
 const defaultAsRegExOptions: AsRegExOptions = {
   strict: false,
   coerce: false,
+  flags: "g",
 };
 
 export function asRegEx<T>(search: T, options: AsRegExOptions = defaultAsRegExOptions): RegExp {
@@ -18,8 +20,8 @@ export function asRegEx<T>(search: T, options: AsRegExOptions = defaultAsRegExOp
   if (typeof search === "string" || typeof search === "number") {
     let searchString = `${search}`;
     if (!coerce) searchString = escapeRegex(`${searchString}`);
-    if (strict) return new RegExp(`^${searchString}$`, "g");
-    return new RegExp(`${searchString}`, "g");
+    if (strict) return new RegExp(`^${searchString}$`, options.flags);
+    return new RegExp(`${searchString}`, options.flags);
   }
   throw new Error("Invalid search type");
 }
