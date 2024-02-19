@@ -20,7 +20,7 @@
             <DispatchInfo>
                 <Resources>
                     <MainPath>./client/index-traditional.html</MainPath>
-					<ScriptPath>./index.jsx</ScriptPath>
+					<ScriptPath>./theSorcerersApprentice.jsx</ScriptPath>
                     <CEFCommandLine>
 						<Parameter>--enable-media-stream</Parameter>
 						<Parameter>--enable-nodejs</Parameter>
@@ -53,7 +53,7 @@
             <DispatchInfo>
                 <Resources>
                     <MainPath>./client/index-spreadsheet.html</MainPath>
-					<ScriptPath>./index.jsx</ScriptPath>
+					<ScriptPath>./theSorcerersApprentice.jsx</ScriptPath>
                     <CEFCommandLine>
 						<Parameter>--enable-media-stream</Parameter>
 						<Parameter>--enable-nodejs</Parameter>

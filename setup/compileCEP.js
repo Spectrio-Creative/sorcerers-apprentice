@@ -12,7 +12,7 @@ if (!fs.existsSync("dist/CSXS")) {
 
 // Move 'packages/host/dist/index.jsx' to 'dist/index.jsx'
 // fs.copyFileSync("packages/host/dist/index.jsx", "dist/index.jsx");
-fs.copyFileSync("packages/host/build/sorcerers_apprentice.jsx", "dist/index.jsx");
+fs.copyFileSync("packages/host/build/sorcerers_apprentice.jsx", "dist/theSorcerersApprentice.jsx");
 
 // Read package.json and get the current version
 const packageJSON = JSON.parse(fs.readFileSync("package.json", "utf8"));
