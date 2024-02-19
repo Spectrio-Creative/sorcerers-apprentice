@@ -1,15 +1,34 @@
-// import fontManager from 'font-scanner';
-import { defineConfig } from 'vite';
-
 // vite.config.js
-// const fonts = fontManager.getAvailableFontsSync();
+import legacy from "@vitejs/plugin-legacy";
+import { resolve } from "path";
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
 
-// fonts.filter(font => /montserrat/i.test(font.family)).forEach((font) => {
-//   console.log(font.postscriptName);
-// });
-
-// console.log(fonts);
+// https://vitejs.dev/config/
 export default defineConfig({
-  base: './',
-  // root: "./public"
-})
+  base: "./",
+  plugins: [
+    vue(),
+    legacy({
+      targets: ["defaults", "not IE 11"],
+    }),
+  ],
+  build: {
+    commonjsOptions: {},
+    rollupOptions: {
+      input: {
+        traditional: resolve(__dirname, "index-traditional.html"),
+        spreadsheet: resolve(__dirname, "index-spreadsheet.html"),
+      },
+      // input: {
+      //   traditional: resolve(__dirname, "index-traditional.html"),
+      //   spreadsheet: resolve(__dirname, "index-spreadsheet.html"),
+      // },
+      output: {
+        format: "commonjs",
+        // format: "esm",
+        // format: "cjs",
+      },
+    },
+  },
+});

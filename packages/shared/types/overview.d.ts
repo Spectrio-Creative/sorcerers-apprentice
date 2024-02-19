@@ -1,4 +1,5 @@
 interface FieldQuickOverview {
+  fullTitle: string;
   title: string;
   type: FieldType;
   tab?: string;
@@ -9,6 +10,7 @@ interface FieldQuickOverview {
 }
 
 interface FieldOverview extends FieldQuickOverview {
+  fullTitle: string;
   title: string;
   type: FieldType;
   tab: string;

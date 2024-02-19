@@ -14,6 +14,7 @@ export class TemplateChild {
   folder: FolderItem;
   fieldRefs: FieldRef[] = [];
   parent: Template;
+  comp: CompItem;
   idLookup: { [key: string]: number } = {};
 
   constructor(folder: FolderItem, parent: Template) {
@@ -27,6 +28,10 @@ export class TemplateChild {
     this.getEditableFields();
   }
 
+  setCompName(name: string) {
+    this.comp.name = name;
+  }
+
   copyFolderContents(input: FolderItem = this.parent.folder, output: FolderItem = this.folder) {
     for (let i = 1; i <= input.numItems; i++) {
       const item = input.item(i);
@@ -38,7 +43,7 @@ export class TemplateChild {
         newComp.parentFolder = output;
         newComp.name = item.name;
         if (item.id === this.parent.comp.id) {
-          newComp.name = this.name;
+          this.comp = newComp;
         }
         this.idLookup[`${item.id}`] = newComp.id;
       } else {
@@ -119,7 +124,7 @@ export class TemplateChild {
   mapFieldsToInput(input: InputFieldValue[]): MappedInputFieldValue[] {
     // TODO: This function could be more efficient
     return input.map((inn) => {
-      const parsed = parseLayerName(inn.title, true);
+      const parsed = parseLayerName(inn.fullTitle || inn.title, true);
 
       const ref = (() => {
         let filtered = this.fieldRefs.filter((ref) => new RegExp(parsed.title, "i").test(ref.field.title));

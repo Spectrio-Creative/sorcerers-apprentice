@@ -56,6 +56,7 @@ export class FieldBase {
 
   getOverview() {
     return {
+      fullTitle: this.layer.name,
       type: this.type,
       options: this.options,
       title: this.title,

@@ -112,3 +112,6 @@ _oldFilesForReference_/
 
 .temp
 .cache
+
+# The signing key for the ZXP file
+sorcerers-apprentice.p12

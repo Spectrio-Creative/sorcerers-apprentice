@@ -1,25 +1,20 @@
 // Modify the generated JavaScript files
-import fs from 'fs';
-import * as glob from 'glob';
+import fs from "fs";
+// import { globSync } from "glob";
 
-const targetDir = './dist/assets';
-const files = glob.sync(`${targetDir}/*.js`);
+// const targetDir = "./dist/assets";
+// const files = globSync(`${targetDir}/*.js`);
 
-const html = './dist/index.html'
+// const htmlTraditional = "./dist/index-traditional.html";
+// const htmlSpreadsheet = "./dist/index-spreadsheet.html";
 
-files.forEach(fileName => {
-  let fileContent = fs.readFileSync(html, 'utf8');
 
-  console.log(`Processing ${fileName}...`, fileContent);
+[].forEach((html) => {
+  let fileContent = fs.readFileSync(html, "utf8");
 
-  // Replace `<script type="module">` with `<script defer type="text/javascript">`
+  // Replace the script tag with a defer attribute
   fileContent = fileContent.replace('<script type="module"', '<script defer type="text/javascript"');
 
-  // Replace `<script>` with `<script defer>`
-//   fileContent = fileContent.replace('<script>', '<script defer>');
-
-  console.log(`Writing ${fileName}...`, fileContent);
-
   // Write the modified content to the file
-  fs.writeFileSync(html, fileContent, 'utf8');
+  fs.writeFileSync(html, fileContent, "utf8");
 });

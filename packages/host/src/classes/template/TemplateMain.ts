@@ -110,7 +110,7 @@ export class TemplateMain {
         templates: this.templates.map((template) => template.getOverview()),
         fonts: fontLibrary.projectFonts,
         libraryAssets: mediaLibrary.mediaItems,
-      };
+      } as SorcererOverview;
     } catch (error) {
       alert("Error: " + error);
       return {
@@ -128,6 +128,7 @@ export class TemplateMain {
       if (found) {
         const tempChild = found.duplicate(input.compName);
         tempChild.fillValues(input.fields);
+        tempChild.setCompName(input.compName);
       }
     });
   }

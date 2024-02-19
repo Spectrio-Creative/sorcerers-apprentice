@@ -41,11 +41,11 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: "module",
   },
-  ignorePatterns: ["package.json", "**/actions/*", "**/static/*", "**/build/*", "**/post/*", "**/archive/*"],
+  ignorePatterns: ["package.json", "**/actions/*", "**/static/*", "**/build/*", "**/post/*", "**/archive/*", "dist/*"],
   rules: {
     indent: ["error", 2, { "SwitchCase": 1 }],
     "linebreak-style": ["error", "unix"],
-    quotes: ["error", "double"],
+    quotes: ["error", "double", { "avoidEscape": true }],
     semi: ["error", "always"],
     "no-control-regex": 0,
     "no-inner-declarations": "warn",

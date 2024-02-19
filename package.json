@@ -1,8 +1,10 @@
 {
   "name": "root",
   "private": true,
+  "version": "4.0.1",
   "scripts": {
     "build": "lerna run build",
+    "dev": "lerna run dev",
     "postbuild": "node ./setup/compileCEP.js && bash ./setup/ZXPCreate.sh",
     "docs:build": "vuepress build docs",
     "docs:dev": "vuepress dev docs"

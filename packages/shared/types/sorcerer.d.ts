@@ -1,8 +1,9 @@
 type FieldType = "Text" | "Media" | "Color" | "Group" | "Font" | "Audio";
 
 interface InputFieldValue {
+  fullTitle: string;
   title: string;
-  type?: FieldType;
+  type: FieldType;
   value: string;
 }
 

@@ -1,0 +1,33 @@
+body {
+  --primary-color: #272727;
+  --secondary-color: #c5c5c5;
+  --tertiary-color: #161616;
+  --highlight-color: #52a0e9;
+  --hover-color: #9a9a9a;
+  --border-color: #3c3c3c;
+  --background-color: #1e1e1e;
+  --background-color-light: #2b2b2b;
+  --background-color-dark: #1a1a1a;
+  --error-color: #ff4d4d;
+  --success-color: #00cc66;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  font-family: "Source Sans", "Source Sans Pro", "Source Sans 3", "Segoe UI", "San Francisco", "Lucida Grande",
+    Helvetica, sans-serif;
+  font-size: 12px;
+}
+
+a {
+  color: var(--secondary-color);
+  /* text-decoration: none; */
+}
+
+a:hover {
+  color: var(--highlight-color);
+}
+
+input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}

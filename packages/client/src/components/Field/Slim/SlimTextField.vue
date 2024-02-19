@@ -1,0 +1,20 @@
+<template>
+  <div class="text-field slim-input-field">
+    <TextInput v-model="model" :show-cancel="showCancel" :cancel="cancel" :locked="locked" />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { defineProps } from "vue";
+import TextInput from "../../Generic/TextInput.vue";
+defineProps<{
+  title: string;
+  locked?: boolean;
+  showCancel?: boolean;
+  cancel?: () => void;
+}>();
+
+const model = defineModel();
+</script>
+
+<style lang="scss" scoped></style>
