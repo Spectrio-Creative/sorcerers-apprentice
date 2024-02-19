@@ -2,10 +2,16 @@
   <div class="app">
     <div class="container">
       <Loader :show="app.processing" />
-      <Button :on-click="refresh" :styles="['primary', 'round']"><RefreshIcon /></Button>
+      <Button class="refresh-button" :on-click="refresh" :styles="['tertiary', 'round']">
+        <div class="inner">
+          <RefreshIcon />
+          <span>Refresh Panel</span>
+        </div>
+      </Button>
       <Spreadsheet ref="spreadsheet" v-if="type === 'spreadsheet'" />
       <Traditional ref="traditional" v-else />
       <div class="version">The Sorcerer’s Apprentice v{{ version }}</div>
+      {{ inputs.inputs }}
     </div>
   </div>
 </template>
@@ -19,8 +25,10 @@ import Button from "./components/Generic/Button.vue";
 import { sorcererStore } from "./stores/sorcerer";
 import RefreshIcon from "./components/Icons/RefreshIcon.vue";
 import { Ref, onMounted, ref } from "vue";
+import { inputsStore } from "./stores/inputs";
 
 const app = appStore();
+const inputs = inputsStore();
 const version = import.meta.env.VITE_APP_VERSION;
 const sorcerer = sorcererStore();
 const traditional: Ref<InstanceType<typeof Traditional> | null> = ref(null);
@@ -29,7 +37,7 @@ const spreadsheet = ref(null);
 const refresh = async () => {
   app.processing = true;
   const traditionalBefore = traditional.value?.beforeRefresh();
-  
+
   await sorcerer.refresh();
 
   if (traditionalBefore) traditional.value?.afterRefresh(traditionalBefore);
@@ -88,4 +96,12 @@ onMounted(() => {
     }
   }
 }
+
+.refresh-button {
+  margin: 0 0 2em;
+  .inner {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}}
 </style>

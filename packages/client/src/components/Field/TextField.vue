@@ -1,6 +1,5 @@
 <template>
   <div class="text-field input-field">
-    <div class="input-label" style="display: inline-block">{{ title }}</div>
     <TextInput v-model="model" :show-cancel="showCancel" :cancel="cancel" :locked="locked" />
   </div>
 </template>

@@ -2,7 +2,11 @@ body {
   --primary-color: #272727;
   --secondary-color: #c5c5c5;
   --tertiary-color: #161616;
+  --tertiary-color-light: #2b2b2b;
+  --tertiary-color-dark: #0d0d0d;
   --highlight-color: #52a0e9;
+  --highlight-color-light: #6eb5f2;
+  --highlight-color-dark: #3d8bd1;
   --hover-color: #9a9a9a;
   --border-color: #3c3c3c;
   --background-color: #1e1e1e;

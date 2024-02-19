@@ -22,6 +22,15 @@ export const sorcererStore = defineStore("sorcerer", () => {
   const libraryAssets = computed(() => overview.value.libraryAssets);
   const libraryAssetNames = computed(() => libraryAssets.value.map((a) => a.name));
 
+  const audioAssets = computed(() => overview.value.libraryAssets.filter((a) => a.hasAudio && !a.hasVideo));
+  const audioAssetNames = computed(() => audioAssets.value.map((a) => a.name));
+
+  const videoAssets = computed(() => overview.value.libraryAssets.filter((a) => a.hasVideo));
+  const videoAssetNames = computed(() => videoAssets.value.map((a) => a.name));
+
+  const mediaAssets = computed(() => overview.value.libraryAssets.filter((a) => !a.hasAudio && !a.hasVideo));
+  const mediaAssetNames = computed(() => mediaAssets.value.map((a) => a.name));
+
   const refresh = async () => {
     app.processing = true;
     app.setProcessingMessage("Refreshing Template Data...");
@@ -42,6 +51,12 @@ export const sorcererStore = defineStore("sorcerer", () => {
     fontNames,
     libraryAssets,
     libraryAssetNames,
+    audioAssets,
+    audioAssetNames,
+    videoAssets,
+    videoAssetNames,
+    mediaAssets,
+    mediaAssetNames,
     refresh,
   };
 });

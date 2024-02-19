@@ -58,17 +58,29 @@ export const inputsStore = defineStore("inputs", () => {
   const findField = (input: InputTemplateValue, field: FieldQuickOverview) => {
     const fieldIndex = input.fields.findIndex((f) => f.title === field.title);
     if (fieldIndex !== -1) return input.fields[fieldIndex];
-    const newField = { title: field.title, value: "", type: field.type, fullTitle: field.fullTitle };
+    const newField = {
+      title: field.title,
+      value: "",
+      type: field.type,
+      fullTitle: field.fullTitle,
+      hidden: field.hidden,
+    } as InputFieldValue;
     input.fields.push(newField);
     return newField;
   };
 
-  const addOrUpdateField = (args: { template: TemplateOverview | InputTemplateValue; field: FieldQuickOverview; value?: string }) => {
-    const { template, field, value } = args;
+  const addOrUpdateField = (args: {
+    template: TemplateOverview | InputTemplateValue;
+    field: FieldQuickOverview;
+    edit?: InputFieldEditables;
+  }) => {
+    const { template, field, edit } = args;
+    const { value, hidden } = edit || {};
     const input = findInput(template);
 
     const inputField = findField(input, field);
     inputField.value = value || "";
+    if (hidden !== undefined) inputField.hidden = hidden;
   };
 
   const removeField = (args: { template: TemplateOverview | InputTemplateValue; field: FieldQuickOverview }) => {

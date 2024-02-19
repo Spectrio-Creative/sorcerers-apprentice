@@ -1,6 +1,5 @@
 <template>
   <div class="font-field input-field">
-    <div class="input-label" style="display: inline-block">{{ title }}</div>
     <DropDown v-model="model" :options="sorcerer.fontNames" :show-cancel="showCancel" :cancel="cancel" />
   </div>
 </template>

@@ -105,6 +105,11 @@ const styleMap = props.styles?.map((style) => ({ [style]: true })).reduce((acc, 
     background-color: var(--tertiary-color);
     border-color: var(--tertiary-color);
     color: var(--secondary-color);
+
+    &:hover {
+      background-color: var(--tertiary-color-dark);
+      border-color: var(--tertiary-color-dark);
+    }
   }
 
   &.dark {

@@ -1,5 +1,9 @@
 <template>
-  <div v-if="!slim" class="field" :class="{ changed }">
+  <div v-if="!slim" class="field traditional" :class="{ changed, visibleToggle }">
+    <div class="field-title">{{ field.title }}</div>
+    <div class="field-toggle" v-if="visibleToggle">
+      <CheckBox v-model="visible" />
+    </div>
     <ColorField
       v-if="field.type === 'Color'"
       :title="field.title"
@@ -21,6 +25,15 @@
       v-model="model"
       :cancel="removeField"
       :show-cancel="changed"
+      :options="sorcerer.videoAssetNames"
+    />
+    <MediaField
+      v-else-if="field.type === 'Audio'"
+      :title="field.title"
+      v-model="model"
+      :cancel="removeField"
+      :show-cancel="changed"
+      :options="sorcerer.audioAssetNames"
     />
     <FontField
       v-else-if="field.type === 'Font'"
@@ -31,7 +44,10 @@
     />
     <div v-else>Unknown field type: {{ field.type }}</div>
   </div>
-  <div v-if="slim" class="field" :class="{ changed }">
+  <div v-if="slim" class="field spreadsheet" :class="{ changed, visibleToggle }">
+    <div class="field-toggle" v-if="visibleToggle">
+      <CheckBox v-model="visible" />
+    </div>
     <SlimColorField
       v-if="field.type === 'Color'"
       :title="field.title"
@@ -53,6 +69,15 @@
       v-model="model"
       :cancel="removeField"
       :show-cancel="changed"
+      :options="sorcerer.videoAssetNames"
+    />
+    <SlimMediaField
+      v-else-if="field.type === 'Audio'"
+      :title="field.title"
+      v-model="model"
+      :cancel="removeField"
+      :show-cancel="changed"
+      :options="sorcerer.audioAssetNames"
     />
     <SlimFontField
       v-else-if="field.type === 'Font'"
@@ -74,14 +99,16 @@ import SlimColorField from "./Slim/SlimColorField.vue";
 import SlimTextField from "./Slim/SlimTextField.vue";
 import SlimMediaField from "./Slim/SlimMediaField.vue";
 import SlimFontField from "./Slim/SlimFontField.vue";
-import { computed, onMounted, onUnmounted, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { inputsStore } from "../../stores/inputs";
+import CheckBox from "../Generic/CheckBox.vue";
+import { sorcererStore } from '../../stores/sorcerer';
 
 interface Props {
   field: FieldQuickOverview;
   slim?: boolean;
   input: InputTemplateValue;
-  inputKey?: 'templateName' | 'compName' | 'outputFile';
+  inputKey?: "templateName" | "compName" | "outputFile";
   onChanged?: (value: string) => void;
   onRemoved?: () => void;
 }
@@ -92,39 +119,57 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const model = defineModel({ default: "" });
-
 const inputs = inputsStore();
+const sorcerer = sorcererStore();
+
+const visible = ref(!props.field.hidden);
 
 const changed = computed(() => {
-  return model.value !== props.field.value;
+  return model.value !== props.field.value || visible.value !== !props.field.hidden;
 });
+
+const visibleToggle = computed(() => {
+  return props.field.options?.includes("visible");
+});
+
+watch(visible, () => updateValue());
 
 watch(model, () => {
   props.onChanged(model.value);
-  
+
   if (props.inputKey) {
     props.input[props.inputKey] = model.value;
     return;
   }
 
-  if (changed.value) {
-    updateValue(model.value);
-  } else {
-    removeField();
-  }
+  updateValue();
 });
 
-const updateValue = (value: string) => {
-  inputs.addOrUpdateField({ template: props.input, field: props.field, value });
+const updateValue = (value?: string) => {
+  console.log("updateValue", value, model.value, changed.value);
+  if (!changed.value) {
+    removeField();
+    return;
+  }
+  inputs.addOrUpdateField({
+    template: props.input,
+    field: props.field,
+    edit: {
+      value: value || model.value,
+      hidden: !visible.value,
+    },
+  });
 };
 
 const removeField = () => {
   inputs.removeField({ template: props.input, field: props.field });
   props.onRemoved();
+  onClear();
 };
 
 const onClear = () => {
   model.value = props.field.value;
+  visible.value = !props.field.hidden;
 };
 
 onMounted(() => {
@@ -138,28 +183,53 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-:deep(.input-field) {
+.field {
   display: grid;
   align-items: center;
-  margin-bottom: 1em;
-  column-gap: 1.5em;
-  gap: 1.5em;
-  grid-template-columns: 100px 1fr;
 
-  &.media-field {
-    grid-template-columns: 100px 1fr 90px;
+  &.spreadsheet {
+    grid-template-columns: 1fr;
+    gap: 1em;
+
+    &.visibleToggle {
+      grid-template-columns: 20px 1fr;
+    }
   }
 
-  .input-label {
-    width: 100px;
-    text-align: right;
-  }
-}
-.field {
-  &.changed {
+  &.traditional {
+    margin-bottom: 1em;
+    grid-template-columns: calc(120px + 1.5em) 1fr;
+    column-gap: 1.5em;
+    gap: 1.5em;
+
+    .field-title {
+      // font-weight: bold;
+      text-align: right;
+    }
+
+    .field-toggle {
+      width: 100%;
+      // display: flex;
+      // justify-content: center;
+      // align-items: center;
+    }
+
+    &.visibleToggle {
+      grid-template-columns: 100px 20px 1fr;
+    }
+
     :deep(.input-field) {
-      .input-label {
-        color: var(--highlight-color);
+      column-gap: 1.5em;
+      align-items: center;
+      gap: 1.5em;
+    }
+  }
+  .field {
+    &.changed {
+      :deep(.input-field) {
+        .input-label {
+          color: var(--highlight-color);
+        }
       }
     }
   }

@@ -1,6 +1,5 @@
 <template>
   <div class="color-field input-field">
-    <div class="input-label" style="display: inline-block">{{ title }}</div>
     <PickColors
       class="pointer"
       v-model:value="model"
@@ -37,7 +36,8 @@ const cancelIt = () => {
 
 <style lang="scss" scoped>
 .input-field.color-field {
-  grid-template-columns: 100px 25px 1fr;
+  display: grid;
+  grid-template-columns: 25px 1fr;
   position: relative;
 
   .pointer {
