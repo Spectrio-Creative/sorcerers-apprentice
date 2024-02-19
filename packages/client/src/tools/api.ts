@@ -79,10 +79,6 @@ export async function fetchSorcererData(): Promise<SorcererOverview> {
       }
       const data = convertDefaultColorsToHex(JSON.parse(res));
 
-      csInterface.evalScript("writeOverview('~/Desktop/TemplateOverview.json');", (res: string) => {
-        console.log(res);
-      });
-
       resolve(data);
     });
   });

@@ -18,7 +18,9 @@ if (!fs.existsSync(envFile)) {
 }
 const env = fs.readFileSync(envFile, "utf8");
 
-const updatedEnv = env.replace(/VUE_APP_VERSION=.*(?:\n|$)/, `VITE_APP_VERSION=${packageJson.version}\n`);
+const updatedEnv = env.replace(/VITE_APP_VERSION=.*(?:\n|$)/, `VITE_APP_VERSION=${packageJson.version}\n`);
+
+console.log(packageJson.version, updatedEnv);
 
 fs.writeFileSync(envFile, updatedEnv, "utf8");
 
