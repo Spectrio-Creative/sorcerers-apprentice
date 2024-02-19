@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.spectrio.sorcerer" ExtensionBundleVersion="1.0" Version="6.0"> <!-- MAJOR-VERSION-UPDATE-MARKER -->
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.spectrio.sorcerer" ExtensionBundleVersion="{{FULL_VERSION}}" Version="{{SHORT_VERSION}}"> <!-- MAJOR-VERSION-UPDATE-MARKER -->
     <ExtensionList>
-        <Extension Id="com.spectrio.sorcerer.Panel1" Version="6.1.0"/>
+        <Extension Id="com.spectrio.sorcerer.Traditional" Version="{{FULL_VERSION}}"/>
+        <Extension Id="com.spectrio.sorcerer.Spreadsheet" Version="{{FULL_VERSION}}"/>
     </ExtensionList>
     <ExecutionEnvironment>
         <HostList>
-            <Host Name="AEFT" Version="13.0"/>
+            <Host Name="AEFT" Version="[13.0,99.9]"/>
         </HostList>
         <LocaleList>
             <Locale Code="All"/>
@@ -15,13 +16,12 @@
         </RequiredRuntimeList>
     </ExecutionEnvironment>
     <DispatchInfoList>
-        <Extension Id="com.spectrio.sorcerer.Panel1">
+        <Extension Id="com.spectrio.sorcerer.Traditional">
             <DispatchInfo>
                 <Resources>
-                    <MainPath>./client/index.html</MainPath>
+                    <MainPath>./client/index-traditional.html</MainPath>
 					<ScriptPath>./index.jsx</ScriptPath>
                     <CEFCommandLine>
-                        <Parameter>--enable-speech-input</Parameter>
 						<Parameter>--enable-media-stream</Parameter>
 						<Parameter>--enable-nodejs</Parameter>
                     </CEFCommandLine>
@@ -31,7 +31,7 @@
                 </Lifecycle>
                 <UI>
                     <Type>Panel</Type>
-                    <Menu>The Sorcerer’s Apprentice</Menu>
+                    <Menu>The Sorcerer's Apprentice</Menu>
                     <Geometry>
                         <Size>
                             <Height>580</Height>
@@ -46,12 +46,39 @@
                             <Width>600</Width>
                         </MinSize>
                     </Geometry>
-                    <Icons>
-                        <Icon Type="Normal">./TeEx_HTML_TEST_23x23_N.png</Icon>
-                        <Icon Type="RollOver">./TeEx_HTML_TEST_23x23_R.png</Icon>
-                        <Icon Type="DarkNormal">./TeEx_HTML_TEST_23x23_DN.png</Icon>
-                        <Icon Type="DarkRollOver">./TeEx_HTML_TEST_23x23_DR.png</Icon>
-                    </Icons>
+                </UI>
+            </DispatchInfo>
+        </Extension>
+        <Extension Id="com.spectrio.sorcerer.Spreadsheet">
+            <DispatchInfo>
+                <Resources>
+                    <MainPath>./client/index-spreadsheet.html</MainPath>
+					<ScriptPath>./index.jsx</ScriptPath>
+                    <CEFCommandLine>
+						<Parameter>--enable-media-stream</Parameter>
+						<Parameter>--enable-nodejs</Parameter>
+                    </CEFCommandLine>
+                </Resources>
+                <Lifecycle>
+                    <AutoVisible>true</AutoVisible>
+                </Lifecycle>
+                <UI>
+                    <Type>Panel</Type>
+                    <Menu>The Sorcerer's Apprentice (Spreadsheet)</Menu>
+                    <Geometry>
+                        <Size>
+                            <Height>580</Height>
+                            <Width>1020</Width>
+                        </Size>
+                        <MaxSize>
+                            <Height>800</Height>
+                            <Width>1200</Width>
+                        </MaxSize>
+                        <MinSize>
+                            <Height>400</Height>
+                            <Width>600</Width>
+                        </MinSize>
+                    </Geometry>
                 </UI>
             </DispatchInfo>
         </Extension>
