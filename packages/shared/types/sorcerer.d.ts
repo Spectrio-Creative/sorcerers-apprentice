@@ -5,6 +5,12 @@ interface InputFieldValue {
   title: string;
   type: FieldType;
   value: string;
+  hidden?: boolean;
+}
+
+interface InputFieldEditables {
+  value: string;
+  hidden?: boolean;
 }
 
 type InputStatus = "Disabled" | "Ready" | "Processing" | "Complete";

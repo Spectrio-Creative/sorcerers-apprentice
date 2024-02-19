@@ -46,7 +46,6 @@ export class LayerMedia extends LayerBase {
       rect.width > this.originalRect.width &&
       rect.height > this.originalRect.height
     ) {
-      alert("scale-down");
       this.avLayer.scale.setValue([100 / scale.contain, 100 / scale.contain, 100 / scale.contain]);
       return;
     }

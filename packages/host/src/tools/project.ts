@@ -134,3 +134,19 @@ export function openComps() {
 
   return comps;
 }
+
+export function allCompsFromFolder(folder: FolderItem) {
+  const results: CompItem[] = [];
+
+  for (let i = 1; i <= folder.numItems; i++) {
+    const item = folder.item(i);
+    if (item instanceof CompItem) {
+      results.push(item);
+    }
+    if (item instanceof FolderItem) {
+      results.push(...allCompsFromFolder(item));
+    }
+  }
+
+  return results;
+}

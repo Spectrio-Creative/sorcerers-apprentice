@@ -1,4 +1,4 @@
-import { searchComp } from "../../tools/project";
+import { allCompsFromFolder, searchComp } from "../../tools/project";
 import { parseLayerName } from "../../tools/templates";
 import { Template } from "./Template";
 import { FieldRef } from "./field/FieldRef";
@@ -53,14 +53,7 @@ export class TemplateChild {
   }
 
   allComps() {
-    const results: CompItem[] = [];
-    for (let i = 1; i < this.folder.numItems; i++) {
-      const item = this.folder.item(i);
-      if (item instanceof CompItem) {
-        results.push(item);
-      }
-    }
-    return results;
+    return allCompsFromFolder(this.folder);
   }
 
   linkPrecomps() {
@@ -161,7 +154,9 @@ export class TemplateChild {
     fields.forEach((val) => {
       const value = val.value;
       if (value) {
-        val.fieldRef.setLayerValue({ value, fontMap });
+        val.fieldRef.setLayerValue({ value, fontMap, hidden: val.hidden });
+      } else {
+        val.fieldRef.layer.layer.enabled = !val.hidden;
       }
     });
 

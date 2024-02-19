@@ -1,15 +1,6 @@
 import type { TemplateMain } from "../classes/template/TemplateMain";
 
 export const testIt = (template: TemplateMain) => {
-  // function getMenuInfo() {
-  //   return JSON.stringify(template.getOverview());
-  // }
-
-  // const file = new File("~/Desktop/MenuInfo.json");
-  // file.open("w");
-  // file.write(getMenuInfo());
-  // file.close();
-
   function setValuesFromList(list: string) {
     const parsed: InputTemplateValue[] = JSON.parse(list);
     template.setValuesFromList(parsed);
@@ -18,133 +9,164 @@ export const testIt = (template: TemplateMain) => {
   setValuesFromList(
     JSON.stringify([
       {
-        templateName: "Fish",
-        compName: "Fish 3000",
+        id: "SzRWgvqIYbhnSdSTEJfIp",
+        templateId: 10484,
+        templateName: "Color BG Template",
+        compName: "Big Ole Test",
+        status: "Ready",
         fields: [
+          { title: "CTA", value: "CONTACT US!", type: "Text", fullTitle: "!T [Company Info] CTA", hidden: true },
           {
-            title: "Weird Vid",
-            type: "Media",
-            value: "buttercups.jpg",
-          }
+            title: "Website",
+            value: "adamthomashoward.com",
+            type: "Text",
+            fullTitle: "!T [Company Info] Website",
+            hidden: true,
+          },
+          // { title: "Phone", value: "123-000-000", type: "Text", fullTitle: "!T [Company Info] Phone", hidden: true },
+          // {
+          //   title: "Single Address",
+          //   value: "123 Street",
+          //   type: "Text",
+          //   fullTitle: "!T [Company Info] Single Address",
+          //   hidden: true,
+          // },
+          // {
+          //   title: "Multiple Address 1",
+          //   value: "123 Street | Extra Phone",
+          //   type: "Text",
+          //   fullTitle: "!T [Company Info] Multiple Address 1",
+          //   hidden: true,
+          // },
+          // {
+          //   title: "Multiple Address 2",
+          //   value: "123 Street | Phone 2",
+          //   type: "Text",
+          //   fullTitle: "!T [Company Info] Multiple Address 2",
+          //   hidden: true,
+          // },
+          // {
+          //   title: "Multiple Address 3",
+          //   value: "123 Street | Phone 3",
+          //   type: "Text",
+          //   fullTitle: "!T [Company Info] Multiple Address 3",
+          //   hidden: true,
+          // },
+          // {
+          //   title: "Multiple Address 4",
+          //   value: "123 Street | Phone 4",
+          //   type: "Text",
+          //   fullTitle: "!T [Company Info] Multiple Address 4",
+          //   hidden: true,
+          // },
+          // {
+          //   title: "Special Instructions",
+          //   value: "Maecenas faucibus mollis interdum.",
+          //   type: "Text",
+          //   fullTitle: "!T [Company Info] Special Instructions",
+          //   hidden: true,
+          // },
+          // {
+          //   title: "Logo Text",
+          //   value: "PERRETTA OVERHEAD",
+          //   type: "Text",
+          //   fullTitle: "!Tv [Company Info] Logo Text",
+          //   hidden: true,
+          // },
+          // { title: "Logo", value: "Black Solid 1", type: "Media", fullTitle: "!Iv [Company Info] Logo", hidden: true },
+          // {
+          //   title: "Primary Color",
+          //   value: "#4E4E9EFF",
+          //   type: "Color",
+          //   fullTitle: "!C [Color] Color Control",
+          //   hidden: false,
+          // },
+          // {
+          //   title: "Secondary Color",
+          //   value: "#B75F62FF",
+          //   type: "Color",
+          //   fullTitle: "!C [Color] Color Control",
+          //   hidden: false,
+          // },
+          // {
+          //   title: "Tertiary Color",
+          //   value: "#4A3D4AFF",
+          //   type: "Color",
+          //   fullTitle: "!C [Color] Color Control",
+          //   hidden: false,
+          // },
+          // {
+          //   title: "Mostly White BG Color",
+          //   value: "#CECECEFF",
+          //   type: "Color",
+          //   fullTitle: "!C [Color] Color Control",
+          //   hidden: false,
+          // },
+          // {
+          //   title: "Music Bed",
+          //   value: "Binary Love - 30s.mp3",
+          //   type: "Audio",
+          //   fullTitle: "!A Music Bed",
+          //   hidden: false,
+          // },
+          // {
+          //   title: "Image 1 Text",
+          //   value: "Walking the left",
+          //   type: "Text",
+          //   fullTitle: "!T [Slideshow] Image 1 Text",
+          //   hidden: false,
+          // },
+          // {
+          //   title: "Image 2 Text",
+          //   value: "Walking to the right",
+          //   type: "Text",
+          //   fullTitle: "!T [Slideshow] Image 2 Text",
+          //   hidden: false,
+          // },
+          // {
+          //   title: "Image 3 Text",
+          //   value: "Walking to the east",
+          //   type: "Text",
+          //   fullTitle: "!T [Slideshow] Image 3 Text",
+          //   hidden: false,
+          // },
+          // {
+          //   title: "Image 4 Text",
+          //   value: "Walking all my life",
+          //   type: "Text",
+          //   fullTitle: "!T [Slideshow] Image 4 Text",
+          //   hidden: false,
+          // },
+          // {
+          //   title: "Image 1",
+          //   value: "13640432_xxl.jpg",
+          //   type: "Media",
+          //   fullTitle: "!Ib [Slideshow] Image 1",
+          //   hidden: false,
+          // },
+          // {
+          //   title: "Image 2",
+          //   value: "AdobeStock_109790437.jpeg",
+          //   type: "Media",
+          //   fullTitle: "!Ib [Slideshow] Image 2",
+          //   hidden: false,
+          // },
+          // {
+          //   title: "Image 3",
+          //   value: "AdobeStock_208255477.jpeg",
+          //   type: "Media",
+          //   fullTitle: "!Ib [Slideshow] Image 3",
+          //   hidden: false,
+          // },
+          // {
+          //   title: "Image 4",
+          //   value: "AdobeStock_103879472.jpeg",
+          //   type: "Media",
+          //   fullTitle: "!Ib [Slideshow] Image 4",
+          //   hidden: false,
+          // },
         ],
-      },
-      {
-        id: "O8a0NALfgu2eyKvn6Usl7",
-        templateId: 120,
-        templateName: "Fish",
-        compName: "This is the Fish",
-        status: "Complete",
-        fields: [
-          { title: "Heading", value: "Montserrat-ExtraLight" },
-          { title: "A Part Wheel of Fish", value: "A Whole Wheel" },
-          { title: "Subtext 1", value: "Integer posuere erat a ante venenatis dapibus posuere velit aliquet." },
-          { title: "Weird Vid", type: "Media", value: "mountain1.jpg" },
-          { title: "A Whole Wheel of Fish", value: "A New Wheel of Fish" },
-          { title: "Subtext 2", value: "Maecenas faucibus mollis interdum." },
-          { title: "Second Background", value: "buttercups.jpg" },
-          { title: "First Background", value: "beach1.jpg" },
-          { title: "Text Color", value: "#9D5797" },
-          { title: "Second Color", value: "#608AA2" },
-        ],
-        outputFile: "~/",
-      },
-      {
-        id: "zFcYP90DcTOrtaKgiuhtx",
-        templateId: 120,
-        templateName: "Fish",
-        compName: "Those are the fish",
-        status: "Complete",
-        fields: [
-          { title: "Heading", value: "Montserrat-Light" },
-          { title: "A Part Wheel of Fish", value: "A Wheel of Fish" },
-          { title: "Subtext 1", value: "Maecenas faucibus mollis interdum." },
-          { title: "Weird Vid", value: "mountain3.jpg" },
-          { title: "A Whole Wheel of Fish", value: "A Whole School of Fish" },
-          { title: "Subtext 2", value: "Curabitur blandit tempus porttitor." },
-          { title: "Second Background", value: "mountain3.jpg" },
-          { title: "First Background", value: "beach2.jpg" },
-          { title: "Text Color", value: "#367BA3FF" },
-          { title: "Second Color", value: "#8036A3FF" },
-        ],
-        outputFile: "~/",
       },
     ] as InputTemplateValue[])
   );
-  // setValuesFromList(
-  //   JSON.stringify([
-  //     // {
-  //     //   templateName: "Boogle Pie",
-  //     //   compName: "Boogle 2000",
-  //     //   fields: [
-  //     //     {
-  //     //       title: "A Whole Wheel of Fish",
-  //     //       type: "Text",
-  //     //       value: "Boogle 2000",
-  //     //     },
-  //     //     {
-  //     //       title: "Background",
-  //     //       type: "Media",
-  //     //       value: "stars.png",
-  //     //     },
-  //     //     {
-  //     //       title: "Font",
-  //     //       type: "Font",
-  //     //       value: "Arial",
-  //     //     },
-  //     //     {
-  //     //       title: "Hue",
-  //     //       type: "Color",
-  //     //       value: "rgb(255, 255, 255)",
-  //     //     },
-  //     //   ],
-  //     // },
-  //     // {
-  //     //   templateName: "Erything",
-  //     //   compName: "Erything 3000",
-  //     //   fields: [
-  //     //     {
-  //     //       title: "A Whole Wheel of Fish",
-  //     //       type: "Text",
-  //     //       value: "Space 8000",
-  //     //     },
-  //     //     {
-  //     //       title: "Text Color",
-  //     //       type: "Color",
-  //     //       value: "#4d9fa1",
-  //     //     },
-  //     //     {
-  //     //       title: "Second Color",
-  //     //       type: "Color",
-  //     //       value: "#7761be",
-  //     //     },
-  //     //     {
-  //     //       title: "Heading",
-  //     //       type: "Font",
-  //     //       value: "Montserrat-Thin",
-  //     //     },
-  //     //     {
-  //     //       title: "First Background",
-  //     //       type: "Media",
-  //     //       value: "mountain1.jpg",
-  //     //     },
-  //     //     {
-  //     //       title: "Second Background",
-  //     //       type: "Media",
-  //     //       value: "mountain2.jpg",
-  //     //     },
-  //     //   ],
-  //     // },
-  // {
-  //   templateName: "Fish",
-  //   compName: "Fish 3000",
-  //   fields: [
-  //     {
-  //       title: "Weird Vid",
-  //       type: "Media",
-  //       value: "mountain1.jpg",
-  //     }
-  //   ],
-  // },
-  //   ] as InputTemplateValue[])
-  // );
 };

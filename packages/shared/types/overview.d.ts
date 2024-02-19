@@ -7,6 +7,7 @@ interface FieldQuickOverview {
   options?: FieldOption[];
   value: string;
   locked?: boolean;
+  hidden?: boolean;
 }
 
 interface FieldOverview extends FieldQuickOverview {

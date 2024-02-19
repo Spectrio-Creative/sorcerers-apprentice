@@ -63,6 +63,7 @@ export class FieldBase {
       tag: this.tag,
       tab: this.tab,
       value: this.value,
+      hidden: !this.layer.enabled,
     };
   }
 

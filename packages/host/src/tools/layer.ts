@@ -38,6 +38,11 @@ export function alignAnchorPoint(layer: Layer, alignment: Alignment, options: Al
     return;
   }
 
+  if (layer.source && !layer.source.hasVideo) {
+    // alert("Cannot align anchor point of layer without video.");
+    return;
+  }
+
   const childAlignment = options.rectangle ? (["left", "top"] as Alignment) : alignment;
 
   const layerRect: Rect = getLayerRect(layer as Layer);

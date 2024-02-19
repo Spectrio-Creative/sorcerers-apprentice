@@ -1,5 +1,5 @@
 import { TemplateMain } from "./classes/template/TemplateMain";
-// import { testIt } from "./playground/tests";
+import { testIt } from "./playground/tests";
 import polyfill from "./tools/polyfill";
 
 polyfill();
@@ -10,11 +10,11 @@ function getMenuInfo() {
   return JSON.stringify(template.getOverview());
 }
 
-function writeOverview(location: string) {
-  const file = new File(location);
-  file.open("w");
-  file.write(JSON.stringify(template.getOverview()));
-  file.close();
+function writeOverview() {
+  const newFile = File.saveDialog("Save the menu info (.json)", "JSON: *.json");
+  newFile.open("w");
+  newFile.write(getMenuInfo());
+  newFile.close();
 
   return "OK";
 }
@@ -29,19 +29,16 @@ function showMenu() {
   template.showMenuPanel();
 }
 
-function sayHello() {
-  alert("Hello from the host!");  
-}
 
-// function selectFile(type: "csv" | "other" = "other") {
-//   let file;
-//   if (type === "csv") {
-//     file = file.openDlg("Select a CSV file", "Comma Separated Values: *.csv");
-//   } else {
-//     file = file.openDlg("Select a file");
-//   }
-//   return file;
-// }
+function selectFile(type: "csv" | "other" = "other") {
+  let file;
+  if (type === "csv") {
+    file = File.openDialog("Select a CSV file", "Comma Separated Values: *.csv");
+  } else {
+    file = File.openDialog("Select a file");
+  }
+  return file;
+}
 
 // function selectFolder() {
 //   const folder = new Folder();
@@ -62,7 +59,9 @@ function sayHello() {
 $.write(`getMenuInfo: ${typeof getMenuInfo}`);
 $.write(`setValuesFromList: ${typeof setValuesFromList}`);
 $.write(`showMenu: ${typeof showMenu}`);
-$.write(`sayHello: ${typeof sayHello}`);
 $.write(`writeOverview: ${typeof writeOverview}`);
+$.write(`selectFile: ${typeof selectFile}`);
 
-// testIt(template);
+
+// writeOverview();
+testIt(template);
