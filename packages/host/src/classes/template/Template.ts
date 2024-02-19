@@ -1,5 +1,5 @@
 import { addTab, addTabbedPannel } from "../../pluginTools/dialogElements";
-import { searchComp, searchLibrary } from "../../tools/project";
+import { allCompsFromFolder, searchComp, searchLibrary } from "../../tools/project";
 import { TemplateChild } from "./TemplateChild";
 import { FieldBase } from "./field/Field";
 import { makeFieldBase } from "./field/makeFieldBase";
@@ -34,14 +34,15 @@ export class Template {
   }
 
   getEditableFields() {
-    // const compFolder = this.folder;
-    const comp = this.comp;
+    const compFolder = this.folder;
+    const comps = allCompsFromFolder(compFolder);
 
-    //Get all layers that are tagged as editable
-    const editableLayers = searchComp(/^!T|^!I|^!V|^!C|^!G|^!F|^!A/g, comp, { recursive: true }) as Layer[];
+    comps.forEach((comp) => {
+      const editableLayers = searchComp(/^!T|^!I|^!V|^!C|^!G|^!F|^!A/g, comp, { recursive: false }) as Layer[];
 
-    editableLayers.forEach((layer) => {
-      this.editableFields.push(...makeFieldBase(layer));
+      editableLayers.forEach((layer) => {
+        this.editableFields.push(...makeFieldBase(layer));
+      });
     });
   }
 
