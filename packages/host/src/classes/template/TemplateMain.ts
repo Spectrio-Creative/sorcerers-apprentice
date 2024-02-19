@@ -101,7 +101,6 @@ export class TemplateMain {
   }
 
   getOverview() {
-    // alert("Getting Overview");
     try {
       this.refresh();
       fontLibrary.refresh();

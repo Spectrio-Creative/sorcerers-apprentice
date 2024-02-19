@@ -135,8 +135,12 @@ export function openComps() {
   return comps;
 }
 
-export function allCompsFromFolder(folder: FolderItem) {
+export function allCompsFromFolder(folder: FolderItem, alerts = false) {
   const results: CompItem[] = [];
+
+  alerts &&
+    alert(`Searching ${folder.name}
+  ${folder.numItems} items found.`);
 
   for (let i = 1; i <= folder.numItems; i++) {
     const item = folder.item(i);
@@ -149,4 +153,12 @@ export function allCompsFromFolder(folder: FolderItem) {
   }
 
   return results;
+}
+
+export function forPropertyInGroup(group: PropertyGroup, callback: (prop: PropertyBase) => void) {
+  for (let i = 1; i <= group.numProperties; i++) {
+    const propClass = group.property(i);
+    if (propClass instanceof PropertyGroup) forPropertyInGroup(propClass, callback);
+    else callback(propClass);
+  }
 }
