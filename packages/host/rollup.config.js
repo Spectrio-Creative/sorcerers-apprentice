@@ -11,6 +11,7 @@ import typescript from "@rollup/plugin-typescript";
 import fs from "fs";
 
 const shims = fs.readFileSync(require.resolve("extendscript-es5-shim"));
+const json2 = fs.readFileSync("./static/json2.js");
 
 // rollup.config.js
 export default {
@@ -19,7 +20,7 @@ export default {
     file: process.env.OUTPUT || "build/sorcerers_apprentice.jsx",
     format: "esm",
     sourcemap: false,
-    banner: shims,
+    banner: `${shims}\n${json2}\n`,
   },
   plugins: [
     findUnused({ exclude: ["src/playground.js", "**/_*.js", "src/playground"] }),
