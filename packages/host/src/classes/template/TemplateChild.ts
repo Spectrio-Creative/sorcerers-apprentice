@@ -60,7 +60,7 @@ export class TemplateChild {
     // TODO: Insure that expressions are not broken
     const comps = this.allComps();
     comps.forEach((comp) => {
-      for (let i = 1; i < comp.numLayers; i++) {
+      for (let i = 1; i <= comp.numLayers; i++) {
         const layer = comp.layer(i) as AVLayer;
         if (layer?.source && layer.source instanceof CompItem) {
           const source = layer.source as CompItem;
