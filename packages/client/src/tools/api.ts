@@ -69,8 +69,9 @@ export async function fetchSorcererData(): Promise<SorcererOverview> {
   }
 
   return new Promise((resolve, _reject) => {
-    csInterface.evalScript("getMenuInfo();", (res: string) => {
+    csInterface.evalScript("SA__getMenuInfo();", (res: string) => {
       if (res === "") {
+        csInterface.evalScript("alert('Error: No data returned from getMenuInfo function.')");
         resolve({
           templates: [],
           fonts: [],
@@ -94,7 +95,7 @@ export async function sendSorcererData(data: InputTemplateValue[]) {
       return;
     }
 
-    csInterface.evalScript(`setValuesFromList('${JSON.stringify(data)}');`, (res: string) => {
+    csInterface.evalScript(`SA__setValuesFromList('${JSON.stringify(data)}');`, (res: string) => {
       console.log(res);
       resolve(res);
     });

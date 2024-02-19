@@ -1,36 +1,43 @@
-import { TemplateMain } from "./classes/template/TemplateMain";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { testIt } from "./playground/tests";
+import { TemplateMain } from "./classes/template/TemplateMain";
 import polyfill from "./tools/polyfill";
 
 polyfill();
 
 const template = new TemplateMain();
 
-function getMenuInfo() {
-  return JSON.stringify(template.getOverview());
+function SA__getMenuInfo() {
+  try {
+    const overview = template.getOverview();
+    const json = JSON.stringify(overview);
+    return json;
+  } catch (error) {
+    alert(`Error: ${error}
+    ${error.stack}`);
+  }
 }
 
-function writeOverview() {
+function SA__writeOverview() {
   const newFile = File.saveDialog("Save the menu info (.json)", "JSON: *.json");
   newFile.open("w");
-  newFile.write(getMenuInfo());
+  newFile.write(SA__getMenuInfo());
   newFile.close();
 
   return "OK";
 }
 
-function setValuesFromList(list: string) {
+function SA__setValuesFromList(list: string) {
   const parsed: InputTemplateValue[] = JSON.parse(list);
   template.setValuesFromList(parsed);
   return "OK";
 }
 
-function showMenu() {
+function SA__showMenu() {
   template.showMenuPanel();
 }
 
-
-function selectFile(type: "csv" | "other" = "other") {
+function SA__selectFile(type: "csv" | "other" = "other") {
   let file;
   if (type === "csv") {
     file = File.openDialog("Select a CSV file", "Comma Separated Values: *.csv");
@@ -40,28 +47,25 @@ function selectFile(type: "csv" | "other" = "other") {
   return file;
 }
 
-// function selectFolder() {
-//   const folder = new Folder();
-//   folder = folder.selectDlg("Select a folder to save");
-//   return folder;
-// }
+function SA__testIt() {
+  testIt(template);
+}
 
-// function printKeys(object: GenericObject<string[]>) {
-//   const keys = Object.keys(object);
-//   keys.forEach((key) => {
-//     alert(`${key}`);
-//     alert(`${key}: ${object[key]}`);
-//   });
-// }
+function SA__SayHello() {
+  alert("CS Interface made connection with root host function.");
+}
 
 // The global functions get removed by the compiler if they are not used
 // This is a workaround to keep them in the final bundle
-$.write(`getMenuInfo: ${typeof getMenuInfo}`);
-$.write(`setValuesFromList: ${typeof setValuesFromList}`);
-$.write(`showMenu: ${typeof showMenu}`);
-$.write(`writeOverview: ${typeof writeOverview}`);
-$.write(`selectFile: ${typeof selectFile}`);
+$.write(`getMenuInfo: ${typeof SA__getMenuInfo}`);
+$.write(`setValuesFromList: ${typeof SA__setValuesFromList}`);
+$.write(`showMenu: ${typeof SA__showMenu}`);
+$.write(`writeOverview: ${typeof SA__writeOverview}`);
+$.write(`selectFile: ${typeof SA__selectFile}`);
+$.write(`testIt: ${typeof SA__testIt}`);
+$.write(`SayHello: ${typeof SA__SayHello}`);
 
+// SA__writeOverview();
+// testIt(template);
 
-// writeOverview();
-testIt(template);
+// SA__writeOverview();
