@@ -10,8 +10,10 @@
       </Button>
       <Spreadsheet ref="spreadsheet" v-if="type === 'spreadsheet'" />
       <Traditional ref="traditional" v-else />
-      <div class="version">The Sorcerer’s Apprentice v{{ version }}</div>
-      {{ inputs.inputs }}
+      <div @click="debugMode = !debugMode" class="version">The Sorcerer’s Apprentice v{{ version }}</div>
+      <div v-if="debugMode" class="debug">
+        {{ inputs.inputs }}
+      </div>
     </div>
   </div>
 </template>
@@ -33,6 +35,7 @@ const version = import.meta.env.VITE_APP_VERSION;
 const sorcerer = sorcererStore();
 const traditional: Ref<InstanceType<typeof Traditional> | null> = ref(null);
 const spreadsheet = ref(null);
+const debugMode = ref(false);
 
 const refresh = async () => {
   app.processing = true;

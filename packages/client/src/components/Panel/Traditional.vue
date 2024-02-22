@@ -164,6 +164,7 @@ const afterRefresh = (options: {selectedIndex: number, groupIndex: number}) => {
   console.log("after refresh", options);
   selectedTemplate.value = sorcerer.overview.templates[options.selectedIndex];
   selectGroup(groups.value[options.groupIndex]);
+  selectTemplate(selectedTemplate.value);
   app.processing = false;
 };
 
