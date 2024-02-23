@@ -10,7 +10,7 @@
       </Button>
       <Spreadsheet ref="spreadsheet" v-if="type === 'spreadsheet'" />
       <Traditional ref="traditional" v-else />
-      <div @click="debugMode = !debugMode" class="version">The Sorcerer’s Apprentice v{{ version }}</div>
+      <div ref="versionEl" class="version">The Sorcerer’s Apprentice v{{ version }}</div>
       <div v-if="debugMode" class="debug">
         {{ inputs.inputs }}
       </div>
@@ -28,6 +28,7 @@ import { sorcererStore } from "./stores/sorcerer";
 import RefreshIcon from "./components/Icons/RefreshIcon.vue";
 import { Ref, onMounted, ref } from "vue";
 import { inputsStore } from "./stores/inputs";
+import { onLongPress } from '@vueuse/core'
 
 const app = appStore();
 const inputs = inputsStore();
@@ -36,6 +37,7 @@ const sorcerer = sorcererStore();
 const traditional: Ref<InstanceType<typeof Traditional> | null> = ref(null);
 const spreadsheet = ref(null);
 const debugMode = ref(false);
+const versionEl: Ref<HTMLElement | null> = ref(null);
 
 const refresh = async () => {
   app.processing = true;
@@ -46,6 +48,10 @@ const refresh = async () => {
   if (traditionalBefore) traditional.value?.afterRefresh(traditionalBefore);
   app.processing = false;
 };
+
+onLongPress(versionEl, () => {
+  debugMode.value = !debugMode.value;
+}, { delay: 1000 });
 
 defineProps<{
   type: "traditional" | "spreadsheet";

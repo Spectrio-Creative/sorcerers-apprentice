@@ -1,6 +1,19 @@
+import { log } from "./system";
+
+export interface AlignAnchorAlerts {
+  keyframes?: boolean | string;
+  layerType?: boolean | string;
+}
+
+export interface AlignAnchorAlertsDefault {
+  keyframes: false | string;
+  layerType: false | string;
+}
+
 export interface AlignAnchorOptions {
   offset?: [number, number];
   rectangle?: Rect;
+  alerts?: boolean | AlignAnchorAlerts;
 }
 
 const alignments = {
@@ -10,6 +23,39 @@ const alignments = {
   bottom: { x: 0, y: -1 },
   top: { x: 0, y: 0 },
 };
+
+function setDefaultAlerts(
+  alerts: boolean | AlignAnchorAlerts,
+  layer: { layerType: LayerType; layerName: string }
+): false | AlignAnchorAlertsDefault {
+  if (!alerts) return false;
+
+  const keyframesMessage = `Cannot align anchor point of layer ${layer.layerName} because of anchor point or position keyframes.`;
+  const layerTypeMessage = `Cannot align anchor point of layer ${layer.layerName} with type: ${layer.layerType}`;
+
+  if (typeof alerts === "boolean") {
+    return {
+      keyframes: keyframesMessage,
+      layerType: layerTypeMessage,
+    };
+  }
+
+  if (typeof alerts.keyframes === "undefined") alerts.keyframes = false;
+  if (typeof alerts.layerType === "undefined") alerts.layerType = false;
+
+  if (typeof alerts.keyframes === "boolean" && alerts.keyframes) {
+    alerts.keyframes = keyframesMessage;
+  }
+
+  if (typeof alerts.layerType === "boolean" && alerts.layerType) {
+    alerts.layerType = layerTypeMessage;
+  }
+
+  return {
+    keyframes: alerts.keyframes as false | string,
+    layerType: alerts.layerType as false | string,
+  };
+}
 
 export function getLayerDelta(layer: AVLayer, alignment: Alignment, layerRect: Rect) {
   const [alignX, alignY] = alignment;
@@ -26,15 +72,20 @@ export function getLayerDelta(layer: AVLayer, alignment: Alignment, layerRect: R
 
 export function alignAnchorPoint(layer: Layer, alignment: Alignment, options: AlignAnchorOptions = {}) {
   const [alignX, alignY] = alignment;
+  const layerType = parseLayerType(layer);
+  const alerts = setDefaultAlerts(options.alerts, { layerType, layerName: layer.name });
 
   if ((layer.anchorPoint.numKeys, layer.position.numKeys)) {
-    alert("Cannot align anchor point of layer with anchor point or position keyframes.");
+    if (alerts && alerts.keyframes) {
+      alert(alerts.keyframes);
+    } else log(`Could not align anchor point of layer ${layer.name} because of anchor point or position keyframes.`);
     return;
   }
 
-  const layerType = parseLayerType(layer);
   if (!(layer instanceof TextLayer || layer instanceof AVLayer || layer instanceof ShapeLayer)) {
-    alert("Cannot align anchor point of layer type: " + layerType);
+    if (alerts && alerts.layerType) {
+      alert(alerts.layerType);
+    } else log(`Could not align anchor point of layer ${layer.name} with type: ${layerType}`);
     return;
   }
 

@@ -67,11 +67,31 @@ export class Template {
     field.createMenuField(this.innerTabs[tabName]);
   }
 
+  userCompsOrTemplatesHasName(name: string) {
+    const result = searchLibrary(/^User Comps|^Templates/g, { type: "Folder", recursive: false }) as FolderItem[];
+    const items = [];
+    result.forEach((folder) => {
+      for (let i = 1; i <= folder.numItems; i++) {
+        items.push(folder.item(i));
+      }
+    });
+    
+    return items.some((item) => item.name === name);
+  }
+
   duplicate(name: string, fillValues = false) {
     const result = searchLibrary(/^User Comps/g, { type: "Folder", recursive: false }) as FolderItem[];
     const userComps = result[0] || app.project.items.addFolder("User Comps");
 
-    const newFolder = userComps.items.addFolder(name);
+    // Insure the name is unique
+    let newName = name;
+    let i = 1;
+    while (this.userCompsOrTemplatesHasName(newName)) {
+      newName = `${name} ${i}`;
+      i++;
+    }
+
+    const newFolder = userComps.items.addFolder(newName);
     const templateChild = new TemplateChild(newFolder, this);
     this.children.push(templateChild);
 
