@@ -127,7 +127,7 @@ export class TemplateMain {
       if (found) {
         const tempChild = found.duplicate(input.compName);
         tempChild.fillValues(input.fields);
-        tempChild.setCompName(input.compName);
+        tempChild.setCompName(tempChild.name);
       }
     });
   }

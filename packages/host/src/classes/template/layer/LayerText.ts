@@ -62,7 +62,13 @@ export class LayerText extends LayerBase {
     boxDocument.justification = this.textDocument.justification;
     boxProperty.setValue(boxDocument);
 
-    alignAnchorPoint(boxText as Layer, this.getAnchorAlignment(), { rectangle: boxRect });
+    alignAnchorPoint(boxText as Layer, this.getAnchorAlignment(), {
+      rectangle: boxRect,
+      alerts: {
+        keyframes: `Warning:
+    Failed to align anchor points on layer ${boxText.name}. for conversion to box text because of keyframes on the layer. This could cause the layer to not appear correctly.`,
+      },
+    });
 
     boxText.position.setValue(this.textLayer.position.value);
 
