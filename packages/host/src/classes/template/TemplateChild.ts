@@ -4,6 +4,7 @@ import { asRegEx } from "../../tools/regex";
 import { Template } from "./Template";
 import { FieldRef } from "./field/FieldRef";
 import camelCase from "just-camel-case";
+import { log } from "../../tools/system";
 
 export interface MappedInputFieldValue extends InputFieldValue {
   fieldRef: FieldRef;
@@ -59,7 +60,7 @@ export class TemplateChild {
         }
         this.idLookup[`${item.id}`] = newComp.id;
       } else {
-        alert(`Could not copy ${item.name} to folder ${output.name}.`);
+        log(`Could not copy ${item.name} to folder ${output.name}.`);
       }
     }
   }
@@ -78,6 +79,7 @@ export class TemplateChild {
         if (layer?.source && layer.source instanceof CompItem) {
           const source = layer.source as CompItem;
           const newSource = this.compFromParentId(source.id);
+          if (!newSource) continue;
           layer.replaceSource(newSource, true);
         }
       }
@@ -123,7 +125,9 @@ export class TemplateChild {
   }
 
   compFromParentId(id: number) {
-    return app.project.itemByID(this.idLookup[`${id}`]) as CompItem;
+    const newId = this.idLookup[`${id}`];
+    if (!newId) return null;
+    return app.project.itemByID(newId) as CompItem;
   }
 
   getEditableFields() {
@@ -131,6 +135,10 @@ export class TemplateChild {
       const fieldLayer = field.layer;
       const fieldComp = fieldLayer.containingComp;
       const comp = this.compFromParentId(fieldComp.id);
+      if (!comp) {
+        log(`Could not find child comp for ${fieldLayer.name}`);
+        return;
+      }
       const layer = searchComp(fieldLayer.name, comp, { strict: true })[0];
       if (!layer) return;
 
