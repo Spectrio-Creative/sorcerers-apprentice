@@ -1,10 +1,12 @@
 import { defaultTheme } from "@vuepress/theme-default";
 import { searchPlugin } from "@vuepress/plugin-search";
+import { viteBundler } from '@vuepress/bundler-vite'
+import { defineUserConfig } from 'vuepress'
 // import { containerPlugin } from '@vuepress/plugin-container'
 
 const base = process.env.NODE_ENV === "production" ? "/creative/tools/sorcerers-apprentice/" : "/";
 
-module.exports = {
+export default defineUserConfig({
   title: "The Sorcerer’s Apprentice (the docs)",
   description: "For templating projects like telling brooms to fill buckets",
   base,
@@ -47,4 +49,5 @@ module.exports = {
     //   // render: false,
     // }),
   ],
-};
+  bundler: viteBundler(),
+});
