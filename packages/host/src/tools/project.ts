@@ -1,4 +1,5 @@
 import { asRegEx } from "./regex";
+import { log } from "./system";
 
 // FIND LIBRARY ITEMS BY NAME OR REGEX
 // iType = the desired file type
@@ -135,20 +136,22 @@ export function openComps() {
   return comps;
 }
 
-export function allCompsFromFolder(folder: FolderItem, alerts = false) {
+export function allCompsFromFolder(folder: FolderItem, logs = false): CompItem[] {
   const results: CompItem[] = [];
 
-  alerts &&
-    alert(`Searching ${folder.name}
+  logs &&
+    log(`Searching ${folder.name}
   ${folder.numItems} items found.`);
 
   for (let i = 1; i <= folder.numItems; i++) {
     const item = folder.item(i);
+    logs &&
+      log(`Found: ${item.name} | Id: ${item.id} | Folder: ${item instanceof FolderItem} | Comp: ${item instanceof CompItem}`);
     if (item instanceof CompItem) {
       results.push(item);
     }
     if (item instanceof FolderItem) {
-      results.push(...allCompsFromFolder(item));
+      results.push(...allCompsFromFolder(item, logs));
     }
   }
 

@@ -1,5 +1,7 @@
+import { parseLayerName } from "../../../../../shared/tools/templates";
 import { TabOptions } from "../../../pluginTools/dialogElements";
-import { parseLayerName } from "../../../tools/templates";
+import { sanitizeString } from "../../../tools/string/specialCharacters";
+import { log } from "../../../tools/system";
 
 export interface FieldBaseOptions {
   type: FieldType;
@@ -55,16 +57,18 @@ export class FieldBase {
   }
 
   getOverview() {
-    return {
+    const overview = {
       fullTitle: this.layer.name,
       type: this.type,
       options: this.options,
       title: this.title,
       tag: this.tag,
       tab: this.tab,
-      value: this.value,
+      value: sanitizeString(this.value),
       hidden: !this.layer.enabled,
     };
+    log(`Overview ${this.layer.name}: ${JSON.stringify(overview)}`);
+    return overview;
   }
 
   /* eslint-disable @typescript-eslint/no-unused-vars */

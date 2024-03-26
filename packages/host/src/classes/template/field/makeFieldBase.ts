@@ -1,4 +1,5 @@
-import { parseColorLayer, parseLayerName } from "../../../tools/templates";
+import { parseLayerName } from "../../../../../shared/tools/templates";
+import { parseColorLayer } from "../../../tools/templates";
 import { FieldBase } from "./Field";
 import { FieldAudio } from "./FieldAudio";
 import { FieldColor } from "./FieldColor";

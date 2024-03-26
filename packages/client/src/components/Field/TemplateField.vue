@@ -35,6 +35,14 @@
       :show-cancel="changed"
       :options="sorcerer.audioAssetNames"
     />
+    <MediaField
+      v-else-if="field.type === 'Output'"
+      :title="field.title"
+      v-model="model"
+      :cancel="removeField"
+      :show-cancel="changed"
+      :options="[]"
+    />
     <FontField
       v-else-if="field.type === 'Font'"
       :title="field.title"
@@ -44,9 +52,9 @@
     />
     <div v-else>Unknown field type: {{ field.type }}</div>
   </div>
-  <div v-if="slim" class="field spreadsheet" :class="{ changed, visibleToggle }">
+  <div v-if="slim" class="field spreadsheet" :class="{ changed, visibleToggle }" style="position: relative">
     <div class="field-toggle" v-if="visibleToggle">
-      <CheckBox v-model="visible" />
+      <CheckBox class="v-toggle" v-model="visible" />
     </div>
     <SlimColorField
       v-if="field.type === 'Color'"
@@ -79,6 +87,14 @@
       :show-cancel="changed"
       :options="sorcerer.audioAssetNames"
     />
+    <SlimMediaField
+      v-else-if="field.type === 'Output'"
+      :title="field.title"
+      v-model="model"
+      :cancel="removeField"
+      :show-cancel="changed"
+      :options="[]"
+    />
     <SlimFontField
       v-else-if="field.type === 'Font'"
       :title="field.title"
@@ -102,7 +118,7 @@ import SlimFontField from "./Slim/SlimFontField.vue";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { inputsStore } from "../../stores/inputs";
 import CheckBox from "../Generic/CheckBox.vue";
-import { sorcererStore } from '../../stores/sorcerer';
+import { sorcererStore } from "../../stores/sorcerer";
 
 interface Props {
   field: FieldQuickOverview;
@@ -145,19 +161,20 @@ watch(model, () => {
   updateValue();
 });
 
-const updateValue = (value?: string) => {
-  console.log("updateValue", value, model.value, changed.value);
+const updateValue = () => {
   if (!changed.value) {
     removeField();
     return;
   }
+
   inputs.addOrUpdateField({
     template: props.input,
+    input: props.input,
     field: props.field,
     edit: {
-      value: value || model.value,
+      value: model.value,
       hidden: !visible.value,
-    },
+    }
   });
 };
 
@@ -173,7 +190,18 @@ const onClear = () => {
 };
 
 onMounted(() => {
-  model.value = props.field.value;
+  const inputValue = inputs.findField(props.input, props.field );
+
+  if(props.inputKey) {
+    model.value = props.input[props.inputKey] || props.field.value;
+    return;
+  }
+
+  model.value = inputValue?.value || props.field.value;
+  if (inputValue) visible.value = !inputValue.hidden;
+
+  if (!changed.value) removeField();
+
   inputs.subscribe(onClear);
 });
 
@@ -183,6 +211,12 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.v-toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .field {
   display: grid;
   align-items: center;

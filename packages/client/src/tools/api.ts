@@ -23,6 +23,28 @@ export function convertDefaultColorsToHex(overview: SorcererOverview): SorcererO
   return newOverview;
 }
 
+export function aeAlert(message: string) {
+  if (isDev) {
+    console.warn(message);
+    return;
+  }
+  csInterface.evalScript(`alert("${message}")`);
+}
+
+export function saveFile(data: string, fileName: string, type: string) {
+  if (isDev) {
+    const blob = new Blob([data], { type });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    return;
+  }
+  
+  csInterface.evalScript(`SA__saveFile('${data}', '${fileName}', '${type}')`);
+}
+
 export function getProjectPath(): Promise<string> {
   return new Promise((resolve, _reject) => {
     csInterface.evalScript(

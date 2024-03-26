@@ -161,7 +161,6 @@ const beforeRefresh = () => {
 };
 
 const afterRefresh = (options: {selectedIndex: number, groupIndex: number}) => {
-  console.log("after refresh", options);
   selectedTemplate.value = sorcerer.overview.templates[options.selectedIndex];
   selectGroup(groups.value[options.groupIndex]);
   selectTemplate(selectedTemplate.value);
@@ -177,7 +176,6 @@ defineExpose({
 const renderComp = async () => {
   // await buildComp();
   await inputs.processInputs();
-  console.log("rendering comp");
   // sorcerer.renderComps();
 };
 </script>

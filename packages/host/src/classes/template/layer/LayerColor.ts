@@ -1,9 +1,9 @@
 import { FieldColor } from "../field/FieldColor";
-import { LayerBase } from "./LayerBase";
+import { LayerBase, LayerBaseOptions } from "./LayerBase";
 
 export class LayerColor extends LayerBase {
-  constructor(layer: Layer, field: FieldColor, layerType?: LayerType) {
-    super(layer, field, layerType);
+  constructor(options: LayerBaseOptions) {
+    super(options);
   }
 
   setValue(value: RGB | RGBA) {

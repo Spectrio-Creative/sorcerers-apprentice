@@ -1,45 +1,77 @@
-import { alignAnchorPoint } from "./tools/layer";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { testIt } from "./playground/tests";
+import { TemplateMain } from "./classes/template/TemplateMain";
+import polyfill from "./tools/polyfill";
+import { log } from "./tools/system";
 
-// alert(JSON.stringify(projectFonts));
-for (let i = 1; i < app.project.items.length; i++) {
-  const item = app.project.items[i];
-  if (item.name === "Adam_Test") {
-    const comp = item as CompItem;
+polyfill();
 
-    const layers = comp.layers;
+const template = new TemplateMain();
 
-    for (let ii = 1; ii <= layers.length; ii++) {
-      const layer = layers[ii];
-      //   alignAnchorPoint(layer, ["left", "top"]);
-      alignAnchorPoint(layer, ["center", "center"], {
-        rectangle: {
-          left: 0,
-          top: 0,
-          width: 1920,
-          height: 1080,
-        },
-      });
-      //   getLayerRect(layer);
-      if (layer.name === "Background") {
-        // const avLayer = layer as AVLayer;
-        // const source = avLayer.source as SolidSource;
-        //         const anchorPoint = avLayer.transform.anchorPoint.value;
-        //         const position = avLayer.position.value;
-        //         const anchorPoint2 = avLayer.anchorPoint.value;
-        //         const scale = avLayer.scale.value;
-        //         const sourceRect = avLayer.sourceRectAtTime(comp.time, false);
-        //         const width = avLayer.width;
-        //         const height = avLayer.height;
-        //         alert(`Anchor Point: ${anchorPoint}
-        // Anchor Point 2: ${anchorPoint2}
-        // Position: ${position}
-        // Scale: ${scale}
-        // Source Rect: ${JSON.stringify(sourceRect)}
-        // Width: ${width}
-        // Height: ${height}
-        // `);
-      }
-    }
-    break;
+function SA__getMenuInfo() {
+  try {
+    const overview = template.getOverview();
+    const json = JSON.stringify(overview);
+    return json;
+  } catch (error) {
+    alert(`Error: ${error}
+    ${error.stack}`);
+    return "ERROR";
   }
 }
+
+function SA__writeOverview() {
+  const overview = SA__getMenuInfo();
+  log("overview:");
+  log(overview);
+  // const newFile = File.saveDialog("Save the menu info (.json)", "JSON: *.json");
+  const newFile = new File("~/MenuInfo.json");
+  newFile.open("w");
+  newFile.write(overview);
+  newFile.close();
+
+  return "OK";
+}
+
+function SA__setValuesFromList(list: string) {
+  const parsed: InputTemplateValue[] = JSON.parse(list);
+  template.setValuesFromList(parsed);
+  return "OK";
+}
+
+function SA__showMenu() {
+  template.showMenuPanel();
+}
+
+function SA__selectFile(type: "csv" | "other" = "other") {
+  let file;
+  if (type === "csv") {
+    file = File.openDialog("Select a CSV file", "Comma Separated Values: *.csv");
+  } else {
+    file = File.openDialog("Select a file");
+  }
+  return file;
+}
+
+function SA__testIt() {
+  testIt(template);
+}
+
+function SA__SayHello() {
+  alert("CS Interface made connection with root host function.");
+}
+
+// The global functions get removed by the compiler if they are not used
+// This is a workaround to keep them in the final bundle
+$.write(`getMenuInfo: ${typeof SA__getMenuInfo}`);
+$.write(`setValuesFromList: ${typeof SA__setValuesFromList}`);
+$.write(`showMenu: ${typeof SA__showMenu}`);
+$.write(`writeOverview: ${typeof SA__writeOverview}`);
+$.write(`selectFile: ${typeof SA__selectFile}`);
+$.write(`testIt: ${typeof SA__testIt}`);
+$.write(`SayHello: ${typeof SA__SayHello}`);
+
+SA__writeOverview();
+// testIt(template);
+
+// SA__writeOverview();

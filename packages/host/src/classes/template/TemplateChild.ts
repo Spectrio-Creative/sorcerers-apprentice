@@ -1,10 +1,10 @@
 import { allCompsFromFolder, forPropertyInGroup, searchComp } from "../../tools/project";
-import { parseLayerName } from "../../tools/templates";
 import { asRegEx } from "../../tools/regex";
 import { Template } from "./Template";
 import { FieldRef } from "./field/FieldRef";
 import camelCase from "just-camel-case";
 import { log } from "../../tools/system";
+import { parseLayerName } from "../../../../shared/tools/templates";
 
 export interface MappedInputFieldValue extends InputFieldValue {
   fieldRef: FieldRef;
@@ -28,10 +28,10 @@ export class TemplateChild {
     this.parent = parent;
 
     this.copyFolderContents();
+    this.allComps = this.findChildComps();
     this.linkPrecomps();
     this.getEditableFields();
     this.linkExpressions();
-    this.allComps = this.findChildComps();
   }
 
   setCompName(name: string) {
@@ -40,6 +40,7 @@ export class TemplateChild {
 
   setPrecompNames() {
     this.allComps.forEach((comp) => {
+      log(comp.name);
       if (comp.id === this.mainComp.id) return;
       comp.name = `${comp.name} [${this.name}]`;
     });
@@ -48,6 +49,7 @@ export class TemplateChild {
   copyFolderContents(input: FolderItem = this.parent.folder, output: FolderItem = this.folder) {
     for (let i = 1; i <= input.numItems; i++) {
       const item = input.item(i);
+      log(`Copying ${item.name} to folder ${output.name}`);
       if (item instanceof FolderItem) {
         const newFolder = output.items.addFolder(item.name);
         this.copyFolderContents(item, newFolder);
@@ -71,7 +73,9 @@ export class TemplateChild {
 
   linkPrecomps() {
     this.setCompName(this.name);
-    this.allComps = this.findChildComps();
+    // this.allComps = this.findChildComps();
+    log(`Linking precomps for ${this.name}`);
+    log(`Comp Names: ${this.allComps.map((comp) => comp.name).join(", ")}`);
     // TODO: Insure that expressions are not broken
     this.allComps.forEach((comp) => {
       for (let i = 1; i <= comp.numLayers; i++) {
@@ -142,7 +146,7 @@ export class TemplateChild {
       const layer = searchComp(fieldLayer.name, comp, { strict: true })[0];
       if (!layer) return;
 
-      this.fieldRefs.push(new FieldRef(layer, field));
+      this.fieldRefs.push(new FieldRef(layer, field, this));
     });
   }
 

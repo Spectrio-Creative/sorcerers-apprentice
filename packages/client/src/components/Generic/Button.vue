@@ -2,7 +2,7 @@
   <div>
     <button
       class="btn"
-      :class="{ selected, ...styleMap, disabled }"
+      :class="{ selected, ...styleMap, disabled, danger: type === 'danger' }"
       @click="onClick"
       :style="width ? `width: calc(${width}px - 3em);` : ''"
       :disabled="disabled"
@@ -16,14 +16,20 @@
 <script setup lang="ts">
 import { defineProps } from "vue";
 type style = "primary" | "secondary" | "tertiary" | "tab" | "refresh" | "round" | "icon" | "dark";
-const props = defineProps<{
-  text?: string;
-  onClick: () => void;
-  width?: number;
-  selected?: boolean;
-  styles?: style[];
-  disabled?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    text?: string;
+    onClick: () => void;
+    width?: number;
+    selected?: boolean;
+    styles?: style[];
+    disabled?: boolean;
+    type?: "normal" | "danger" | "warning" | "success";
+  }>(),
+  {
+    type: "normal",
+  }
+);
 
 const styleMap = props.styles?.map((style) => ({ [style]: true })).reduce((acc, val) => ({ ...acc, ...val }), {}) || {};
 </script>
@@ -124,11 +130,34 @@ const styleMap = props.styles?.map((style) => ({ [style]: true })).reduce((acc, 
     }
   }
 
+  &.danger {
+    border-color: var(--error-color);
+    color: #f8f8f8;
+    color: var(--error-color);
+
+    &.disabled {
+      opacity: 0.5;
+      background-color: var(--primary-color);
+      cursor: default;
+
+      &:hover {
+        border-color: var(--error-color);
+        color: var(--error-color);
+      }
+    }
+
+    &:hover {
+      border-color: var(--error-color-light);
+      color: var(--error-color-light);
+      background-color: var(--primary-color);
+    }
+  }
+
   &.round {
     border-radius: 10em;
     padding: 0.7em 0.8em;
   }
-  
+
   &.icon {
     border-radius: 0;
     padding: 0.5em 0.8em;

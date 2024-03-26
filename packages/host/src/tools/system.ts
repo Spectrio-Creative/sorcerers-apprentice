@@ -8,7 +8,7 @@ export function log(text: string) {
     logFile.close();
   }
 
-  const currentDateTime = new Date().toLocaleString();
+  const currentDateTime = new Date().toLocaleString(undefined, {dateStyle: "short", dayPeriod: "short"});
   text = `${currentDateTime} - ${text}`;
 
   // Write to log file

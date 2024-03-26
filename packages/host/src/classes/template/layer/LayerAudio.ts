@@ -1,10 +1,10 @@
 import { searchLibrary } from "../../../tools/project";
-import { FieldBase } from "../field/Field";
+import { LayerBaseOptions } from "./LayerBase";
 import { LayerMedia } from "./LayerMedia";
 
 export class LayerAudio extends LayerMedia {
-  constructor(layer: Layer, field: FieldBase, layerType?: LayerType) {
-    super(layer, field, layerType);
+  constructor(options: LayerBaseOptions) {
+    super(options);
   }
 
   setValue(value: string) {

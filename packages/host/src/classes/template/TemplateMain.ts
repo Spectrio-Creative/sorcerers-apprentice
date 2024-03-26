@@ -1,6 +1,7 @@
 import { fontLibrary } from "../../globals/project/fontLibrary";
 import { mediaLibrary } from "../../globals/project/mediaLibrary";
 import { searchLibrary } from "../../tools/project";
+import { log } from "../../tools/system";
 import { findTemplatesInFolders } from "../../tools/templates";
 import { createMainDialog } from "../MainDialog";
 import { Template } from "./Template";
@@ -101,12 +102,19 @@ export class TemplateMain {
   }
 
   getOverview() {
+    log("getting overview");
     try {
       this.refresh();
       fontLibrary.refresh();
       mediaLibrary.refresh();
+
+      log(`fontLibrary: ${JSON.stringify(fontLibrary.projectFonts)}`);
+      log(`mediaLibrary: ${JSON.stringify(mediaLibrary.mediaItems)}`);
+      const templates = this.templates.map((template) => template.getOverview());
+      log(`templates: ${JSON.stringify(templates)}`);
+      
       return {
-        templates: this.templates.map((template) => template.getOverview()),
+        templates,
         fonts: fontLibrary.projectFonts,
         libraryAssets: mediaLibrary.mediaItems,
       } as SorcererOverview;

@@ -1,15 +1,14 @@
-import { FieldBase } from "../field/Field";
-import { LayerBase } from "./LayerBase";
+import { LayerBase, LayerBaseOptions } from "./LayerBase";
 
 export class LayerFont extends LayerBase {
   textLayer: TextLayer;
   textDocument: TextDocument;
   textProperty: TextDocumentProperty;
 
-  constructor(layer: Layer, field: FieldBase, layerType?: LayerType) {
-    super(layer, field, layerType);
+  constructor(options: LayerBaseOptions) {
+    super(options);
 
-    this.textLayer = layer as TextLayer;
+    this.textLayer = options.layer as TextLayer;
     this.textProperty = this.textLayer.sourceText;
     this.textDocument = this.textProperty.value as TextDocument;
   }

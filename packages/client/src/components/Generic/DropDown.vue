@@ -77,6 +77,7 @@ function addTag(newTag: string) {
         border-radius: 0;
         font-size: 0.8rem;
         padding: 0;
+        overflow: hidden;
       }
 
       .multiselect__select {

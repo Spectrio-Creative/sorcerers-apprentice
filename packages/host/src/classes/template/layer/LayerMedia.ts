@@ -1,18 +1,19 @@
 import { searchLibrary } from "../../../tools/project";
 import { parseLayerType, alignAnchorPoint, getLayerRect } from "../../../tools/layer";
-import { FieldBase } from "../field/Field";
-import { LayerBase } from "./LayerBase";
+import { LayerBase, LayerBaseOptions } from "./LayerBase";
 
 export class LayerMedia extends LayerBase {
   avLayer: AVLayer;
+  preComp?: CompItem;
   originalRect: Rect;
   rectangle: Rect;
 
-  constructor(layer: Layer, field: FieldBase, layerType?: LayerType) {
-    super(layer, field, layerType);
-    this.avLayer = layer as AVLayer;
+  constructor(options: LayerBaseOptions) {
+    super(options);
+    this.avLayer = options.layer as AVLayer;
     this.originalRect = getLayerRect(this.layer);
     this.rectangle = { ...this.originalRect };
+    this.preCompose(`Precomp - ${this.avLayer.name} - [${this.fieldRef.parent.name}]`);
     alignAnchorPoint(this.layer, ["center", "center"], { rectangle: this.originalRect });
   }
 
@@ -99,5 +100,27 @@ export class LayerMedia extends LayerBase {
       contain: containScale,
       cover: coverScale,
     };
+  }
+
+  preCompose(name: string) {
+    const layerName = this.layer.name;
+    this.preComp = this.layer.containingComp.layers.precompose([this.layer.index], name, false);
+    // Move precomp to the precomps folder inside the specific template folder
+    const templateFolder = this.fieldRef.parent.folder;
+
+    // Rename the inner layer to the original layer name and set as the avLayer
+    this.avLayer = this.preComp.layer(1) as AVLayer;
+    this.avLayer.name = layerName;
+
+    // Check if the precomps folder exists
+    for (let i = 1; i <= templateFolder.numItems; i++) {
+      const item = templateFolder.items[i];
+      if (item.name === "Precomps" && item instanceof FolderItem) {
+        this.preComp.parentFolder = item as FolderItem;
+        return;
+      }
+    }
+    const precompFolder = templateFolder.items.addFolder("Precomps");
+    this.preComp.parentFolder = precompFolder;
   }
 }

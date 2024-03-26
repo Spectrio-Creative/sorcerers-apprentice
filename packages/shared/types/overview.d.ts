@@ -1,10 +1,10 @@
 interface FieldQuickOverview {
   fullTitle: string;
   title: string;
-  type: FieldType;
+  type: FieldType | "Output";
   tab?: string;
   tag?: string;
-  options?: FieldOption[];
+  options: FieldOption[];
   value: string;
   locked?: boolean;
   hidden?: boolean;
@@ -13,7 +13,7 @@ interface FieldQuickOverview {
 interface FieldOverview extends FieldQuickOverview {
   fullTitle: string;
   title: string;
-  type: FieldType;
+  type: FieldType | "Output";
   tab: string;
   tag: string;
   options: FieldOption[];

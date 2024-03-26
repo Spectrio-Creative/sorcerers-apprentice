@@ -26,9 +26,32 @@ export const inputsStore = defineStore("inputs", () => {
     if (index !== -1) clearSubscriptions.splice(index, 1);
   };
 
-  const addInput = (input: InputTemplateValue) => {
+  const addInput = (input: InputTemplateValue, afterId?: string | 0) => {
+    if (afterId) {
+      const index = inputs.value.findIndex((i) => i.id === afterId);
+      if (index !== -1) inputs.value.splice(index + 1, 0, input);
+      return input;
+    }
+
+    if (afterId === 0) {
+      inputs.value.unshift(input);
+      return input;
+    }
+
     inputs.value.push(input);
     return input;
+  };
+
+  const getPreviousInput = (input: InputTemplateValue | string) => {
+    const inputId = typeof input === "string" ? input : input.id;
+    const index = inputs.value.findIndex((i) => i.id === inputId);
+    if (index === -1) return;
+    return inputs.value[index - 1];
+  };
+
+  const removeInput = (input: InputTemplateValue | string) => {
+    const index = inputs.value.findIndex((i) => (typeof input === "string" ? i.id === input : i.id === input.id));
+    if (index !== -1) inputs.value.splice(index, 1);
   };
 
   const addOrSkipInput = (input: InputTemplateValue) => {
@@ -51,18 +74,25 @@ export const inputsStore = defineStore("inputs", () => {
     if ("templateId" in template) return template;
     const input = inputs.value.find((i) => i.templateId === template.id);
     if (input) return input;
-    console.log("Creating input for template", template.name);
     return addInput(createInputFromTemplate(template));
   };
 
-  const findField = (input: InputTemplateValue, field: FieldQuickOverview) => {
-    const fieldIndex = input.fields.findIndex((f) => f.title === field.title);
+  const findField = (input: InputTemplateValue, field: FieldQuickOverview, create = true) => {
+    const headerTitle = field.tab ? `[${field.tab}] ${field.title}` : field.title;
+    const fieldIndex = input.fields.findIndex((f) => {
+      const fHeaderTitle = f.tab ? `[${f.tab}] ${f.title}` : f.title;
+      return fHeaderTitle === headerTitle;
+    });
+    
     if (fieldIndex !== -1) return input.fields[fieldIndex];
+    if (!create) return;
     const newField = {
       title: field.title,
       value: "",
       type: field.type,
       fullTitle: field.fullTitle,
+      options: field.options,
+      tab: field.tab,
       hidden: field.hidden,
     } as InputFieldValue;
     input.fields.push(newField);
@@ -72,13 +102,14 @@ export const inputsStore = defineStore("inputs", () => {
   const addOrUpdateField = (args: {
     template: TemplateOverview | InputTemplateValue;
     field: FieldQuickOverview;
+    input?: InputTemplateValue;
     edit?: InputFieldEditables;
   }) => {
     const { template, field, edit } = args;
     const { value, hidden } = edit || {};
-    const input = findInput(template);
+    const input = args.input || findInput(template);
 
-    const inputField = findField(input, field);
+    const inputField = findField(input, field) as InputFieldValue;
     inputField.value = value || "";
     if (hidden !== undefined) inputField.hidden = hidden;
   };
@@ -92,8 +123,6 @@ export const inputsStore = defineStore("inputs", () => {
 
   const addNewTemplateInputs = () => {
     sorcerer.overview.templates.forEach((template) => {
-      console.log("Adding template", template.name);
-      console.log("Input Count", inputs.value.length);
       const input = createInputFromTemplate(template);
       addOrSkipInput(input);
     });
@@ -141,6 +170,8 @@ export const inputsStore = defineStore("inputs", () => {
     subscribe,
     unsubscribe,
     addInput,
+    getPreviousInput,
+    removeInput,
     findField,
     findInput,
     addOrSkipInput,

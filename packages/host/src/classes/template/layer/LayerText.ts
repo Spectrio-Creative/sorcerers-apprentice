@@ -1,6 +1,5 @@
 import { alignAnchorPoint } from "../../../tools/layer";
-import { FieldBase } from "../field/Field";
-import { LayerBase } from "./LayerBase";
+import { LayerBase, LayerBaseOptions } from "./LayerBase";
 
 export class LayerText extends LayerBase {
   textLayer: TextLayer;
@@ -10,9 +9,9 @@ export class LayerText extends LayerBase {
   rectAtTime: Rect;
   fontRatio: number;
 
-  constructor(layer: Layer, field: FieldBase, layerType?: LayerType) {
-    super(layer, field, layerType);
-    this.textLayer = layer as TextLayer;
+  constructor(options: LayerBaseOptions) {
+    super(options);
+    this.textLayer = options.layer as TextLayer;
     this.textProperty = this.textLayer.sourceText;
     this.textDocument = this.textProperty.value as TextDocument;
     alignAnchorPoint(this.layer, this.getAnchorAlignment());

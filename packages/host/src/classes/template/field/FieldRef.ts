@@ -8,6 +8,7 @@ import { LayerText } from "../layer/LayerText";
 import { makeLayerBase } from "../layer/makeLayerBase";
 import { FieldBase } from "./Field";
 import { LayerAudio } from "../layer/LayerAudio";
+import { TemplateChild } from "../TemplateChild";
 
 export interface FieldRefValueOptions {
   fontMap?: GenericObject<string>;
@@ -18,9 +19,11 @@ export interface FieldRefValueOptions {
 export class FieldRef {
   layer: LayerBase;
   field: FieldBase;
+  parent: TemplateChild;
 
-  constructor(layer: Layer, field: FieldBase) {
-    this.layer = makeLayerBase(layer, field);
+  constructor(layer: Layer, field: FieldBase, parent: TemplateChild) {
+    this.parent = parent;
+    this.layer = makeLayerBase(layer, field, this);
     this.field = field;
   }
 

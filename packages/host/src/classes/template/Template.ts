@@ -1,5 +1,6 @@
 import { addTab, addTabbedPannel } from "../../pluginTools/dialogElements";
 import { allCompsFromFolder, searchComp, searchLibrary } from "../../tools/project";
+import { log } from "../../tools/system";
 import { TemplateChild } from "./TemplateChild";
 import { FieldBase } from "./field/Field";
 import { makeFieldBase } from "./field/makeFieldBase";
@@ -75,7 +76,7 @@ export class Template {
         items.push(folder.item(i));
       }
     });
-    
+
     return items.some((item) => item.name === name);
   }
 
@@ -101,7 +102,11 @@ export class Template {
   }
 
   getOverview() {
-    const editableOverview = this.editableFields.map((field) => field.getOverview());
+    const editableOverview = this.editableFields.map((field) => {
+      const fieldOverview = field.getOverview();
+      return fieldOverview;
+    });
+    log(`Overview (${this.name}): ${JSON.stringify(editableOverview)}`);
     return {
       name: this.name,
       id: this.id,
