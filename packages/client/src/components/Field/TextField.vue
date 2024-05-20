@@ -1,5 +1,5 @@
 <template>
-  <div class="text-field input-field">
+  <div class="text-field input-field" :class="{ slim, full: !slim }">
     <TextInput v-model="model" :show-cancel="showCancel" :cancel="cancel" :locked="locked" />
   </div>
 </template>
@@ -12,6 +12,7 @@ defineProps<{
   showCancel?: boolean;
   locked?: boolean;
   cancel?: () => void;
+  slim?: boolean;
 }>();
 
 const model = defineModel();

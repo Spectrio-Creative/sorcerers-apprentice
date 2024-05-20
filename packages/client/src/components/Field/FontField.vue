@@ -1,5 +1,5 @@
 <template>
-  <div class="font-field input-field">
+  <div class="font-field input-field" :class="{ slim, full: !slim }">
     <DropDown v-model="model" :options="sorcerer.fontNames" :show-cancel="showCancel" :cancel="cancel" />
   </div>
 </template>
@@ -12,6 +12,7 @@ defineProps<{
   title: string;
   showCancel?: boolean;
   cancel?: () => void;
+  slim?: boolean;
 }>();
 
 const model = defineModel();

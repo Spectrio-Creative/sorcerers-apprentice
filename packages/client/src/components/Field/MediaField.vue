@@ -1,7 +1,7 @@
 <template>
-  <div class="media-field input-field">
-    <DropDown v-model="model" :options="options" :show-cancel="showCancel" :cancel="cancel" />
     <Button text="Browse" :on-click="func" :width="125"></Button>
+  <div class="media-field input-field" :class="{ slim, full: !slim }">
+    <DropDown ref="selector" v-model="model" :options="options" :show-cancel="showCancel" :cancel="cancel" />
   </div>
 </template>
 
@@ -14,6 +14,7 @@ defineProps<{
   showCancel?: boolean;
   cancel?: () => void;
   options: string[];
+  slim?: boolean;
 }>();
 
 const func = () => {
@@ -27,5 +28,10 @@ const model = defineModel();
 .media-field {
   display: grid;
   grid-template-columns: 1fr 90px;
+
+  &.slim {
+    grid-template-columns: 1fr calc(70px - 3em);
+    gap: 5px;
+  }
 }
 </style>

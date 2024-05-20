@@ -1,6 +1,6 @@
 <template>
-  <div v-if="!slim" class="field traditional" :class="{ changed, visibleToggle }">
-    <div class="field-title">{{ field.title }}</div>
+  <div class="field" :class="{ changed, visibleToggle, traditional: !slim, spreadsheet: slim }">
+    <div v-if="!slim" class="field-title">{{ field.title }}</div>
     <div class="field-toggle" v-if="visibleToggle">
       <CheckBox v-model="visible" />
     </div>
@@ -10,6 +10,7 @@
       v-model="model"
       :cancel="removeField"
       :show-cancel="changed"
+      :slim="slim"
     />
     <TextField
       v-else-if="field.type === 'Text'"
@@ -18,6 +19,7 @@
       :cancel="removeField"
       :show-cancel="changed"
       :locked="field.locked"
+      :slim="slim"
     />
     <MediaField
       v-else-if="field.type === 'Media'"
@@ -26,6 +28,8 @@
       :cancel="removeField"
       :show-cancel="changed"
       :options="sorcerer.videoAssetNames"
+      :slim="slim"
+      file-type="visual"
     />
     <MediaField
       v-else-if="field.type === 'Audio'"
@@ -34,6 +38,8 @@
       :cancel="removeField"
       :show-cancel="changed"
       :options="sorcerer.audioAssetNames"
+      :slim="slim"
+      file-type="audio"
     />
     <MediaField
       v-else-if="field.type === 'Output'"
@@ -42,6 +48,8 @@
       :cancel="removeField"
       :show-cancel="changed"
       :options="[]"
+      :slim="slim"
+      file-type="video"
     />
     <FontField
       v-else-if="field.type === 'Font'"
@@ -49,58 +57,7 @@
       v-model="model"
       :cancel="removeField"
       :show-cancel="changed"
-    />
-    <div v-else>Unknown field type: {{ field.type }}</div>
-  </div>
-  <div v-if="slim" class="field spreadsheet" :class="{ changed, visibleToggle }" style="position: relative">
-    <div class="field-toggle" v-if="visibleToggle">
-      <CheckBox class="v-toggle" v-model="visible" />
-    </div>
-    <SlimColorField
-      v-if="field.type === 'Color'"
-      :title="field.title"
-      v-model="model"
-      :cancel="removeField"
-      :show-cancel="changed"
-    />
-    <SlimTextField
-      v-else-if="field.type === 'Text'"
-      :title="field.title"
-      v-model="model"
-      :cancel="removeField"
-      :show-cancel="changed"
-      :locked="field.locked"
-    />
-    <SlimMediaField
-      v-else-if="field.type === 'Media'"
-      :title="field.title"
-      v-model="model"
-      :cancel="removeField"
-      :show-cancel="changed"
-      :options="sorcerer.videoAssetNames"
-    />
-    <SlimMediaField
-      v-else-if="field.type === 'Audio'"
-      :title="field.title"
-      v-model="model"
-      :cancel="removeField"
-      :show-cancel="changed"
-      :options="sorcerer.audioAssetNames"
-    />
-    <SlimMediaField
-      v-else-if="field.type === 'Output'"
-      :title="field.title"
-      v-model="model"
-      :cancel="removeField"
-      :show-cancel="changed"
-      :options="[]"
-    />
-    <SlimFontField
-      v-else-if="field.type === 'Font'"
-      :title="field.title"
-      v-model="model"
-      :cancel="removeField"
-      :show-cancel="changed"
+      :slim="slim"
     />
     <div v-else>Unknown field type: {{ field.type }}</div>
   </div>
@@ -111,10 +68,6 @@ import ColorField from "./ColorField.vue";
 import TextField from "./TextField.vue";
 import MediaField from "./MediaField.vue";
 import FontField from "./FontField.vue";
-import SlimColorField from "./Slim/SlimColorField.vue";
-import SlimTextField from "./Slim/SlimTextField.vue";
-import SlimMediaField from "./Slim/SlimMediaField.vue";
-import SlimFontField from "./Slim/SlimFontField.vue";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { inputsStore } from "../../stores/inputs";
 import CheckBox from "../Generic/CheckBox.vue";
