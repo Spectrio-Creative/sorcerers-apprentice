@@ -1,0 +1,84 @@
+body {
+    --primary-color: #272727;
+    --secondary-color: #c5c5c5;
+    --tertiary-color: #161616;
+    --highlight-color: #52a0e9;
+    --hover-color: #9a9a9a;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    font-family: "Source Sans", "Source Sans Pro", "Source Sans 3", "Segoe UI", "San Francisco", "Lucida Grande", Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+a {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--hover-color);
+}
+.btn a {
+    display: inline-block;
+    padding: .7em 1.5em;
+    border: 1px solid var(--secondary-color);
+    color: var(--secondary-color);
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn a:hover {
+    background-color: var(--hover-color);
+    border-color: var(--hover-color);
+    color: var(--primary-color);
+}
+
+input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+input[type="text"] {
+    /* width: calc(100% - 100px - 16px); */
+    padding: .7em;
+    border: 0px solid var(--secondary-color);
+    background-color: var(--tertiary-color);
+    color: var(--secondary-color);
+}
+
+.input-field {
+    display: grid;
+    align-items: center;
+    margin-bottom: 1em;
+    column-gap: 1.5em;
+    gap: 1.5em;
+    grid-template-columns: 100px 1fr;
+}
+
+.input-field.color-field,
+.input-field.media-field {
+    grid-template-columns: 100px 1fr 90px;
+}
+
+.input-field .input-label {
+    width: 100px;
+    text-align: right;
+}
+
+*:focus {
+    outline: none;
+}
+
+.template-options {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2em;
+    gap: 1.5em;
+}
+
+.template-option.selected .btn a {
+    background-color: var(--hover-color);
+    border-color: var(--hover-color);
+    color: var(--primary-color);
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtensionList>
+    <Extension Id="com.spectrio.sorcerer.Traditional">
+        <HostList>
+            <Host Name="AEFT" Port="8211"/>
+        </HostList>
+    </Extension>
+    <Extension Id="com.spectrio.sorcerer.Spreadsheet">
+        <HostList>
+            <Host Name="AEFT" Port="8212"/>
+        </HostList>
+    </Extension>
+</ExtensionList>
