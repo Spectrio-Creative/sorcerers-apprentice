@@ -6,7 +6,7 @@ import { sorcererStore } from "../stores/sorcerer";
 import { inputsStore } from "../stores/inputs";
 
 //@ts-ignore
-export const csInterface = new CSInterface();
+export const csInterface: CSInterface = new CSInterface();
 
 export const isDev = import.meta.env.DEV;
 
@@ -57,7 +57,7 @@ export function getProjectPath(): Promise<string> {
       }
       return app.project.file.absoluteURI;
     }
-    appPath();
+    ss.appPath();
     `,
       (res: string) => {
         resolve(res);
@@ -91,7 +91,7 @@ export async function fetchSorcererData(): Promise<SorcererOverview> {
   }
 
   return new Promise((resolve, _reject) => {
-    csInterface.evalScript("SA__getMenuInfo();", (res: string) => {
+    csInterface.evalScript("ss.getMenuInfo();", (res) => {
       if (res === "") {
         csInterface.evalScript("alert('Error: No data returned from getMenuInfo function.')");
         resolve({
@@ -117,7 +117,18 @@ export async function sendSorcererData(data: InputTemplateValue[]) {
       return;
     }
 
-    csInterface.evalScript(`SA__setValuesFromList('${JSON.stringify(data)}');`, (res: string) => {
+    csInterface.evalScript(
+      `
+    var jsonString = ${JSON.stringify(JSON.stringify(data))};
+    ss.setValuesFromList(jsonString);
+    `,
+      (res) => {
+        console.log(res);
+        resolve(res as string);
+      }
+    );
+  });
+}
       console.log(res);
       resolve(res);
     });

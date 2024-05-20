@@ -1,71 +1,94 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { testIt } from "./playground/tests";
+import { testIt as playground } from "./playground/tests";
 import { TemplateMain } from "./classes/template/TemplateMain";
 import polyfill from "./tools/polyfill";
+import { log } from "./tools/system";
+import { openCSV, saveCSV, saveMP4, saveOther } from "./tools/fs";
 
 polyfill();
 
-const template = new TemplateMain();
+// Create namespace to avoid conflicts with global
+export function createSSNamespace() {
+  const template = new TemplateMain();
 
-function SA__getMenuInfo() {
-  try {
-    const overview = template.getOverview();
-    const json = JSON.stringify(overview);
-    return json;
-  } catch (error) {
-    alert(`Error: ${error}
+  function getMenuInfo() {
+    try {
+      // template = new TemplateMain();
+      const overview = template.getOverview();
+      const json = JSON.stringify(overview);
+      return json;
+    } catch (error) {
+      alert(`Error: ${error}
     ${error.stack}`);
+    }
   }
-}
 
-function SA__writeOverview() {
-  const newFile = File.saveDialog("Save the menu info (.json)", "JSON: *.json");
-  newFile.open("w");
-  newFile.write(SA__getMenuInfo());
-  newFile.close();
+  function writeOverview() {
+    log("Writing overview");
+    const newFile = File.saveDialog("Save the menu info (.json)", "JSON: *.json");
+    newFile.open("w");
+    newFile.write(getMenuInfo());
+    newFile.close();
 
-  return "OK";
-}
-
-function SA__setValuesFromList(list: string) {
-  const parsed: InputTemplateValue[] = JSON.parse(list);
-  template.setValuesFromList(parsed);
-  return "OK";
-}
-
-function SA__showMenu() {
-  template.showMenuPanel();
-}
-
-function SA__selectFile(type: "csv" | "other" = "other") {
-  let file;
-  if (type === "csv") {
-    file = File.openDialog("Select a CSV file", "Comma Separated Values: *.csv");
-  } else {
-    file = File.openDialog("Select a file");
+    return "OK";
   }
-  return file;
+
+  function setValuesFromList(list: string) {
+    const parsed: InputTemplateValue[] = JSON.parse(list);
+    template.setValuesFromList(parsed);
+    return "OK";
+  }
+
+  function showMenu() {
+    template.showMenuPanel();
+  }
+
+  function selectFile(type: ImportFile = "other") {
+    if (type === "csv") {
+      return openCSV();
+    }
+
+    return File.openDialog("Select a file", "*.*", false);
+  }
+
+  function saveFile(data?: string, type: ExportFile = "other") {
+    try {
+      let file: File;
+      if (type === "csv") file = saveCSV(data);
+      else if (type === "mp4") file = saveMP4();
+      else file = saveOther(data);
+
+      if (!file) return JSON.stringify({ status: "CANCELLED", file });
+      const filePath = file.fsName;
+      const fileName = file.name;
+
+      return JSON.stringify({ status: "OK", file, filePath, fileName });
+    } catch (error) {
+      return JSON.stringify({ status: "ERROR", error: error.message });
+    }
+  }
+
+  function testIt() {
+    playground(template);
+  }
+
+  function SayHello() {
+    alert("CS Interface made connection with root host function.");
+  }
+
+  return {
+    getMenuInfo,
+    setValuesFromList,
+    showMenu,
+    writeOverview,
+    selectFile,
+    saveFile,
+    testIt,
+    SayHello,
+  };
 }
 
-function SA__testIt() {
-  testIt(template);
-}
+const ss = createSSNamespace();
 
-function SA__SayHello() {
-  alert("CS Interface made connection with root host function.");
-}
-
-// The global functions get removed by the compiler if they are not used
-// This is a workaround to keep them in the final bundle
-$.write(`getMenuInfo: ${typeof SA__getMenuInfo}`);
-$.write(`setValuesFromList: ${typeof SA__setValuesFromList}`);
-$.write(`showMenu: ${typeof SA__showMenu}`);
-$.write(`writeOverview: ${typeof SA__writeOverview}`);
-$.write(`selectFile: ${typeof SA__selectFile}`);
-$.write(`testIt: ${typeof SA__testIt}`);
-$.write(`SayHello: ${typeof SA__SayHello}`);
-
-// SA__writeOverview();
-// testIt(template);
-
-// SA__writeOverview();
+// Make sure the namespace is available in the global scope
+$.write(`namespace: ${typeof ss}`);
