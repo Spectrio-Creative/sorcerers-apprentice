@@ -39,6 +39,9 @@ export const inputsStore = defineStore("inputs", () => {
     }
 
     inputs.value.push(input);
+    // Remove fields that are not in the template overview
+    cleanInputFields(input);
+
     return input;
   };
 
@@ -83,7 +86,7 @@ export const inputsStore = defineStore("inputs", () => {
       const fHeaderTitle = f.tab ? `[${f.tab}] ${f.title}` : f.title;
       return fHeaderTitle === headerTitle;
     });
-    
+
     if (fieldIndex !== -1) return input.fields[fieldIndex];
     if (!create) return;
     const newField = {

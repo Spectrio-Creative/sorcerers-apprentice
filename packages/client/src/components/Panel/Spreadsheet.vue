@@ -14,9 +14,11 @@
       </div>
     </div>
   </Modal>
-  <div class="csv-panel">
-    <Button :on-click="openExportModal">Export CSV(s)</Button>
-    <Button :on-click="importCSV">Import CSV(s)</Button>
+  <div class="top-menu">
+    <div class="csv-panel">
+      <Button :on-click="openExportModal">Export CSV(s)</Button>
+      <Button :on-click="importCSV">Import CSV(s)</Button>
+    </div>
   </div>
   <div class="panel spreadsheet">
     <div class="spreadsheet-container">
@@ -143,8 +145,13 @@ function pasteInput() {
   newInput.templateOverview = clone(targetInput.value.templateOverview);
   newInput.templateId = targetInput.value.templateId;
 
-  // TODO: Purge incompatible fields
+  // Purge incompatible fields
+  newInput.fields = newInput.fields.filter((field) =>
+    newInput.templateOverview.some((templateField) => templateField.title === field.title)
+  );
+
   targetInput.value = newInput;
+
   const previousId = inputs.getPreviousInput(targetId)?.id || 0;
   inputs.removeInput(targetId);
   inputs.addInput(newInput, previousId);
@@ -224,6 +231,7 @@ function addTemplate(templateName: string, fields?: { [key: string]: string }) {
     newInput.fields.push(field);
   }
 
+  console.log(`Adding input: ${newInput.id}`);
   inputs.addInput(newInput);
   selectingTemplate.value = false;
 }
@@ -326,7 +334,7 @@ const exportCSV = () => {
         const tab = field.tab ? `[${field.tab}] ` : "";
         row[`${tab}${field.title}`] = visiblePrefix + field.value;
       });
-      
+
       return row;
     })
     .filter((row) => row !== undefined) as { [key: string]: string }[];
@@ -388,15 +396,19 @@ const deleteRows = () => {
 </script>
 
 <style lang="scss" scoped>
-.csv-panel {
-  display: flex;
-  gap: 1em;
-  align-items: center;
-  justify-content: end;
-  margin-bottom: 2.5em;
-  font-size: 0.8em;
-  position: relative;
-  margin-top: -5em;
+.top-menu {
+  text-align: right;
+  margin-top: -4em;
+  margin-bottom: 2em;
+
+  .csv-panel {
+    display: inline-flex;
+    gap: 1em;
+    align-items: center;
+    justify-content: end;
+    font-size: 0.8em;
+    position: relative;
+  }
 }
 
 .panel {
