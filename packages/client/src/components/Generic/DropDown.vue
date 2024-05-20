@@ -53,6 +53,8 @@ function addTag(newTag: string) {
   addedOptions.value.push(newTag);
   model.value = newTag;
 }
+
+defineExpose({addTag});
 </script>
 
 <style lang="scss" scoped>
