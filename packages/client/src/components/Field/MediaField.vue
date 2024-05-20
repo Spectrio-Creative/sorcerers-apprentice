@@ -13,6 +13,7 @@ defineProps<{
   title: string;
   showCancel?: boolean;
   cancel?: () => void;
+  fileType: ImportFile | ExportFile;
   options: string[];
   slim?: boolean;
 }>();
