@@ -2,7 +2,7 @@
   <div class="app">
     <div class="container" @contextmenu.prevent="showContextMenu($event)">
       <Loader :show="app.processing" />
-      <Button class="refresh-button" :on-click="refresh" :styles="['tertiary', 'round']">
+      <Button class="refresh-button" :on-click="() => refresh(false)" :styles="['tertiary', 'round']">
         <div class="inner">
           <RefreshIcon />
           <span>Refresh Panel</span>
@@ -31,7 +31,7 @@ import { appStore } from "./stores/app";
 import Button from "./components/Generic/Button.vue";
 import { sorcererStore } from "./stores/sorcerer";
 import RefreshIcon from "./components/Icons/RefreshIcon.vue";
-import { Ref, onMounted, ref } from "vue";
+import { Ref, computed, onMounted, ref } from "vue";
 import { inputsStore } from "./stores/inputs";
 import { sayHello } from './tools/api';
 import ContextMenu from "./components/UI/ContextMenu.vue";
@@ -56,11 +56,11 @@ const showContextMenu = (event: MouseEvent) => {
   menuPosition.value = { x: event.clientX, y: event.clientY };
 };
 
-const refresh = async () => {
+const refresh = async (quiet = false) => {
   app.processing = true;
   const traditionalBefore = traditional.value?.beforeRefresh();
 
-  await sorcerer.refresh();
+  await sorcerer.refresh(quiet);
 
   if (traditionalBefore) traditional.value?.afterRefresh(traditionalBefore);
   app.processing = false;
@@ -71,7 +71,7 @@ defineProps<{
 }>();
 
 onMounted(() => {
-  refresh();
+  refresh(true);
 });
 </script>
 
