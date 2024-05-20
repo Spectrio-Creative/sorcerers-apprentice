@@ -379,7 +379,7 @@ const exportCSV = () => {
 
   for (const [key, group] of Object.entries(groups)) {
     const csv = Papa.unparse(group);
-    saveFile(csv, `${key.replace("+++", "+")}.csv`, "text/csv");
+    saveFile(csv, {fileName: `${key.replace("+++", "+")}.csv`, type: "csv"});
   }
 
   for (const id of inputsToRemove) {
@@ -410,6 +410,17 @@ const deleteRows = () => {
     position: relative;
   }
 }
+
+// .csv-panel {
+//   display: flex;
+//   gap: 1em;
+//   align-items: center;
+//   justify-content: end;
+//   font-size: 0.8em;
+//   position: relative;
+//   margin-top: -5em;
+//   margin-bottom: 2.5em;
+// }
 
 .panel {
   &.spreadsheet {
