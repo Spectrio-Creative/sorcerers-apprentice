@@ -19,12 +19,13 @@ export default {
   output: {
     file: process.env.OUTPUT || "build/sorcerers_apprentice.jsx",
     format: "esm",
-    sourcemap: false,
+    // TODO: sort out sourcemaps so we can have helpful error messages
+    sourcemap: true,
     banner: `${shims}\n${json2}\n`,
   },
   plugins: [
     findUnused({ exclude: ["src/playground.js", "**/_*.js", "src/playground"] }),
-    typescript({ tsconfig: "tsconfig.json", include: ["src/**/*", "../shared/**/*"]}),
+    typescript({ tsconfig: "tsconfig.json", include: ["src/**/*", "../shared/**/*"], sourceMap: true }),
     nodeResolve(),
     commonjs({
       include: [/node_modules/, /shared/],
@@ -45,6 +46,7 @@ export default {
         "babel-plugin-transform-es3-property-literals",
         "babel-plugin-transform-es5-property-mutators",
       ],
+      sourceMaps: true,
     }),
     cleanup(),
     // getBabelOutputPlugin({ presets: ["extendscript"] }),

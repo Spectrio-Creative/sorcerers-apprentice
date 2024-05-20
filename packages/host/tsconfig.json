@@ -5,7 +5,8 @@
         "types": [
             "types-for-adobe/aftereffects/22.0"
         ],
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "sourceMap": true
     },
     "include": ["src", "../shared"],
     "exclude": ["node_modules"]
