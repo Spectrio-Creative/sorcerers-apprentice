@@ -1,25 +1,39 @@
 <template>
-    <Button text="Browse" :on-click="func" :width="125"></Button>
   <div class="media-field input-field" :class="{ slim, full: !slim }">
     <DropDown ref="selector" v-model="model" :options="options" :show-cancel="showCancel" :cancel="cancel" />
+    <Button v-if="slim" :on-click="selectFile" :width="70" :styles="['icon']"><IconFolder /></Button>
+    <Button v-else text="Browse" :on-click="selectFile" :width="125"></Button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { defineProps, ref } from "vue";
 import Button from "../Generic/Button.vue";
 import DropDown from "../Generic/DropDown.vue";
-defineProps<{
+import IconFolder from "../Icons/IconFolder.vue";
+import { selectFile as selectFileAPI } from "../../tools/api";
+
+const props = defineProps<{
   title: string;
   showCancel?: boolean;
   cancel?: () => void;
   fileType: ImportFile | ExportFile;
+  output?: boolean;
   options: string[];
   slim?: boolean;
 }>();
 
-const func = () => {
-  console.log("clicked");
+const selector = ref<typeof DropDown | null>(null);
+
+const selectFile = async () => {
+  const fileInfo = await selectFileAPI(props.fileType);
+  console.log("Finished fetching", fileInfo);
+
+  if(!(fileInfo?.file)) return;
+
+  selector.value?.addTag(fileInfo.file);
+
+  // model.value = fileInfo.file;
 };
 
 const model = defineModel();

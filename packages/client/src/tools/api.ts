@@ -1,4 +1,6 @@
 import { decimalToRgb, formatAsDecimal } from "../../../shared/tools/color";
+import * as fs from "./fs";
+import type CSInterface from "../../types/CSInterface";
 
 // @ts-ignore
 import tinycolor from "tinycolor2";
@@ -31,19 +33,23 @@ export function aeAlert(message: string) {
   csInterface.evalScript(`alert("${message}")`);
 }
 
-export function saveFile(data: string, fileName: string, type: string) {
-  if (isDev) {
-    const blob = new Blob([data], { type });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName;
-    a.click();
-    return;
-  }
-  
-  csInterface.evalScript(`SA__saveFile('${data}', '${fileName}', '${type}')`);
-}
+// export function saveFile(data: string, fileName: string, type: string) {
+//   if (isDev) {
+//     const blob = new Blob([data], { type });
+//     const url = URL.createObjectURL(blob);
+//     const a = document.createElement("a");
+//     a.href = url;
+//     a.download = fileName;
+//     a.click();
+//     return;
+//   }
+
+//   csInterface.evalScript(`
+//   var data = ${JSON.stringify(data)};
+//   var fileName = ${JSON.stringify(fileName)};
+//   var type = ${JSON.stringify(type)};
+//   saveFile(data, fileName, type);`);
+// }
 
 export function getProjectPath(): Promise<string> {
   return new Promise((resolve, _reject) => {
@@ -59,14 +65,14 @@ export function getProjectPath(): Promise<string> {
     }
     ss.appPath();
     `,
-      (res: string) => {
-        resolve(res);
+      (res) => {
+        resolve(res as string);
       }
     );
   });
 }
 
-export async function fetchSorcererData(): Promise<SorcererOverview> {
+export async function fetchSorcererData(quiet = true): Promise<SorcererOverview> {
   const sorcerer = sorcererStore();
   const inputs = inputsStore();
 
@@ -93,25 +99,27 @@ export async function fetchSorcererData(): Promise<SorcererOverview> {
   return new Promise((resolve, _reject) => {
     csInterface.evalScript("ss.getMenuInfo();", (res) => {
       if (res === "") {
-        csInterface.evalScript("alert('Error: No data returned from getMenuInfo function.')");
+        if (!quiet) csInterface.evalScript("alert('Error:\\nNo template data found in open project.')");
         resolve({
           templates: [],
           fonts: [],
           libraryAssets: [],
         } as SorcererOverview);
       }
-      const data = convertDefaultColorsToHex(JSON.parse(res));
+      const data = convertDefaultColorsToHex(JSON.parse(res as string));
 
       resolve(data);
     });
   });
 }
 
-export async function sendSorcererData(data: InputTemplateValue[]) {
+export async function sendSorcererData(data: InputTemplateValue[]): Promise<string> {
   return new Promise((resolve, _reject) => {
     if (isDev) {
       // Settimeout to simulate the delay of the host
       setTimeout(() => {
+        console.log(JSON.parse(JSON.stringify(data)));
+        // console.log(`setValuesFromList('${JSON.stringify(data)}');`);
         resolve("OK");
       }, 1000);
       return;
@@ -129,8 +137,91 @@ export async function sendSorcererData(data: InputTemplateValue[]) {
     );
   });
 }
+
+export async function runTest(): Promise<string> {
+  return new Promise((resolve, _reject) => {
+    if (isDev) {
+      // Settimeout to simulate the delay of the host
+      setTimeout(() => {
+        resolve("OK");
+      }, 1000);
+      return;
+    }
+
+    csInterface.evalScript("testIt();", (res) => {
       console.log(res);
-      resolve(res);
+      resolve(res as string);
     });
+  });
+}
+
+export async function sayHello(): Promise<string> {
+  return new Promise((resolve, _reject) => {
+    if (isDev) {
+      alert("Running SayHello function from host");
+      return;
+    }
+
+    csInterface.evalScript("ss.SayHello();", (res) => {
+      console.log(res);
+      resolve(res as string);
+    });
+  });
+}
+
+export async function selectFile(
+  type: ImportFile | ExportFile = "other"
+): Promise<{
+  status: string;
+  file: string;
+  filePath: string;
+  fileName: string;
+}> {
+  if (isDev) {
+    const fileInfo = await fs.selectFile(type);
+    console.log("selected file", fileInfo);
+    return fileInfo;
+  }
+
+  return new Promise((resolve, _reject) => {
+    csInterface.evalScript(
+      `
+    var type = ${JSON.stringify(type)};
+    ss.selectFile(type);`,
+      (res) => {
+        console.log(res);
+        resolve(JSON.parse(res as string));
+      }
+    );
+  });
+}
+
+export async function saveFile(
+  data?: string,
+  options: { fileName: string; type: ExportFile } = { fileName: "", type: "other" }
+): Promise<{
+  status: string;
+  file: string;
+  filePath: string;
+  fileName: string;
+}> {
+  if (isDev) {
+    const fileInfo = await fs.saveFile(data, options.type);
+    console.log("saved file", fileInfo);
+    return fileInfo;
+  }
+
+  return new Promise((resolve, _reject) => {
+    csInterface.evalScript(
+      `
+    var data = ${JSON.stringify(data)};
+    var fileName = ${JSON.stringify(options.fileName)};
+    var type = ${JSON.stringify(options.type)};
+    ss.saveFile(data, type);`,
+      (res) => {
+        console.log(res);
+        resolve(JSON.parse(res as string));
+      }
+    );
   });
 }

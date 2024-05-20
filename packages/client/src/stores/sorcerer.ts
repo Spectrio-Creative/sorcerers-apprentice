@@ -31,11 +31,11 @@ export const sorcererStore = defineStore("sorcerer", () => {
   const mediaAssets = computed(() => overview.value.libraryAssets.filter((a) => !a.hasAudio && !a.hasVideo));
   const mediaAssetNames = computed(() => mediaAssets.value.map((a) => a.name));
 
-  const refresh = async () => {
+  const refresh = async (quiet = true) => {
     app.processing = true;
     app.setProcessingMessage("Refreshing Template Data...");
 
-    const newData = await fetchSorcererData();
+    const newData = await fetchSorcererData(quiet);
     console.log("fetched data", newData);
     overview.value = newData;
 
