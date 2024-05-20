@@ -131,6 +131,18 @@ export const inputsStore = defineStore("inputs", () => {
     });
   };
 
+  const cleanInputFields = (input: InputTemplateValue | string) => {
+    const inputId = typeof input === "string" ? input : input.id;
+    const inputIndex = inputs.value.findIndex((i) => i.id === inputId);
+    if (inputIndex === -1) return;
+    // const template = sorcerer.overview.templates.find((t) => t.id === inputs.value[inputIndex].templateId);
+    // if (!template) return;
+    const templateOverview = inputs.value[inputIndex].templateOverview;
+    inputs.value[inputIndex].fields = inputs.value[inputIndex].fields.filter((field) => {
+      return templateOverview.some((f) => f.title === field.title);
+    });
+  };
+
   const postRefresh = (newData: SorcererOverview) => {
     // Remove inputs that are no longer in the overview
     inputs.value = inputs.value.filter((input) => {
@@ -154,6 +166,7 @@ export const inputsStore = defineStore("inputs", () => {
 
     for (const input of readyInputs) {
       input.status = "Processing";
+      cleanInputFields(input);
       await sendSorcererData([input]);
       input.status = "Complete";
     }
@@ -175,6 +188,7 @@ export const inputsStore = defineStore("inputs", () => {
     addInput,
     getPreviousInput,
     removeInput,
+    cleanInputFields,
     findField,
     findInput,
     addOrSkipInput,
