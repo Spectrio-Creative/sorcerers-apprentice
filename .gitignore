@@ -115,3 +115,6 @@ _oldFilesForReference_/
 
 # The signing key for the ZXP file
 sorcerers-apprentice.p12
+
+# Testing assets
+test-assets/
