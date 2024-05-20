@@ -30,7 +30,7 @@
             v-for="input in innerInputs"
             :key="input.id"
             :class="{ inactive: input.status !== 'Ready' }"
-            @contextmenu.prevent="showContextMenu($event, input)"
+            @contextmenu.stop.prevent="showContextMenu($event, input)"
           >
             <div
               title="Reset Line"

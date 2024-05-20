@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <div class="container">
+    <div class="container" @contextmenu.prevent="showContextMenu($event)">
       <Loader :show="app.processing" />
       <Button class="refresh-button" :on-click="refresh" :styles="['tertiary', 'round']">
         <div class="inner">
@@ -11,7 +11,12 @@
       <Spreadsheet ref="spreadsheet" v-if="type === 'spreadsheet'" />
       <Traditional ref="traditional" v-else />
       <div ref="versionEl" class="version">The Sorcerer’s Apprentice v{{ version }}</div>
+      <ContextMenu v-model:open="showMenu" :actions="contextMenuActions" :position="menuPosition" />
       <div v-if="debugMode" class="debug">
+        <div style="display: flex; align-items: center; gap: 2rem;">
+          <h2>Debug</h2>
+          <Button :on-click="sayHello">Test</Button>
+        </div>
         {{ inputs.inputs }}
       </div>
     </div>
@@ -28,7 +33,8 @@ import { sorcererStore } from "./stores/sorcerer";
 import RefreshIcon from "./components/Icons/RefreshIcon.vue";
 import { Ref, onMounted, ref } from "vue";
 import { inputsStore } from "./stores/inputs";
-import { onLongPress } from '@vueuse/core'
+import { sayHello } from './tools/api';
+import ContextMenu from "./components/UI/ContextMenu.vue";
 
 const app = appStore();
 const inputs = inputsStore();
@@ -38,6 +44,17 @@ const traditional: Ref<InstanceType<typeof Traditional> | null> = ref(null);
 const spreadsheet = ref(null);
 const debugMode = ref(false);
 const versionEl: Ref<HTMLElement | null> = ref(null);
+const showMenu = ref(false);
+const contextMenuActions = computed<{ action: () => void; label: string }[]>(() => [
+  { action: () => debugMode.value = !debugMode.value, label: `${debugMode.value ? 'Hide' : 'Show'} Debug Info` },
+]);
+const menuPosition = ref({ x: 0, y: 0 });
+
+const showContextMenu = (event: MouseEvent) => {
+  event.preventDefault();
+  showMenu.value = true;
+  menuPosition.value = { x: event.clientX, y: event.clientY };
+};
 
 const refresh = async () => {
   app.processing = true;
@@ -48,10 +65,6 @@ const refresh = async () => {
   if (traditionalBefore) traditional.value?.afterRefresh(traditionalBefore);
   app.processing = false;
 };
-
-onLongPress(versionEl, () => {
-  debugMode.value = !debugMode.value;
-}, { delay: 1000 });
 
 defineProps<{
   type: "traditional" | "spreadsheet";
