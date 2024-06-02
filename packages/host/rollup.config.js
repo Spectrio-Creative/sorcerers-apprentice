@@ -7,11 +7,15 @@ import cleanup from "rollup-plugin-cleanup";
 import findUnused from "rollup-plugin-unused";
 import include from "rollup-plugin-include";
 import typescript from "@rollup/plugin-typescript";
-// import stripComments from "./plugins/strip";
+import stripComments from "./plugins/strip";
 import fs from "fs";
 
 const shims = fs.readFileSync(require.resolve("extendscript-es5-shim"));
+// Strip comments from the shims
+const shimsStripped = stripComments().transform(`${shims}`, "extendscript-es5-shim").code;
 const json2 = fs.readFileSync("./static/json2.js");
+// Strip comments from the json2 shim
+const json2Stripped = stripComments().transform(`${json2}`, "json2").code;
 
 // rollup.config.js
 export default {
@@ -21,7 +25,7 @@ export default {
     format: "esm",
     // TODO: sort out sourcemaps so we can have helpful error messages
     sourcemap: true,
-    banner: `${shims}\n${json2}\n`,
+    banner: `${shimsStripped}\n${json2Stripped}\n`,
   },
   plugins: [
     findUnused({ exclude: ["src/playground.js", "**/_*.js", "src/playground"] }),
@@ -50,6 +54,6 @@ export default {
     }),
     cleanup(),
     // getBabelOutputPlugin({ presets: ["extendscript"] }),
-    // stripComments(),
+    stripComments(),
   ],
 };

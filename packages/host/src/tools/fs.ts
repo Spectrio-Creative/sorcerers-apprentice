@@ -11,6 +11,7 @@ export const openCSV = () => {
       if (file.hidden) return false;
       if (file.name.match(/\.csv$/i)) return true;
       if (file.type == "CSV ") return true;
+      return false;
     },
     false
   );
@@ -18,51 +19,53 @@ export const openCSV = () => {
 
 export interface SaveFileOptions {
   fileName?: string;
+  prompt?: string;
   type?: ExportFile;
 }
 
-export const saveCSV = (data?: string, _options?: SaveFileOptions) => {
-  let filter: string | ((file: File | Folder) => boolean) = "CSV: *.csv";
-  if (File.fs !== "Windows") {
-    filter = function (file: File | Folder) {
-      if (file instanceof Folder) return true;
-      if (file.hidden) return false;
-      if (file.name.match(/\.csv$/i)) return true;
-      if (file.type == "CSV ") return true;
-    };
+export const fileFiltersMac = (type: ExportFile) => {
+  switch (type) {
+    case "csv":
+      return function (file: File) {
+        if (file.name.match(/\.csv$/i)) return true;
+        if (file.type == "CSV ") return true;
+        return false;
+      };
+    case "mp4":
+      return function (file: File) {
+        if (file.name.match(/\.mp4$/i)) return true;
+        if (file.type == "MP4 ") return true;
+        return false;
+      };
+    default:
+      return function () {
+        return true;
+      };
   }
-  const newFile = File.saveDialog("Save the CSV file", filter);
-  if (!data) return newFile;
-  newFile.open("w");
-  newFile.write(data);
-  newFile.close();
-  return newFile;
 };
 
-export const saveMP4 = () => {
-  let filter: string | ((file: File | Folder) => boolean) = "MP4: *.mp4";
-  if (File.fs !== "Windows") {
-    filter = function (file: File | Folder) {
-      if (file instanceof Folder) return true;
-      if (file.hidden) return false;
-      if (file.name.match(/\.mp4$/i)) return true;
-      if (file.type == "MP4 ") return true;
-    };
-  }
-  const newFile = File.saveDialog("Save the MP4 file", filter);
-  return newFile;
+export const fileFiltersWindows = (type: ExportFile) => {
+  if (type === "csv") return "CSV: *.csv";
+  if (type === "mp4") return "MP4: *.mp4";
+  return "*.*";
 };
 
-export const saveOther = (data?: string, _options?: SaveFileOptions) => {
-  let filter: string | ((file: File | Folder) => boolean) = "*.*";
+export const saveFile = (data?: string, options?: SaveFileOptions) => {
+  const type = options?.type || "other";
+  const _fileName = options?.fileName || "file";
+  const prompt = options?.prompt || `Save the ${type} file`;
+
+  let filter: string | ((file: File | Folder) => boolean) = fileFiltersWindows(type);
+
   if (File.fs !== "Windows") {
+    const filterFunction = fileFiltersMac(type);
     filter = function (file: File | Folder) {
       if (file instanceof Folder) return true;
       if (file.hidden) return false;
-      return true;
+      return filterFunction(file);
     };
   }
-  const newFile = File.saveDialog("Save the file", filter);
+  const newFile = File.saveDialog(prompt, filter);
   if (!data) return newFile;
   newFile.open("w");
   newFile.write(data);

@@ -1,6 +1,6 @@
 export function log(text: string) {
   // Check if log file exists and create it if it doesn't
-  const scriptPath = new File($.fileName).path;
+  const scriptPath = new File($.fileName).fsName;
   const logFile = new File(`${scriptPath}/log.txt`);
   if (!logFile.exists) {
     logFile.open("w");

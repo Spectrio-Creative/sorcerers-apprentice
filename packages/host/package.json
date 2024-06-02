@@ -12,6 +12,7 @@
     "clean": "rm -rf ./build",
     "lint": "eslint src/",
     "playground": "ENTRY=src/playground.ts OUTPUT=./build/playground.jsx rollup --config",
+    "ame": "ENTRY=src/ame.ts OUTPUT=./build/ame.jsx rollup --config",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {

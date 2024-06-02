@@ -3,7 +3,7 @@ import { testIt as playground } from "./playground/tests";
 import { TemplateMain } from "./classes/template/TemplateMain";
 import polyfill from "./tools/polyfill";
 import { log } from "./tools/system";
-import { openCSV, saveCSV, saveMP4, saveOther } from "./tools/fs";
+import { saveFile as saveExport, openCSV } from "./tools/fs";
 
 polyfill();
 
@@ -53,10 +53,7 @@ export function createSSNamespace() {
 
   function saveFile(data?: string, type: ExportFile = "other") {
     try {
-      let file: File;
-      if (type === "csv") file = saveCSV(data);
-      else if (type === "mp4") file = saveMP4();
-      else file = saveOther(data);
+      const file: File = saveExport(data, { type });
 
       if (!file) return JSON.stringify({ status: "CANCELLED", file });
       const filePath = file.fsName;
