@@ -25,7 +25,7 @@ export default {
     format: "esm",
     // TODO: sort out sourcemaps so we can have helpful error messages
     sourcemap: true,
-    banner: `${shimsStripped}\n${json2Stripped}\n`,
+    banner: process.env.BANNER || `${shimsStripped}\n${json2Stripped}\n`,
   },
   plugins: [
     findUnused({ exclude: ["src/playground.js", "**/_*.js", "src/playground"] }),

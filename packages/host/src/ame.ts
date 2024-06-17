@@ -2,7 +2,7 @@
 // import { saveFile } from "./tools/fs";
 // import { searchLibrary } from "./tools/project";
 
-import { writeBMPFile } from "./tools/play";
+import { writePresetsJSON } from "./tools/ame/presets";
 
 // // const ss = createSSNamespace();
 
@@ -43,60 +43,7 @@ import { writeBMPFile } from "./tools/play";
 /* eslint-disable */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-// @ts-ignore
-const encoder = app.getEncoderHost();
-const formats = encoder.getFormatList();
-// alert(`Formats: ${JSON.stringify(formats)}`);
-
-// @ts-ignore
-const frontend = app.getFrontend();
-
-// const source = "/Volumes/Moomintroll/Golden Light - Video EP/B-Roll/MVI_3934.MOV";
-// const source = "~/Desktop/IMG_2856.jpeg";
-
-// Example usage
-const filePath = "/Volumes/Moomintroll/Test/red.bmp";
-const width = 16;
-const height = 9;
-const color = [255, 0, 0] as [number, number, number]; // Red color
-
-const file = new File(filePath);
-if (!file.exists) {
-  writeBMPFile(filePath, width, height, color);
-}
-
-const encoderWrapper = frontend.addFileToBatch(filePath, "H.264", "Match Source - High bitrate");
-const formatJSON = {};
-
-// Loop through all the formats and presets
-for (const format of formats) {
-  // const presets = encoder.getPresets(format);
-  encoderWrapper.loadFormat(format);
-  const presets = encoderWrapper.getPresetList().map((preset: string) => {
-    // The presets are sometimes formatted like "9bb57b43-b3d1-448f-bdb0-4c5e3dcf9750#Match Source - High bitrate"
-    // We only want the name of the preset without the GUID.
-    // If there are multiple # characters, we only want to split on the first one.
-    
-    const breakPoint = preset.indexOf("#");
-    const presetName = preset.substring(breakPoint + 1);
-    // const guid = preset.substring(0, breakPoint);
-    return presetName;
-  });
-  formatJSON[format] = presets;
-}
-
-// encoderWrapper.remove();
-// @ts-ignore
-const exporter = app.getExporter();
-exporter.removeAllBatchItems();
-
-// Save the JSON to a file
-const jsonFile = new File("/Volumes/Moomintroll/Test/formats.json");
-jsonFile.open("w");
-jsonFile.write(JSON.stringify(formatJSON));
-jsonFile.close();
-
-alert(`Formats and presets written to: ${jsonFile.fsName}`);
+writePresetsJSON();
 
 // // @ts-ignore
 // const exporter = app.getExporter();

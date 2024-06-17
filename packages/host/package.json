@@ -12,7 +12,10 @@
     "clean": "rm -rf ./build",
     "lint": "eslint src/",
     "playground": "cross-env ENTRY=src/playground.ts OUTPUT=./build/playground.jsx rollup --config",
-    "ame": "ENTRY=src/ame.ts OUTPUT=./build/ame.jsx rollup --config",
+    "ame": "cross-env ENTRY=src/ame.ts OUTPUT=./build/ame.jsx rollup --config",
+    "compile": "yarn compile:ame-presets",
+    "compile:ame-presets": "cross-env BANNER=//NoBanner ENTRY=src/tools/ame/presets.ts OUTPUT=./src/tools/ame/presetsCompiled.ts rollup --config",
+    "postcompile": "node ./post/compile.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
