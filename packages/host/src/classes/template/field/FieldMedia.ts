@@ -1,4 +1,5 @@
 import { addMenuField } from "../../../pluginTools/dialogElements";
+import { log } from "../../../tools/system";
 import { FieldBase, FieldBaseOptions } from "./Field";
 
 export class FieldMedia extends FieldBase {
@@ -11,7 +12,15 @@ export class FieldMedia extends FieldBase {
     this.type = "Media";
     this.avLayer = layer as AVLayer;
 
-    this.value = this.avLayer.source.name;
+    this.value =
+      this.avLayer?.source?.name ||
+      this.avLayer?.source?.file?.fsName ||
+      this.avLayer?.source?.mainSource?.file?.fsName ||
+      "";
+
+    if (this.value === "") {
+      log(`Media path not found for layer ${this.avLayer.name}`);
+    }
   }
 
   createMenuField(tab: Tab) {
@@ -22,7 +31,7 @@ export class FieldMedia extends FieldBase {
     this.menuField.browse.onClick = this.browse;
     this.menuField.input.addEventListener("focus", this.focused);
     this.menuField.input.addEventListener("blur", this.unFocused);
-    
+
     this.addFieldListener();
   }
 
@@ -47,10 +56,10 @@ export class FieldMedia extends FieldBase {
   unFocused = (obj: UIEvent) => {
     const editText = obj.target as EditText;
     if (!this.simpleDisplay) return;
-    
+
     this.removeFieldListener();
     this.value = editText.text;
-    editText.text = this.value.split(/\/|\\/).pop() as string + "*";
+    editText.text = (this.value.split(/\/|\\/).pop() as string) + "*";
 
     this.addFieldListenerAfterChange();
     this.simpleDisplay = false;
