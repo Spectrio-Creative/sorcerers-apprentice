@@ -1,0 +1,2336 @@
+{
+    "templates": [
+      {
+        "name": "Color BG Template",
+        "id": 10484,
+        "comp": "Color BG Template",
+        "folder": "Color BG Template",
+        "fields": [
+          {
+            "fullTitle": "!T [Company Info] CTA",
+            "type": "Text",
+            "options": [],
+            "title": "CTA",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "CONTACT US TODAY!",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Website",
+            "type": "Text",
+            "options": [],
+            "title": "Website",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "thisisthewebstieurl.com",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Phone",
+            "type": "Text",
+            "options": [],
+            "title": "Phone",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "000-000-000",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Single Address",
+            "type": "Text",
+            "options": [],
+            "title": "Single Address",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "Single Address",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Multiple Address 1",
+            "type": "Text",
+            "options": [],
+            "title": "Multiple Address 1",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "First Address | Extra Phone",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Multiple Address 2",
+            "type": "Text",
+            "options": [],
+            "title": "Multiple Address 2",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "Second Address | Phone",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Multiple Address 3",
+            "type": "Text",
+            "options": [],
+            "title": "Multiple Address 3",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "Third Address | Phone",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Multiple Address 4",
+            "type": "Text",
+            "options": [],
+            "title": "Multiple Address 4",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "Fourth Address | Phone",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Special Instructions",
+            "type": "Text",
+            "options": [],
+            "title": "Special Instructions",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "Special instructions can go here.",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!G [Company Info]",
+            "type": "Group",
+            "options": [],
+            "title": "",
+            "tag": "",
+            "tab": "Company Info",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!C [Color] Color Control",
+            "type": "Color",
+            "options": [],
+            "title": "Primary Color",
+            "tag": "",
+            "tab": "Color",
+            "value": "0,0,1,1",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!C [Color] Color Control",
+            "type": "Color",
+            "options": [],
+            "title": "Secondary Color",
+            "tag": "",
+            "tab": "Color",
+            "value": "0.75686281919479,0.15294118225574,0.17647059261799,1",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!C [Color] Color Control",
+            "type": "Color",
+            "options": [],
+            "title": "Tertiary Color",
+            "tag": "",
+            "tab": "Color",
+            "value": "0.02352941408753,0.01960784383118,0.02352941408753,1",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!C [Color] Color Control",
+            "type": "Color",
+            "options": [],
+            "title": "Mostly White BG Color",
+            "tag": "",
+            "tab": "Color",
+            "value": "1,1,1,1",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!C [Color] Color Control",
+            "type": "Color",
+            "options": [],
+            "title": "Always White",
+            "tag": "",
+            "tab": "Color",
+            "value": "1,1,1,1",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!C [Color] Color Control",
+            "type": "Color",
+            "options": [],
+            "title": "Always Black",
+            "tag": "",
+            "tab": "Color",
+            "value": "0,0,0,1",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!A Music Bed",
+            "type": "Audio",
+            "options": [],
+            "title": "Music Bed",
+            "tag": "",
+            "tab": "",
+            "value": "3 Water Springs by Ian Post (Summer Camp) - 30s Quiet.mp3",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!Tv [Company Info] Logo Text",
+            "type": "Text",
+            "options": ["visible"],
+            "title": "Logo Text",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "PERRETTA OVERHEAD GARAGE DOORS",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!Iv [Company Info] Logo",
+            "type": "Media",
+            "options": ["visible"],
+            "title": "Logo",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "Blue Solid 1",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!T [Slideshow] Image 1 Text",
+            "type": "Text",
+            "options": [],
+            "title": "Image 1 Text",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "He strives to keep the best lawn in the neighborhood.",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!Ib [Slideshow] Image 1",
+            "type": "Media",
+            "options": ["background-size"],
+            "title": "Image 1",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "AdobeStock_430224536.jpeg",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!T [Slideshow] Image 2 Text",
+            "type": "Text",
+            "options": [],
+            "title": "Image 2 Text",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "He was sitting in a trash can with high street class.",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!Ib [Slideshow] Image 2",
+            "type": "Media",
+            "options": ["background-size"],
+            "title": "Image 2",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "AdobeStock_85133296.jpeg",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!T [Slideshow] Image 3 Text",
+            "type": "Text",
+            "options": [],
+            "title": "Image 3 Text",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "Warm beer on a cold day isn't my idea of fun.",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!Ib [Slideshow] Image 3",
+            "type": "Media",
+            "options": ["background-size"],
+            "title": "Image 3",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "AdobeStock_226873707.jpeg",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!T [Slideshow] Image 4 Text",
+            "type": "Text",
+            "options": [],
+            "title": "Image 4 Text",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "The Great Dane looked more like a horse than a dog.",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!Ib [Slideshow] Image 4",
+            "type": "Media",
+            "options": ["background-size"],
+            "title": "Image 4",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "13640432_xxl.jpg",
+            "hidden": false
+          }
+        ]
+      },
+      {
+        "name": "White BG Template",
+        "id": 1007,
+        "comp": "White BG Template",
+        "folder": "White BG Template",
+        "fields": [
+          {
+            "fullTitle": "!T [Company Info] CTA",
+            "type": "Text",
+            "options": [],
+            "title": "CTA",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "CONTACT US TODAY!",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Website",
+            "type": "Text",
+            "options": [],
+            "title": "Website",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "thisisthewebstieurl.com",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Phone",
+            "type": "Text",
+            "options": [],
+            "title": "Phone",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "000-000-000",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Single Address",
+            "type": "Text",
+            "options": [],
+            "title": "Single Address",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "Single Address",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Multiple Address 1",
+            "type": "Text",
+            "options": [],
+            "title": "Multiple Address 1",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "First Address | Extra Phone",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Multiple Address 2",
+            "type": "Text",
+            "options": [],
+            "title": "Multiple Address 2",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "Second Address | Phone",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Multiple Address 3",
+            "type": "Text",
+            "options": [],
+            "title": "Multiple Address 3",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "Third Address | Phone",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Multiple Address 4",
+            "type": "Text",
+            "options": [],
+            "title": "Multiple Address 4",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "Fourth Address | Phone",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!T [Company Info] Special Instructions",
+            "type": "Text",
+            "options": [],
+            "title": "Special Instructions",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "Special instructions can go here.",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!G [Company Info]",
+            "type": "Group",
+            "options": [],
+            "title": "",
+            "tag": "",
+            "tab": "Company Info",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!C [Color] Color Control",
+            "type": "Color",
+            "options": [],
+            "title": "Primary Color",
+            "tag": "",
+            "tab": "Color",
+            "value": "0,0,1,1",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!C [Color] Color Control",
+            "type": "Color",
+            "options": [],
+            "title": "Secondary Color",
+            "tag": "",
+            "tab": "Color",
+            "value": "0.75686281919479,0.15294118225574,0.17647059261799,1",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!C [Color] Color Control",
+            "type": "Color",
+            "options": [],
+            "title": "Tertiary Color",
+            "tag": "",
+            "tab": "Color",
+            "value": "0.02352941408753,0.01960784383118,0.02352941408753,1",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!C [Color] Color Control",
+            "type": "Color",
+            "options": [],
+            "title": "Mostly White BG Color",
+            "tag": "",
+            "tab": "Color",
+            "value": "1,1,1,1",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!C [Color] Color Control",
+            "type": "Color",
+            "options": [],
+            "title": "Always White",
+            "tag": "",
+            "tab": "Color",
+            "value": "1,1,1,1",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!C [Color] Color Control",
+            "type": "Color",
+            "options": [],
+            "title": "Always Black",
+            "tag": "",
+            "tab": "Color",
+            "value": "0,0,0,1",
+            "hidden": true
+          },
+          {
+            "fullTitle": "!A Music Bed",
+            "type": "Audio",
+            "options": [],
+            "title": "Music Bed",
+            "tag": "",
+            "tab": "",
+            "value": "3 Water Springs by Ian Post (Summer Camp) - 30s Quiet.mp3",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!Tv [Company Info] Logo Text",
+            "type": "Text",
+            "options": ["visible"],
+            "title": "Logo Text",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "PERRETTA OVERHEAD GARAGE DOORS",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!Iv [Company Info] Logo",
+            "type": "Media",
+            "options": ["visible"],
+            "title": "Logo",
+            "tag": "",
+            "tab": "Company Info",
+            "value": "Blue Solid 1",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!T [Slideshow] Image 1 Text",
+            "type": "Text",
+            "options": [],
+            "title": "Image 1 Text",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "He strives to keep the best lawn in the neighborhood.",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!Ib [Slideshow] Image 1",
+            "type": "Media",
+            "options": ["background-size"],
+            "title": "Image 1",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "AdobeStock_430224536.jpeg",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!T [Slideshow] Image 2 Text",
+            "type": "Text",
+            "options": [],
+            "title": "Image 2 Text",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "He was sitting in a trash can with high street class.",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!Ib [Slideshow] Image 2",
+            "type": "Media",
+            "options": ["background-size"],
+            "title": "Image 2",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "AdobeStock_85133296.jpeg",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!T [Slideshow] Image 3 Text",
+            "type": "Text",
+            "options": [],
+            "title": "Image 3 Text",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "Warm beer on a cold day isn't my idea of fun.",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!Ib [Slideshow] Image 3",
+            "type": "Media",
+            "options": ["background-size"],
+            "title": "Image 3",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "AdobeStock_226873707.jpeg",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!T [Slideshow] Image 4 Text",
+            "type": "Text",
+            "options": [],
+            "title": "Image 4 Text",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "The Great Dane looked more like a horse than a dog.",
+            "hidden": false
+          },
+          {
+            "fullTitle": "!Ib [Slideshow] Image 4",
+            "type": "Media",
+            "options": ["background-size"],
+            "title": "Image 4",
+            "tag": "",
+            "tab": "Slideshow",
+            "value": "13640432_xxl.jpg",
+            "hidden": false
+          }
+        ]
+      }
+    ],
+    "fonts": [
+      { "font": "Barlow-Bold", "fontFamily": "Barlow", "fontStyle": "Bold" },
+      { "font": "Barlow-Medium", "fontFamily": "Barlow", "fontStyle": "Medium" },
+      { "font": "Barlow-Regular", "fontFamily": "Barlow", "fontStyle": "Regular" },
+      { "font": "Barlow-SemiBold", "fontFamily": "Barlow", "fontStyle": "SemiBold" },
+      { "font": "Montserrat-Regular", "fontFamily": "Montserrat", "fontStyle": "Regular" }
+    ],
+    "libraryAssets": [
+      {
+        "name": "10696685_xxl.jpg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Auto%20Repair/10696685_xxl.jpg",
+        "fileName": "10696685_xxl.jpg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Auto Repair/10696685_xxl.jpg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "13640432_xxl.jpg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/Template%20Images/13640432_xxl.jpg",
+        "fileName": "13640432_xxl.jpg",
+        "libraryPath": "/TOOLBOX/Template Images/13640432_xxl.jpg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "3 Water Springs by Ian Post (Summer Camp) - 30s Quiet.mp3",
+        "hasVideo": false,
+        "hasAudio": true,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_AUDIO/3%20Water%20Springs%20by%20Ian%20Post%20(Summer%20Camp)%20Artlist.mp3",
+        "fileName": "3%20Water%20Springs%20by%20Ian%20Post%20(Summer%20Camp)%20Artlist.mp3",
+        "libraryPath": "/TOOLBOX/_AUDIO/3 Water Springs by Ian Post (Summer Camp) - 30s Quiet.mp3",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Adjustment Layer 1",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Adjustment Layer 1",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Adjustment Layer 5",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Adjustment Layer 5",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Adjustment Layer 6",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Adjustment Layer 6",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_103879472.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Financial/AdobeStock_103879472.jpeg",
+        "fileName": "AdobeStock_103879472.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Financial/AdobeStock_103879472.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_108630396.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/Imports/AdobeStock_108630396.jpeg",
+        "fileName": "AdobeStock_108630396.jpeg",
+        "libraryPath": "/TOOLBOX/Imports/AdobeStock_108630396.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_109150629.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Home%20Remodel/AdobeStock_109150629.jpeg",
+        "fileName": "AdobeStock_109150629.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Home Remodel/AdobeStock_109150629.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_109790437.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dental/AdobeStock_109790437.jpeg",
+        "fileName": "AdobeStock_109790437.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dental/AdobeStock_109790437.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_112737156.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_112737156.jpeg",
+        "fileName": "AdobeStock_112737156.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_112737156.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_113998009.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Financial/AdobeStock_113998009.jpeg",
+        "fileName": "AdobeStock_113998009.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Financial/AdobeStock_113998009.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_119700472.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_119700472.jpeg",
+        "fileName": "AdobeStock_119700472.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_119700472.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_122095333.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dental/AdobeStock_122095333.jpeg",
+        "fileName": "AdobeStock_122095333.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dental/AdobeStock_122095333.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_124627941.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Auto%20Repair/AdobeStock_124627941.jpeg",
+        "fileName": "AdobeStock_124627941.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Auto Repair/AdobeStock_124627941.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_125495723.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_125495723.jpeg",
+        "fileName": "AdobeStock_125495723.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_125495723.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_126866576.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Lawn%20Care/AdobeStock_126866576.jpeg",
+        "fileName": "AdobeStock_126866576.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Lawn Care/AdobeStock_126866576.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_129961740.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Auto%20Repair/AdobeStock_129961740.jpeg",
+        "fileName": "AdobeStock_129961740.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Auto Repair/AdobeStock_129961740.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_129976996.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Auto%20Repair/AdobeStock_129976996.jpeg",
+        "fileName": "AdobeStock_129976996.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Auto Repair/AdobeStock_129976996.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_129985648.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dental/AdobeStock_129985648.jpeg",
+        "fileName": "AdobeStock_129985648.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dental/AdobeStock_129985648.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_131674914.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Financial/AdobeStock_131674914.jpeg",
+        "fileName": "AdobeStock_131674914.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Financial/AdobeStock_131674914.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_136018860.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dental/AdobeStock_136018860.jpeg",
+        "fileName": "AdobeStock_136018860.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dental/AdobeStock_136018860.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_137773804.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Financial/AdobeStock_137773804.jpeg",
+        "fileName": "AdobeStock_137773804.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Financial/AdobeStock_137773804.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_138061081.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Lawn%20Care/AdobeStock_138061081.jpeg",
+        "fileName": "AdobeStock_138061081.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Lawn Care/AdobeStock_138061081.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_139474604.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Eye%20Care/AdobeStock_139474604.jpeg",
+        "fileName": "AdobeStock_139474604.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Eye Care/AdobeStock_139474604.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_139912747.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Home%20Remodel/AdobeStock_139912747.jpeg",
+        "fileName": "AdobeStock_139912747.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Home Remodel/AdobeStock_139912747.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_140081041.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Home%20Remodel/AdobeStock_140081041.jpeg",
+        "fileName": "AdobeStock_140081041.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Home Remodel/AdobeStock_140081041.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_141940713.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dental/AdobeStock_141940713.jpeg",
+        "fileName": "AdobeStock_141940713.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dental/AdobeStock_141940713.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_141987278.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dental/AdobeStock_141987278.jpeg",
+        "fileName": "AdobeStock_141987278.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dental/AdobeStock_141987278.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_141987453.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dental/AdobeStock_141987453.jpeg",
+        "fileName": "AdobeStock_141987453.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dental/AdobeStock_141987453.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_142505492.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/Imports/AdobeStock_142505492.jpeg",
+        "fileName": "AdobeStock_142505492.jpeg",
+        "libraryPath": "/TOOLBOX/Imports/AdobeStock_142505492.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_152468740.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dental/AdobeStock_152468740.jpeg",
+        "fileName": "AdobeStock_152468740.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dental/AdobeStock_152468740.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_160773679.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Financial/AdobeStock_160773679.jpeg",
+        "fileName": "AdobeStock_160773679.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Financial/AdobeStock_160773679.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_164246818.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Auto%20Repair/AdobeStock_164246818.jpeg",
+        "fileName": "AdobeStock_164246818.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Auto Repair/AdobeStock_164246818.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_168751998.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Lawn%20Care/AdobeStock_168751998.jpeg",
+        "fileName": "AdobeStock_168751998.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Lawn Care/AdobeStock_168751998.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_169088738.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/Imports/AdobeStock_169088738.jpeg",
+        "fileName": "AdobeStock_169088738.jpeg",
+        "libraryPath": "/TOOLBOX/Imports/AdobeStock_169088738.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_169390989.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Eye%20Care/AdobeStock_169390989.jpeg",
+        "fileName": "AdobeStock_169390989.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Eye Care/AdobeStock_169390989.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_171103380.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Lawn%20Care/AdobeStock_171103380.jpeg",
+        "fileName": "AdobeStock_171103380.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Lawn Care/AdobeStock_171103380.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_172627304.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Lawn%20Care/AdobeStock_172627304.jpeg",
+        "fileName": "AdobeStock_172627304.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Lawn Care/AdobeStock_172627304.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_176101951.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Auto%20Repair/AdobeStock_176101951.jpeg",
+        "fileName": "AdobeStock_176101951.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Auto Repair/AdobeStock_176101951.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_178998795.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_178998795.jpeg",
+        "fileName": "AdobeStock_178998795.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_178998795.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_179795502.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_179795502.jpeg",
+        "fileName": "AdobeStock_179795502.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_179795502.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_180912445.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Lawn%20Care/AdobeStock_180912445.jpeg",
+        "fileName": "AdobeStock_180912445.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Lawn Care/AdobeStock_180912445.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_185592300.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Financial/AdobeStock_185592300.jpeg",
+        "fileName": "AdobeStock_185592300.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Financial/AdobeStock_185592300.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_186443785.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Auto%20Repair/AdobeStock_186443785.jpeg",
+        "fileName": "AdobeStock_186443785.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Auto Repair/AdobeStock_186443785.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_187653127.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dental/AdobeStock_187653127.jpeg",
+        "fileName": "AdobeStock_187653127.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dental/AdobeStock_187653127.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_187770314.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Financial/AdobeStock_187770314.jpeg",
+        "fileName": "AdobeStock_187770314.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Financial/AdobeStock_187770314.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_189363093.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Lawn%20Care/AdobeStock_189363093.jpeg",
+        "fileName": "AdobeStock_189363093.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Lawn Care/AdobeStock_189363093.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_190013234.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_190013234.jpeg",
+        "fileName": "AdobeStock_190013234.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_190013234.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_190486078.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Home%20Remodel/AdobeStock_190486078.jpeg",
+        "fileName": "AdobeStock_190486078.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Home Remodel/AdobeStock_190486078.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_193433062.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_193433062.jpeg",
+        "fileName": "AdobeStock_193433062.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_193433062.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_195722653.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Lawn%20Care/AdobeStock_195722653.jpeg",
+        "fileName": "AdobeStock_195722653.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Lawn Care/AdobeStock_195722653.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_200320353.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Auto%20Repair/AdobeStock_200320353.jpeg",
+        "fileName": "AdobeStock_200320353.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Auto Repair/AdobeStock_200320353.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_202342550.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Auto%20Repair/AdobeStock_202342550.jpeg",
+        "fileName": "AdobeStock_202342550.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Auto Repair/AdobeStock_202342550.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_203079035.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/Imports/AdobeStock_203079035.jpeg",
+        "fileName": "AdobeStock_203079035.jpeg",
+        "libraryPath": "/TOOLBOX/Imports/AdobeStock_203079035.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_203200356.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Financial/AdobeStock_203200356.jpeg",
+        "fileName": "AdobeStock_203200356.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Financial/AdobeStock_203200356.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_203929025.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Ear%20Care/AdobeStock_203929025.jpeg",
+        "fileName": "AdobeStock_203929025.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Ear Care/AdobeStock_203929025.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_208255477.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Ear%20Care/AdobeStock_208255477.jpeg",
+        "fileName": "AdobeStock_208255477.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Ear Care/AdobeStock_208255477.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_210571790.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Auto%20Repair/AdobeStock_210571790.jpeg",
+        "fileName": "AdobeStock_210571790.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Auto Repair/AdobeStock_210571790.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_216132798.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_216132798.jpeg",
+        "fileName": "AdobeStock_216132798.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_216132798.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_222485045.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Home%20Remodel/AdobeStock_222485045.jpeg",
+        "fileName": "AdobeStock_222485045.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Home Remodel/AdobeStock_222485045.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_226873707.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/Template%20Images/AdobeStock_226873707.jpeg",
+        "fileName": "AdobeStock_226873707.jpeg",
+        "libraryPath": "/TOOLBOX/Template Images/AdobeStock_226873707.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_232486649.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Eye%20Care/AdobeStock_232486649.jpeg",
+        "fileName": "AdobeStock_232486649.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Eye Care/AdobeStock_232486649.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_23513089.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Home%20Remodel/AdobeStock_23513089.jpeg",
+        "fileName": "AdobeStock_23513089.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Home Remodel/AdobeStock_23513089.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_238255151.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Financial/AdobeStock_238255151.jpeg",
+        "fileName": "AdobeStock_238255151.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Financial/AdobeStock_238255151.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_245578963.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Financial/AdobeStock_245578963.jpeg",
+        "fileName": "AdobeStock_245578963.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Financial/AdobeStock_245578963.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_246519527.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_246519527.jpeg",
+        "fileName": "AdobeStock_246519527.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_246519527.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_251324811.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Home%20Remodel/AdobeStock_251324811.jpeg",
+        "fileName": "AdobeStock_251324811.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Home Remodel/AdobeStock_251324811.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_25267368.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Home%20Remodel/AdobeStock_25267368.jpeg",
+        "fileName": "AdobeStock_25267368.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Home Remodel/AdobeStock_25267368.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_263023711.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Counseling/AdobeStock_263023711.jpeg",
+        "fileName": "AdobeStock_263023711.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Counseling/AdobeStock_263023711.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_265009815.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_265009815.jpeg",
+        "fileName": "AdobeStock_265009815.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_265009815.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_267997133.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_267997133.jpeg",
+        "fileName": "AdobeStock_267997133.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_267997133.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_284541276.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Counseling/AdobeStock_284541276.jpeg",
+        "fileName": "AdobeStock_284541276.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Counseling/AdobeStock_284541276.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_288511091.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_288511091.jpeg",
+        "fileName": "AdobeStock_288511091.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_288511091.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_288862744.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Counseling/AdobeStock_288862744.jpeg",
+        "fileName": "AdobeStock_288862744.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Counseling/AdobeStock_288862744.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_290457223.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Ear%20Care/AdobeStock_290457223.jpeg",
+        "fileName": "AdobeStock_290457223.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Ear Care/AdobeStock_290457223.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_29130089.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_29130089.jpeg",
+        "fileName": "AdobeStock_29130089.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/HVAC/AdobeStock_29130089.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_303783539.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Eye%20Care/AdobeStock_303783539.jpeg",
+        "fileName": "AdobeStock_303783539.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Eye Care/AdobeStock_303783539.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_33367206.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dental/AdobeStock_33367206.jpeg",
+        "fileName": "AdobeStock_33367206.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dental/AdobeStock_33367206.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_358396800.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Eye%20Care/AdobeStock_358396800.jpeg",
+        "fileName": "AdobeStock_358396800.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Eye Care/AdobeStock_358396800.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_39083373.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Lawn%20Care/AdobeStock_39083373.jpeg",
+        "fileName": "AdobeStock_39083373.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Lawn Care/AdobeStock_39083373.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_430224536.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/Template%20Images/AdobeStock_430224536.jpeg",
+        "fileName": "AdobeStock_430224536.jpeg",
+        "libraryPath": "/TOOLBOX/Template Images/AdobeStock_430224536.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_4958172.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Lawn%20Care/AdobeStock_4958172.jpeg",
+        "fileName": "AdobeStock_4958172.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Lawn Care/AdobeStock_4958172.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_61720335.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_61720335.jpeg",
+        "fileName": "AdobeStock_61720335.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_61720335.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_61855596.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_61855596.jpeg",
+        "fileName": "AdobeStock_61855596.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_61855596.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_66227493.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Lawn%20Care/AdobeStock_66227493.jpeg",
+        "fileName": "AdobeStock_66227493.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Lawn Care/AdobeStock_66227493.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_67156246.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_67156246.jpeg",
+        "fileName": "AdobeStock_67156246.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dermatology/AdobeStock_67156246.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_70854822.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/Imports/AdobeStock_70854822.jpeg",
+        "fileName": "AdobeStock_70854822.jpeg",
+        "libraryPath": "/TOOLBOX/Imports/AdobeStock_70854822.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_70973929.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Auto%20Repair/AdobeStock_70973929.jpeg",
+        "fileName": "AdobeStock_70973929.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Auto Repair/AdobeStock_70973929.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_74128280.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dental/AdobeStock_74128280.jpeg",
+        "fileName": "AdobeStock_74128280.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dental/AdobeStock_74128280.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_74811162.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Ear%20Care/AdobeStock_74811162.jpeg",
+        "fileName": "AdobeStock_74811162.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Ear Care/AdobeStock_74811162.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_83238844.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Financial/AdobeStock_83238844.jpeg",
+        "fileName": "AdobeStock_83238844.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Financial/AdobeStock_83238844.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_85133296.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/Template%20Images/AdobeStock_85133296.jpeg",
+        "fileName": "AdobeStock_85133296.jpeg",
+        "libraryPath": "/TOOLBOX/Template Images/AdobeStock_85133296.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_85233601.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Auto%20Repair/AdobeStock_85233601.jpeg",
+        "fileName": "AdobeStock_85233601.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Auto Repair/AdobeStock_85233601.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_93824355.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_STOCK/Services/Lawn%20Care/AdobeStock_93824355.jpeg",
+        "fileName": "AdobeStock_93824355.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Lawn Care/AdobeStock_93824355.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "AdobeStock_99326886.jpeg",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_STOCK/Services/Dental/AdobeStock_99326886.jpeg",
+        "fileName": "AdobeStock_99326886.jpeg",
+        "libraryPath": "/TOOLBOX/_STOCK/Services/Dental/AdobeStock_99326886.jpeg",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Big Ole Test",
+        "hasVideo": true,
+        "hasAudio": true,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Big Ole Test",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Binary Love - 30s.mp3",
+        "hasVideo": false,
+        "hasAudio": true,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_AUDIO/Binary%20Love%20-%2030s.mp3",
+        "fileName": "Binary%20Love%20-%2030s.mp3",
+        "libraryPath": "/TOOLBOX/_AUDIO/Binary Love - 30s.mp3",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Black Fade",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Black Fade",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Black Solid 1",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Black Solid 1",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Black Solid 2",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Black Solid 2",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Black Solid 4",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Black Solid 4",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Blue Solid 1",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Blue Solid 1",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Breathe It - 30s.mp3",
+        "hasVideo": false,
+        "hasAudio": true,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_AUDIO/Breathe%20It%20-%2030s.mp3",
+        "fileName": "Breathe%20It%20-%2030s.mp3",
+        "libraryPath": "/TOOLBOX/_AUDIO/Breathe It - 30s.mp3",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Camera Flip 360 & Skew",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Camera Flip 360 & Skew",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Camera Flip 360 & Skew",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Camera Flip 360 & Skew",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Camera Flip 360 & Skew",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Camera Flip 360 & Skew",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Camera Flip 360 & Skew",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/Templates/White BG Template/Precomps/Camera Flip 360 & Skew",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Camera Flip 360 & Skew",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Camera Flip 360 & Skew",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Camera Flip 360 & Skew",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Camera Flip 360 & Skew",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Camera Flip 360 & Skew",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/White BG Template/Precomps/Camera Flip 360 & Skew",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Camera Flip 360 & Skew",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Camera Flip 360 & Skew",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Camera Flip 360 & Skew",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/Templates/Color BG Template/Precomps/Camera Flip 360 & Skew",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Camera Flip 360 & Skew",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Camera Flip 360 & Skew",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Camera Flip 360 & Skew",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Camera Flip 360 & Skew",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Camera Flip 360 & Skew",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Camera Flip 360 & Skew",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Color BG Template",
+        "hasVideo": true,
+        "hasAudio": true,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Color BG Template",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Color BG Template",
+        "hasVideo": true,
+        "hasAudio": true,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Color BG Template",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Color BG Template",
+        "hasVideo": true,
+        "hasAudio": true,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Color BG Template",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Color BG Template",
+        "hasVideo": true,
+        "hasAudio": true,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Color BG Template",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Color BG Template",
+        "hasVideo": true,
+        "hasAudio": true,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Color BG Template",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Color BG Template",
+        "hasVideo": true,
+        "hasAudio": true,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Color BG Template",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Color BG Template",
+        "hasVideo": true,
+        "hasAudio": true,
+        "brokenLink": false,
+        "libraryPath": "/Templates/Color BG Template/Color BG Template",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Color BG Template",
+        "hasVideo": true,
+        "hasAudio": true,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Color BG Template",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Color BG Template",
+        "hasVideo": true,
+        "hasAudio": true,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Color BG Template",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Freewheel - 30s.mp3",
+        "hasVideo": false,
+        "hasAudio": true,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_AUDIO/Freewheel%20-%2030s.mp3",
+        "fileName": "Freewheel%20-%2030s.mp3",
+        "libraryPath": "/TOOLBOX/_AUDIO/Freewheel - 30s.mp3",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Image 2 Overlay",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Image 2 Overlay",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Intro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Intro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Intro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Intro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Intro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Intro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Intro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Intro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Intro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Intro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Intro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Intro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Intro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/Templates/White BG Template/Precomps/Intro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Intro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Intro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Intro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Intro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Intro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/Templates/Color BG Template/Precomps/Intro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Intro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Intro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Intro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/White BG Template/Precomps/Intro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Intro BG",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Intro BG",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Intro Logo Control",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Intro Logo Control",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Left BG",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Left BG",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Logo",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Logo",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Logo",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Logo",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Logo",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Logo",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Logo",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Logo",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Logo",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Logo",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Logo",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Logo",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Logo",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Logo",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Logo",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/Templates/White BG Template/Precomps/Logo",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Logo",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Logo",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Logo",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/White BG Template/Precomps/Logo",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Logo",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Logo",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Logo",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/Templates/Color BG Template/Precomps/Logo",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Logo Throughout BG",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Logo Throughout BG",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Logo2.png",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/Template%20Images/Logo2.png",
+        "fileName": "Logo2.png",
+        "libraryPath": "/TOOLBOX/Template Images/Logo2.png",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Milestones by Year After Year - 30s Quiet.mp3",
+        "hasVideo": false,
+        "hasAudio": true,
+        "brokenLink": false,
+        "file": "~/Downloads/DexAuto_Template_121123%20folder/(Footage)/TOOLBOX/_AUDIO/made-of-steel_by_john-isaac_Artlist.mp3",
+        "fileName": "made-of-steel_by_john-isaac_Artlist.mp3",
+        "libraryPath": "/TOOLBOX/_AUDIO/Milestones by Year After Year - 30s Quiet.mp3",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Move Address",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Move Address",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Move Website",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Move Website",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Null 4",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Null 4",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Null 5",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Null 5",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Null 6",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Null 6",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Null 7",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Null 7",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Null 8",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Null 8",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Outro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/White BG Template/Precomps/Outro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Outro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/Templates/Color BG Template/Precomps/Outro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Outro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Outro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Outro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Outro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Outro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Outro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Outro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Outro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Outro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/Templates/White BG Template/Precomps/Outro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Outro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Outro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Outro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Outro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Outro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Outro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Outro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Outro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Outro",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Outro",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Right BG",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Right BG",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Slideshow",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Slideshow",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Slideshow",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/Templates/Color BG Template/Precomps/Slideshow",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Slideshow",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Slideshow",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Slideshow",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Slideshow",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Slideshow",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Slideshow",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Slideshow",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Slideshow",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Slideshow",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/Templates/White BG Template/Precomps/Slideshow",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Slideshow",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Slideshow",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Slideshow",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Slideshow",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Slideshow",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Slideshow",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Slideshow",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/White BG Template/Precomps/Slideshow",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Slideshow",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/Big Ole Test/Precomps/Slideshow",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Small Line",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Small Line",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Timeless - Short Version by Valdi Sabev (Zoned) Artlist - 30s Quiet.mp3",
+        "hasVideo": false,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_AUDIO/Timeless%20-%20Short%20Version%20by%20Valdi%20Sabev%20(Zoned)%20Artlist%20-%2030s%20Quiet.mp3",
+        "fileName": "Timeless%20-%20Short%20Version%20by%20Valdi%20Sabev%20(Zoned)%20Artlist%20-%2030s%20Quiet.mp3",
+        "libraryPath": "/TOOLBOX/_AUDIO/Timeless - Short Version by Valdi Sabev (Zoned) Artlist - 30s Quiet.mp3",
+        "typeName": "Footage"
+      },
+      {
+        "name": "Top Website Bar",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/Top Website Bar",
+        "typeName": "Footage"
+      },
+      {
+        "name": "White",
+        "hasVideo": true,
+        "hasAudio": false,
+        "brokenLink": false,
+        "libraryPath": "/TOOLBOX/Solids/White",
+        "typeName": "Footage"
+      },
+      {
+        "name": "White BG Template",
+        "hasVideo": true,
+        "hasAudio": true,
+        "brokenLink": false,
+        "libraryPath": "/User Comps/White BG Template/White BG Template",
+        "typeName": "Composition"
+      },
+      {
+        "name": "White BG Template",
+        "hasVideo": true,
+        "hasAudio": true,
+        "brokenLink": false,
+        "libraryPath": "/Templates/White BG Template/White BG Template",
+        "typeName": "Composition"
+      },
+      {
+        "name": "Within Reach by Always Dreaming - 30s Quiet.mp3",
+        "hasVideo": false,
+        "hasAudio": false,
+        "brokenLink": true,
+        "file": "/taral@spectrio.com%20-%20Google%20D.../My%20Drive/Client%20Projects/_MDS/_TEMPLATES/DEX/ASSETS/New_DEX_Template%20folder/(Footage)/TOOLBOX/_AUDIO/Within%20Reach%20by%20Always%20Dreaming%20-%2030s%20Quiet.mp3",
+        "fileName": "Within%20Reach%20by%20Always%20Dreaming%20-%2030s%20Quiet.mp3",
+        "libraryPath": "/TOOLBOX/_AUDIO/Within Reach by Always Dreaming - 30s Quiet.mp3",
+        "typeName": "Footage"
+      }
+    ]
+  }
+  

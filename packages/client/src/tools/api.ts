@@ -77,7 +77,7 @@ export async function fetchSorcererData(quiet = true): Promise<SorcererOverview>
   const inputs = inputsStore();
 
   if (isDev) {
-    const demoData: SorcererOverview = await (await fetch("../.cache/MenuInfo.json")).json();
+    const demoData: SorcererOverview = await (await fetch("../dev/MenuInfo.json")).json();
     return convertDefaultColorsToHex(demoData);
   }
 
