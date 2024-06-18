@@ -27,9 +27,14 @@ else
   read INSTALL
   if [ $INSTALL = "y" ]; then
     bash "$script_dir/ZXPInstall.sh"
-    COMMAND=ZXPSignCmd
-    # If the ZXPSignCmd executable is still not found, exit the script
-    if ! command -v ZXPSignCmd &> /dev/null; then
+    # If OSX
+    if [ "$(uname)" == "Darwin" ]; then
+      COMMAND=ZXPSignCmd
+    else
+      COMMAND="$script_dir/../ZXPSignCmd"
+    fi
+    # If the COMMAND executable is still not found, exit the script
+    if ! command -v "$COMMAND" &> /dev/null; then
       echo "ZXPSignCmd not found, exiting"
       exit 1
     fi
@@ -47,7 +52,7 @@ rm -rf "$script_dir/../build"
 
 # Create the build directory if it doesn't exist
 mkdir "$script_dir/../build"
-ZXPSignCmd -sign "$script_dir/../dist" "$script_dir/../build/sorcerers-apprentice.zxp" "$script_dir/sorcerers-apprentice.p12" $CERTIFICATE_PASSWORD -tsa http://timestamp.digicert.com/
+"$COMMAND" -sign "$script_dir/../dist" "$script_dir/../build/sorcerers-apprentice.zxp" "$script_dir/sorcerers-apprentice.p12" $CERTIFICATE_PASSWORD -tsa http://timestamp.digicert.com/
 
 # Check if the signing was successful
 if [ $? -eq 0 ]; then

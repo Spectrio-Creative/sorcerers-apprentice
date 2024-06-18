@@ -7,10 +7,13 @@ if [ "$(uname)" == "Darwin" ]; then
     cp -r /Volumes/ZXPSignCmd-64bit/ZXPSignCmd-64bit /usr/local/bin/ZXPSignCmd
     hdiutil detach /Volumes/ZXPSignCmd-64bit
     rm ZXPSignCmd.dmg
+    chmod +x /usr/local/bin/ZXPSignCmd
 else
     # TODO: check if 32 or 64 bit and download the appropriate version
+    # For now, just download the 64-bit version
     curl -L https://github.com/Adobe-CEP/CEP-Resources/blob/master/ZXPSignCMD/4.1.103/win64/ZXPSignCmd.exe?raw=true -o ZXPSignCmd.exe
-    mv ZXPSignCmd.exe /usr/local/bin/ZXPSignCmd
+    chmod +x ZXPSignCmd.exe
 fi
-chmod +x /usr/local/bin/ZXPSignCmd
+# TODO: Add handling for Linux
+
 echo "ZXPSignCmd installed"
