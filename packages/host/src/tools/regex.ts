@@ -19,14 +19,18 @@ export function asRegEx<T>(search: T, options: AsRegExOptions = defaultAsRegExOp
 
   if (typeof search === "string" || typeof search === "number") {
     let searchString = `${search}`;
-    if (!coerce) searchString = escapeRegex(`${searchString}`);
+    if (!coerce) searchString = escapeRegExp(`${searchString}`);
     if (strict) return new RegExp(`^${searchString}$`, options.flags);
     return new RegExp(`${searchString}`, options.flags);
   }
   throw new Error("Invalid search type");
 }
 
-function escapeRegex(text: string) {
-  /* eslint-disable no-useless-escape */
-  return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+// function escapeRegex(text: string) {
+//   return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+// }
+
+
+export function escapeRegExp(text: string) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
