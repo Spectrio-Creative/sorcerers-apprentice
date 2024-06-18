@@ -1,18 +1,26 @@
-// import { createSSNamespace } from "./main";
-// import { saveFile } from "./tools/fs";
-import { queueInAME } from "./tools/ame";
-import { savePresetsJSON } from "./tools/ame/presetsCompiled";
-import { searchLibrary } from "./tools/project";
+import { createSSNamespace } from "./main";
+import { log } from "./tools/system";
 
-// Get comp titled 'Fish Test' from project.
-const comp = searchLibrary(/Fish/gi, { type: "Composition", recursive: true }) as CompItem[];
+// const scriptFile = new File($.fileName);
+// const scriptPath = new File($.fileName).fsName;
 
-if (comp.length === 0) throw new Error("Comp not found.");
 
-savePresetsJSON({
-  callback: (filePath: string) => {
-    alert(filePath);
-  },
-  jsonLocation: "~/Desktop/presets.json",
-});
-// queueInAME(comp);
+// alert(`Script file info:\
+//     absoluteURI: ${scriptFile.absoluteURI}
+//     getRelativeURI('/'): ${scriptFile.getRelativeURI('/')}
+//     fsName: ${scriptFile.fsName}
+//     name: ${scriptFile.name}
+//     displayName: ${scriptFile.displayName}
+//     Script path: ${scriptPath}`)
+
+log("Running playground");
+
+const ss = createSSNamespace();
+
+log("Created namespace");
+
+const menu = ss.getMenuInfo();
+
+
+
+log(menu);

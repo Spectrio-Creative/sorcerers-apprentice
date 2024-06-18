@@ -54,6 +54,6 @@ export default {
     }),
     cleanup(),
     // getBabelOutputPlugin({ presets: ["extendscript"] }),
-    stripComments(),
+    // stripComments(),
   ],
 };
