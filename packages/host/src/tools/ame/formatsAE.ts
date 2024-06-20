@@ -8,7 +8,7 @@ export function saveFormatsJSON({
   const jsonFileString = typeof jsonLocation === "string" ? jsonLocation : jsonLocation.fsName;
   let ameScript = `{{AME_SCRIPT}}`;
     
-  ameScript += `\n\nwritePresetsJSON("${jsonFileString}");`;
+  ameScript += `\n\nwriteFormatsJSON("${jsonFileString}");`;
 
   const ameIsOpen = BridgeTalk.isRunning("ame");
 

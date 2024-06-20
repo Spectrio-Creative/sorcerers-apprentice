@@ -13,7 +13,7 @@ const file = fs.readFileSync("./src/tools/ame/formatsAECompiled.ts", "utf8");
 const fileContent = template.replace(
   "{{AME_SCRIPT}}",
   strip(file, { line: true, block: true, keepProtected: false })
-    .replace("export { writePresetsJSON };", "")
+    .replace("export { writeFormatsJSON };", "")
     // .replace(/"/g, '\\"')
     // .replace(/\n/g, "\\\n")
 );

@@ -1,4 +1,4 @@
-export function savePresetsJSON({
+export function saveFormatsJSON({
   callback,
   jsonLocation,
 }: {
@@ -11,6 +11,7 @@ function createBMP(width, height, color) {
   var headerSize = 54;
   var fileSize = headerSize + width * height * 3;
   var buffer = [];
+  
   buffer.push(0x42); 
   buffer.push(0x4d); 
   buffer.push(fileSize & 0xff);
@@ -25,6 +26,7 @@ function createBMP(width, height, color) {
   buffer.push(0);
   buffer.push(0);
   buffer.push(0); 
+  
   buffer.push(40);
   buffer.push(0);
   buffer.push(0);
@@ -65,6 +67,7 @@ function createBMP(width, height, color) {
   buffer.push(0);
   buffer.push(0);
   buffer.push(0); 
+  
   var colorB = color[2];
   var colorG = color[1];
   var colorR = color[0];
@@ -88,14 +91,18 @@ function writeBMPFile(filePath, width, height, color) {
   file.close();
 }
 
-function writePresetsJSON(jsonLocation) {
+function writeFormatsJSON(jsonLocation) {
   if (jsonLocation === void 0) {
     jsonLocation = "~/formats.json";
   }
   var jsonFile = typeof jsonLocation === "string" ? new File(jsonLocation) : jsonLocation;
+  
   var encoder = app.getEncoderHost();
   var formats = encoder.getFormatList();
+  
+  
   var frontend = app.getFrontend();
+  
   var filePath = "~/red.bmp";
   var width = 16;
   var height = 9;
@@ -107,19 +114,28 @@ function writePresetsJSON(jsonLocation) {
   var encoderWrapper = frontend.addFileToBatch(file.fsName, "H.264", "Match Source - High bitrate");
   alert("EncoderWrapper: ".concat(JSON.stringify(!!encoderWrapper)));
   var formatJSON = {};
+  
   for (var _i = 0, formats_1 = formats; _i < formats_1.length; _i++) {
     var format = formats_1[_i];
+    
     encoderWrapper.loadFormat(format);
     var presets = encoderWrapper.getPresetList().map(function (preset) {
+      
+      
+      
       var breakPoint = preset.indexOf("#");
       var presetName = preset.substring(breakPoint + 1);
+      
       return presetName;
     });
     formatJSON[format] = presets;
   }
+  
+  
   var exporter = app.getExporter();
   exporter.removeAllBatchItems();
   file.remove();
+  
   jsonFile.open("w");
   jsonFile.write(JSON.stringify(formatJSON));
   jsonFile.close();
@@ -130,7 +146,7 @@ function writePresetsJSON(jsonLocation) {
 
 `;
     
-  ameScript += `\n\nwritePresetsJSON("${jsonFileString}");`;
+  ameScript += `\n\nwriteFormatsJSON("${jsonFileString}");`;
 
   const ameIsOpen = BridgeTalk.isRunning("ame");
 
