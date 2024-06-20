@@ -33,6 +33,20 @@ export function aeAlert(message: string) {
   csInterface.evalScript(`alert("${message}")`);
 }
 
+export function aeQuestion(message: string): Promise<boolean> {
+  return new Promise((resolve, _reject) => {
+    if (isDev) {
+      const response = confirm(message);
+      response ? console.log(message, response) : console.warn(message, response);
+      resolve(response);
+      return;
+    }
+    csInterface.evalScript(`confirm("${message}")`, (res) => {
+      resolve(res === "true");
+    });
+  });
+}
+
 // export function saveFile(data: string, fileName: string, type: string) {
 //   if (isDev) {
 //     const blob = new Blob([data], { type });
@@ -70,6 +84,20 @@ export function getProjectPath(): Promise<string> {
       }
     );
   });
+}
+
+export async function fetchAMEPresetData(): Promise<AMEPresetObj> {
+  if (isDev) {
+    const demoData: AMEPresetObj = await (await fetch("../dev/AMEPresets.json")).json();
+    return demoData;
+  }
+
+  return {};
+}
+
+export async function refreshAMEPresetData(): Promise<AMEPresetObj> {
+
+  return {};
 }
 
 export async function fetchSorcererData(quiet = true): Promise<SorcererOverview> {

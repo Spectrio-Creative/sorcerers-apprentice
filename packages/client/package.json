@@ -24,6 +24,7 @@
     "vue-tsc": "^1.8.27"
   },
   "dependencies": {
+    "@coreui/vue": "^5.1.0",
     "@vitejs/plugin-legacy": "^5.3.0",
     "@vueuse/core": "^10.8.0",
     "case-anything": "^2.1.13",

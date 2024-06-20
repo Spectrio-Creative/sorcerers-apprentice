@@ -101,12 +101,12 @@ export class Template {
     return templateChild;
   }
 
-  getOverview() {
+  getOverview(logs = false) {
     const editableOverview = this.editableFields.map((field) => {
       const fieldOverview = field.getOverview();
       return fieldOverview;
     });
-    log(`Overview (${this.name}): ${JSON.stringify(editableOverview)}`);
+    logs && log(`Overview (${this.name}): ${JSON.stringify(editableOverview)}`);
     return {
       name: this.name,
       id: this.id,

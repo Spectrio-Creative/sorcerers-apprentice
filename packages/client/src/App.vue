@@ -33,11 +33,13 @@ import { sorcererStore } from "./stores/sorcerer";
 import RefreshIcon from "./components/Icons/RefreshIcon.vue";
 import { Ref, computed, onMounted, ref } from "vue";
 import { inputsStore } from "./stores/inputs";
+import { ameStore } from "./stores/ame";
 import { sayHello } from './tools/api';
 import ContextMenu from "./components/UI/ContextMenu.vue";
 
 const app = appStore();
 const inputs = inputsStore();
+const ame = ameStore();
 const version = import.meta.env.VITE_APP_VERSION;
 const sorcerer = sorcererStore();
 const traditional: Ref<InstanceType<typeof Traditional> | null> = ref(null);
@@ -72,6 +74,7 @@ defineProps<{
 
 onMounted(() => {
   refresh(true);
+  ame.init();
 });
 </script>
 
@@ -121,9 +124,11 @@ onMounted(() => {
 
 .refresh-button {
   margin: 0 0 2em;
+
   .inner {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-}}
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+}
 </style>

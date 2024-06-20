@@ -21,6 +21,6 @@ log("Created namespace");
 
 const menu = ss.getMenuInfo();
 
+log(`Got menu info as ${typeof menu}`);
 
-
-log(menu);
+confirm("Do you want to run the script?");

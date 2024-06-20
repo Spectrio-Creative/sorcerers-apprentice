@@ -32,6 +32,8 @@ interface InputTemplateValue {
   templateOverview: TemplateOverviewField[];
   compName?: string;
   outputFile?: string;
+  outputFormat?: string;
+  outputPreset?: string;
   status?: InputStatus;
   fields: InputFieldValue[];
 }

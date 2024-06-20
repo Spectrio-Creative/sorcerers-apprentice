@@ -4,11 +4,13 @@ import { TemplateMain } from "./classes/template/TemplateMain";
 import polyfill from "./tools/polyfill";
 import { log } from "./tools/system";
 import { saveFile as saveExport, openCSV } from "./tools/fs";
+import { version } from "../../../package.json";
 
 polyfill();
 
 // Create namespace to avoid conflicts with global
 export function createSSNamespace() {
+  log(`Running Sorcerer's Apprentice Script (v${version})`);
   const template = new TemplateMain();
 
   function getMenuInfo() {

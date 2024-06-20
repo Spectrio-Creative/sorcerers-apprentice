@@ -56,7 +56,7 @@ export class FieldBase {
     this.tab = tab;
   }
 
-  getOverview() {
+  getOverview(logs = false) {
     const overview = {
       fullTitle: this.layer.name,
       type: this.type,
@@ -67,7 +67,7 @@ export class FieldBase {
       value: sanitizeString(this.value),
       hidden: !this.layer.enabled,
     };
-    log(`Overview ${this.layer.name}: ${JSON.stringify(overview)}`);
+    logs && log(`Overview ${this.layer.name}: ${JSON.stringify(overview)}`);
     return overview;
   }
 
