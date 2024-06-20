@@ -86,16 +86,16 @@ export function getProjectPath(): Promise<string> {
   });
 }
 
-export async function fetchAMEPresetData(): Promise<AMEPresetObj> {
+export async function fetchAMEFormatsData(): Promise<AMEFormatsObj> {
   if (isDev) {
-    const demoData: AMEPresetObj = await (await fetch("../dev/AMEPresets.json")).json();
+    const demoData: AMEFormatsObj = await (await fetch("../dev/AMEPresets.json")).json();
     return demoData;
   }
 
   return {};
 }
 
-export async function refreshAMEPresetData(): Promise<AMEPresetObj> {
+export async function refreshAMEFormatsData(): Promise<AMEFormatsObj> {
 
   return {};
 }

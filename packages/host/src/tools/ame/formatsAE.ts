@@ -1,4 +1,4 @@
-export function savePresetsJSON({
+export function saveFormatsJSON({
   callback,
   jsonLocation,
 }: {

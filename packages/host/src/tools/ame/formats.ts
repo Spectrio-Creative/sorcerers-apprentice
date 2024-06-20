@@ -1,6 +1,6 @@
 import { writeBMPFile } from "./play";
 
-export function writePresetsJSON(jsonLocation: File | string = "~/formats.json"): string {
+export function writeFormatsJSON(jsonLocation: File | string = "~/formats.json"): string {
   const jsonFile = (typeof jsonLocation === "string") ? new File(jsonLocation) : jsonLocation;
 
   // @ts-ignore

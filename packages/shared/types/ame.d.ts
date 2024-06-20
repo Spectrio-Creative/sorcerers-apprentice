@@ -1,1 +1,1 @@
-type AMEPresetObj = {[format: string]: string[]};
+type AMEFormatsObj = {[format: string]: string[]};

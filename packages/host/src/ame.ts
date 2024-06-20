@@ -2,7 +2,7 @@
 // import { saveFile } from "./tools/fs";
 // import { searchLibrary } from "./tools/project";
 
-import { writePresetsJSON } from "./tools/ame/presets";
+import { writeFormatsJSON } from "./tools/ame/formats";
 
 // // const ss = createSSNamespace();
 
@@ -43,7 +43,7 @@ import { writePresetsJSON } from "./tools/ame/presets";
 /* eslint-disable */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-writePresetsJSON();
+writeFormatsJSON();
 
 // // @ts-ignore
 // const exporter = app.getExporter();

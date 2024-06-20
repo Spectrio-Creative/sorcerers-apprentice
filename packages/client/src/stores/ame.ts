@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 import { computed, Ref, ref } from "vue";
-import { fetchAMEPresetData, refreshAMEPresetData } from "../tools/api";
+import { fetchAMEFormatsData, refreshAMEFormatsData } from "../tools/api";
 
 export const ameStore = defineStore("ame", () => {
-  const presetObj: Ref<AMEPresetObj> = ref({});
+  const presetObj: Ref<AMEFormatsObj> = ref({});
 
   const formats = computed(() => {
     return Object.keys(presetObj.value);
@@ -14,12 +14,12 @@ export const ameStore = defineStore("ame", () => {
   };
   
   const loadPresets = async () => {
-    const presets = await fetchAMEPresetData();
+    const presets = await fetchAMEFormatsData();
     presetObj.value = presets;
   };
 
   const refreshPresets = async () => {
-    const presets = await refreshAMEPresetData();
+    const presets = await refreshAMEFormatsData();
     presetObj.value = presets;
   };
 
