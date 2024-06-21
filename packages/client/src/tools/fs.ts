@@ -5,12 +5,23 @@ export async function saveFile(
   return new Promise((resolve, _reject) => {
     // Select file from browser dialog to simulate the host
     if (!data) {
-      resolve({
+      let response = {
         status: "OK",
         file: "C:/Users/username/Documents/Project/file.txt",
         filePath: "C:/Users/username/Documents/Project/",
         fileName: "file.txt",
-      });
+      };
+
+      if (type === "video") {
+        response = {
+          status: "OK",
+          file: "C:/Users/username/Documents/Project/video.mp4",
+          filePath: "C:/Users/username/Documents/Project/",
+          fileName: "video.mp4",
+        };
+      }
+
+      resolve(response as FileResponseOK);
       return;
     }
 

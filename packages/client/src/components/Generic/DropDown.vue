@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import VueMultiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.css";
 import CancelButton from "./CancelButton.vue";
@@ -49,12 +49,19 @@ const allOptions = computed(() => {
   return [...props.options, ...addedOptions.value];
 });
 
+// Watch options for changes and change model if it's not in the list
+watch(allOptions, (newOptions) => {
+  if (!newOptions.includes(model.value)) {
+    model.value = newOptions[0];
+  }
+});
+
 function addTag(newTag: string) {
   addedOptions.value.push(newTag);
   model.value = newTag;
 }
 
-defineExpose({addTag});
+defineExpose({ addTag });
 </script>
 
 <style lang="scss" scoped>
@@ -125,6 +132,7 @@ defineExpose({addTag});
       .multiselect__content-wrapper {
         border-color: var(--tertiary-color);
         border-radius: 0;
+        position: relative;
 
         .multiselect__option {
           padding: 0.5rem 1rem;

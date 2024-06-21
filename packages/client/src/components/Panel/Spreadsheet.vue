@@ -56,7 +56,9 @@
     <div class="bottom-menu" style="display: grid; grid-template-columns: 1fr" v-if="!selectingTemplate">
       <div class="left" style="display: flex; gap: 1em">
         <Button :on-click="() => (selectingTemplate = true)">+</Button>
-        <Button :on-click="inputs.processInputs">Process</Button>
+        <Button :on-click="inputs.processInputs">Create Comps</Button>
+        <Button :on-click="() => inputs.processInputs(true)">Queue in AME</Button>
+        <Button :on-click="() => inputs.processInputs(true, true)">Render in AME</Button>
         <Button :disabled="!someInputsNotReady" :on-click="inputs.setAllInputsReady">Re-Activate All</Button>
         <Button v-if="disabledRows.length" type="danger" :on-click="deleteRows">Delete Rows</Button>
       </div>
@@ -91,10 +93,12 @@ import { aeAlert, saveFile } from "../../tools/api";
 import { nanoid } from "nanoid";
 import clone from "just-clone";
 
-const headerInputMap: Record<string, "templateName" | "compName" | "outputFile"> = {
+const headerInputMap: Record<string, "templateName" | "compName" | "outputFile" | "outputFormat" | "outputPreset"> = {
   "Template Name": "templateName",
   "Comp Name": "compName",
   "Output File": "outputFile",
+  "Output Format": "outputFormat",
+  "Output Preset": "outputPreset",
 };
 
 const inputs = inputsStore();
@@ -195,7 +199,7 @@ const getHeadersFromTemplate = (
   template: TemplateOverview,
   headerType: "title" | "fullTitle" | "[tabs] title" = "[tabs] title"
 ) => {
-  const headers = ["Template Name", "Comp Name", "Output File"];
+  const headers = ["Template Name", "Comp Name", "Output File", "Output Format", "Output Preset"];
   const filteredFields = template.fields.filter((field) => field.type !== "Group");
   return headers.concat(
     filteredFields.map((field) => {
@@ -379,7 +383,7 @@ const exportCSV = () => {
 
   for (const [key, group] of Object.entries(groups)) {
     const csv = Papa.unparse(group);
-    saveFile(csv, {fileName: `${key.replace("+++", "+")}.csv`, type: "csv"});
+    saveFile({data: csv, fileName: `${key.replace("+++", "+")}.csv`, type: "csv"});
   }
 
   for (const id of inputsToRemove) {

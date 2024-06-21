@@ -1,24 +1,33 @@
 <template>
   <div class="app">
     <div class="container" @contextmenu.prevent="showContextMenu($event)">
-      <Loader :show="app.processing" />
-      <Button class="refresh-button" :on-click="() => refresh(false)" :styles="['tertiary', 'round']">
-        <div class="inner">
-          <RefreshIcon />
-          <span>Refresh Panel</span>
+      <!-- <div class="container"> -->
+      <Loader :show="app.processing" :text="app.processingMessage" />
+      <template v-if="!initialized">
+        <div style="margin: auto; width: max-content; text-align: center; margin-top: 10em">
+          <h2>The Sorcerer's Apprentice</h2>
+          <p>Initialising...{{ initialized }}</p>
         </div>
-      </Button>
-      <Spreadsheet ref="spreadsheet" v-if="type === 'spreadsheet'" />
-      <Traditional ref="traditional" v-else />
-      <div ref="versionEl" class="version">The Sorcerer’s Apprentice v{{ version }}</div>
-      <ContextMenu v-model:open="showMenu" :actions="contextMenuActions" :position="menuPosition" />
-      <div v-if="debugMode" class="debug">
-        <div style="display: flex; align-items: center; gap: 2rem;">
-          <h2>Debug</h2>
-          <Button :on-click="sayHello">Test</Button>
+      </template>
+      <template v-else>
+        <Button class="refresh-button" :on-click="() => refresh(false)" :styles="['tertiary', 'round']">
+          <div class="inner">
+            <RefreshIcon />
+            <span>Refresh Panel</span>
+          </div>
+        </Button>
+        <Spreadsheet ref="spreadsheet" v-if="type === 'spreadsheet'" />
+        <Traditional ref="traditional" v-else />
+        <div ref="versionEl" class="version">The Sorcerer’s Apprentice v{{ version }}</div>
+        <ContextMenu v-model:open="showMenu" :actions="contextMenuActions" :position="menuPosition" />
+        <div v-if="debugMode" class="debug">
+          <div style="display: flex; align-items: center; gap: 2rem">
+            <h2>Debug</h2>
+            <Button :on-click="sayHello">Test</Button>
+          </div>
+          {{ inputs.inputs }}
         </div>
-        {{ inputs.inputs }}
-      </div>
+      </template>
     </div>
   </div>
 </template>
@@ -31,10 +40,10 @@ import { appStore } from "./stores/app";
 import Button from "./components/Generic/Button.vue";
 import { sorcererStore } from "./stores/sorcerer";
 import RefreshIcon from "./components/Icons/RefreshIcon.vue";
-import { Ref, computed, onMounted, ref } from "vue";
+import { Ref, onMounted, computed, ref } from "vue";
 import { inputsStore } from "./stores/inputs";
 import { ameStore } from "./stores/ame";
-import { sayHello } from './tools/api';
+import { aeQuestion, sayHello } from "./tools/api";
 import ContextMenu from "./components/UI/ContextMenu.vue";
 
 const app = appStore();
@@ -48,9 +57,10 @@ const debugMode = ref(false);
 const versionEl: Ref<HTMLElement | null> = ref(null);
 const showMenu = ref(false);
 const contextMenuActions = computed<{ action: () => void; label: string }[]>(() => [
-  { action: () => debugMode.value = !debugMode.value, label: `${debugMode.value ? 'Hide' : 'Show'} Debug Info` },
+  { action: () => (debugMode.value = !debugMode.value), label: `${debugMode.value ? "Hide" : "Show"} Debug Info` },
 ]);
 const menuPosition = ref({ x: 0, y: 0 });
+const initialized = ref(false);
 
 const showContextMenu = (event: MouseEvent) => {
   event.preventDefault();
@@ -58,23 +68,36 @@ const showContextMenu = (event: MouseEvent) => {
   menuPosition.value = { x: event.clientX, y: event.clientY };
 };
 
-const refresh = async (quiet = false) => {
-  app.processing = true;
+const refresh = async (quiet = false, setProcessing = true) => {
+  if(setProcessing) app.processing = true;
   const traditionalBefore = traditional.value?.beforeRefresh();
 
-  await sorcerer.refresh(quiet);
+  await sorcerer.refresh(quiet, setProcessing);
 
   if (traditionalBefore) traditional.value?.afterRefresh(traditionalBefore);
-  app.processing = false;
+  if (setProcessing) app.processing = false;
 };
 
 defineProps<{
   type: "traditional" | "spreadsheet";
 }>();
 
-onMounted(() => {
-  refresh(true);
-  ame.init();
+onMounted(async () => {
+  app.processing = true;
+  const clearMessage = app.addProcessingMessage("Initialising...");
+  refresh(true, false);
+  const fetched = await ame.init();
+  console.log("AME fetched", fetched);
+  if (!fetched) {
+    const buildList = await aeQuestion(`AME Format cache file not found. Would you like to initialise it now? This will open AME and clear your current queue.`);
+    if (buildList) {
+      await ame.refreshFormats();
+    }
+  }
+  console.log("AME Formats:", ame.formats);
+  clearMessage();
+  initialized.value = true;
+  app.processing = false;
 });
 </script>
 
@@ -84,6 +107,7 @@ onMounted(() => {
 // --tertiary-color: #161616;
 // --highlight-color: #52a0e9;
 // --hover-color: #9a9a9a;
+
 .app {
   position: fixed;
   top: 0;

@@ -31,9 +31,9 @@ export const sorcererStore = defineStore("sorcerer", () => {
   const mediaAssets = computed(() => overview.value.libraryAssets.filter((a) => !a.hasAudio && !a.hasVideo));
   const mediaAssetNames = computed(() => mediaAssets.value.map((a) => a.name));
 
-  const refresh = async (quiet = true) => {
-    app.processing = true;
-    app.setProcessingMessage("Refreshing Template Data...");
+  const refresh = async (quiet = true, setProcessing = true) => {
+    if (setProcessing) app.processing = true;
+    const clearMessage = app.addProcessingMessage("Refreshing Template Data...");
 
     const newData = await fetchSorcererData(quiet);
     console.log("fetched data", newData);
@@ -41,7 +41,8 @@ export const sorcererStore = defineStore("sorcerer", () => {
 
     inputs.postRefresh(newData);
     
-    app.processing = false;
+    clearMessage();
+    if (setProcessing) app.processing = false;
   };
 
   return {

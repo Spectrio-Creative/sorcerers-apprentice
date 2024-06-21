@@ -26,7 +26,10 @@
           <div>Comp Name:</div>
           <div>Output File:</div>
           <TextInput v-model="input.compName" />
-          <TextInput v-model="input.outputFile" />
+          <div class="file-selector">
+            <TextInput v-model="input.outputFile" />    
+            <Button text="Browse" :on-click="() => selectOutputFile(input.id)" :width="125"></Button>
+          </div>
           <div style="display: flex; gap: 1em">
             <Button class="refresh-button" :on-click="refreshPresets" :styles="['tertiary', 'round']" tooltip="Refresh AME Formats">
               <div class="inner">
@@ -74,7 +77,8 @@
     </div>
     <div class="actions">
       <Button :disabled="templates.length < 1" :on-click="inputs.processInputs">Build Comp</Button>
-      <Button :disabled="templates.length < 1" :on-click="renderComp">Render</Button>
+      <Button :disabled="templates.length < 1" :on-click="() => addCompToQueue(false)">Add To Queue (AME)</Button>
+      <Button :disabled="templates.length < 1" :on-click="() => addCompToQueue(true)">Render (AME)</Button>
     </div>
     <!-- {{ inputs.inputs }} -->
   </div>
@@ -91,7 +95,7 @@ import { sorcererStore } from "../../stores/sorcerer";
 import RefreshIcon from "../../components/Icons/RefreshIcon.vue";
 import { ameStore } from "../../stores/ame";
 import DropDown from "../Generic/DropDown.vue";
-import { aeQuestion } from "../../tools/api";
+import { aeQuestion, runTest, saveFile } from "../../tools/api";
 
 interface Group {
   title: string;
@@ -181,6 +185,16 @@ const beforeRefresh = () => {
   return { selectedIndex, groupIndex };
 };
 
+const selectOutputFile = async (id: string) => {
+  const input = inputs.inputs.find((input) => input.id === id);
+  if (!input) return;
+
+  const fileInfo = await saveFile({type: "video", fileName: input.compName || "Comp" });
+  if(!(fileInfo?.filePath)) return;
+
+  input.outputFile = fileInfo.filePath;
+};
+
 const afterRefresh = (options: { selectedIndex: number; groupIndex: number }) => {
   selectedTemplate.value = sorcerer.overview.templates[options.selectedIndex];
   selectGroup(groups.value[options.groupIndex]);
@@ -194,15 +208,14 @@ defineExpose({
 });
 
 const refreshPresets = async () => {
+  await runTest();
   const approved = await aeQuestion("Refreshing presets will clear the AME queue, are you sure you want to continue?");
   if (!approved) return;
   ame.refreshFormats();
 };
 
-const renderComp = async () => {
-  // await buildComp();
-  await inputs.processInputs();
-  // sorcerer.renderComps();
+const addCompToQueue = async (render: boolean) => {
+  await inputs.processInputs(true, render);
 };
 </script>
 
@@ -260,6 +273,14 @@ const renderComp = async () => {
       margin-bottom: 2rem;
     }
   }
+}
+
+.file-selector {
+  display: grid;
+  grid-template-columns: 1fr 125px;
+  gap: 1em;
+  display: grid;
+  grid-template-columns: 1fr 90px;
 }
 
 .refresh-button {
