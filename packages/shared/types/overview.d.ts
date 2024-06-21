@@ -1,7 +1,7 @@
 interface FieldQuickOverview {
   fullTitle: string;
   title: string;
-  type: FieldType | "Output";
+  type: FieldType | "Output" | "Format" | "Preset";
   tab?: string;
   tag?: string;
   options: FieldOption[];
@@ -13,7 +13,7 @@ interface FieldQuickOverview {
 interface FieldOverview extends FieldQuickOverview {
   fullTitle: string;
   title: string;
-  type: FieldType | "Output";
+  type: FieldType | "Output" | "Format" | "Preset";
   tab: string;
   tag: string;
   options: FieldOption[];

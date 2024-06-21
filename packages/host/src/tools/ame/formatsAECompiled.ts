@@ -112,22 +112,20 @@ function writeFormatsJSON(jsonLocation) {
     writeBMPFile(filePath, width, height, color);
   }
   var encoderWrapper = frontend.addFileToBatch(file.fsName, "H.264", "Match Source - High bitrate");
-  alert("EncoderWrapper: ".concat(JSON.stringify(!!encoderWrapper)));
   var formatJSON = {};
   
   for (var _i = 0, formats_1 = formats; _i < formats_1.length; _i++) {
     var format = formats_1[_i];
     
     encoderWrapper.loadFormat(format);
-    var presets = encoderWrapper.getPresetList().map(function (preset) {
-      
-      
-      
+    var presets = [];
+    var list = encoderWrapper.getPresetList();
+    for (var _a = 0, list_1 = list; _a < list_1.length; _a++) {
+      var preset = list_1[_a];
       var breakPoint = preset.indexOf("#");
       var presetName = preset.substring(breakPoint + 1);
-      
-      return presetName;
-    });
+      presets.push(presetName);
+    }
     formatJSON[format] = presets;
   }
   
@@ -135,9 +133,26 @@ function writeFormatsJSON(jsonLocation) {
   var exporter = app.getExporter();
   exporter.removeAllBatchItems();
   file.remove();
+  var simpleStringify = function simpleStringify(obj) {
+    var str = "{";
+    for (var key in obj) {
+      str += '"' + key + '": [ ';
+      for (var _i = 0, _a = obj[key]; _i < _a.length; _i++) {
+        var item = _a[_i];
+        str += '"' + item + '",';
+      }
+      
+      str = str.slice(0, -1);
+      str += " ],";
+    }
+    
+    str = str.slice(0, -1);
+    str += "}";
+    return str;
+  };
   
   jsonFile.open("w");
-  jsonFile.write(JSON.stringify(formatJSON));
+  jsonFile.write('{ "timestamp": "' + new Date() + '", "formats": ' + simpleStringify(formatJSON) + "}");
   jsonFile.close();
   return jsonFile.fsName;
 }

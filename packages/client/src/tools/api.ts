@@ -88,16 +88,53 @@ export function getProjectPath(): Promise<string> {
 
 export async function fetchAMEFormatsData(): Promise<AMEFormatsObj> {
   if (isDev) {
+    // return { timestamp: `${new Date()}`, formats: {} };
     const demoData: AMEFormatsObj = await (await fetch("../dev/AMEPresets.json")).json();
     return demoData;
   }
 
-  return {};
+  return new Promise((resolve, _reject) => {
+    csInterface.evalScript("ss.fetchAMEFormatsData();", async (res) => {
+      // console.log(res);
+      if (res === "{}") {
+        resolve({ timestamp: `${new Date()}`, formats: {} });
+      }
+      const data = JSON.parse(res as string);
+
+      console.log(data);
+
+      resolve(data || { timestamp: `${new Date()}`, formats: {} });
+    });
+  });
 }
 
 export async function refreshAMEFormatsData(): Promise<AMEFormatsObj> {
+  if (isDev) {
+    const demoData: AMEFormatsObj = await (await fetch("../dev/AMEPresets.json")).json();
+    return demoData;
+  }
 
-  return {};
+  const timestamp = new Date();
+
+  const checkTimeAndWait: () => Promise<AMEFormatsObj> = async () => {
+    const data = await fetchAMEFormatsData();
+
+    const lastRefresh = new Date(data.timestamp);
+    if (timestamp < lastRefresh) {
+      return data;
+    }
+
+    return new Promise((resolve, _reject) => {
+      setTimeout(async () => {
+        resolve(await checkTimeAndWait());
+      }, 1000);
+    });
+  };
+
+  return new Promise(async (resolve, _reject) => {
+    csInterface.evalScript("ss.refreshAMEFormatsData();");
+    resolve(await checkTimeAndWait());
+  });
 }
 
 export async function fetchSorcererData(quiet = true): Promise<SorcererOverview> {
@@ -169,6 +206,29 @@ export async function sendSorcererData(data: InputTemplateValue[]): Promise<Comp
   });
 }
 
+export async function sendCompsToAME(data: AMEComp[], startRender = false): Promise<AMEResponse> {
+  if (isDev) {
+    console.log(data);
+    return {
+      status: "OK",
+    };
+  }
+
+  return new Promise((resolve, _reject) => {
+    csInterface.evalScript(
+      `
+    var data = ${JSON.stringify(data)};
+    var startRender = ${JSON.stringify(startRender)};
+    ss.sendCompsToAME(data, startRender);
+    `,
+      (res) => {
+        console.log(res);
+        resolve(JSON.parse(res as string));
+      }
+    );
+  });
+}
+
 export async function runTest(): Promise<string> {
   return new Promise((resolve, _reject) => {
     if (isDev) {
@@ -225,17 +285,20 @@ export async function selectFile(type: SorcererFile = "other"): Promise<{
   });
 }
 
-export async function saveFile(
-  data?: string,
-  options: { fileName: string; type: ExportFile } = { fileName: "", type: "other" }
-): Promise<{
-  status: string;
-  file: string;
-  filePath: string;
-  fileName: string;
-}> {
+export async function saveFile({
+  data,
+  fileName,
+  type,
+}: {
+  data?: string;
+  fileName?: string;
+  type?: SorcererFile;
+}): Promise<FileResponse> {
+  fileName = fileName || "Untitled";
+  type = type || "other";
+
   if (isDev) {
-    const fileInfo = await fs.saveFile(data, options.type);
+    const fileInfo = await fs.saveFile(data, type);
     console.log("saved file", fileInfo);
     return fileInfo;
   }
@@ -244,8 +307,8 @@ export async function saveFile(
     csInterface.evalScript(
       `
     var data = ${JSON.stringify(data)};
-    var fileName = ${JSON.stringify(options.fileName)};
-    var type = ${JSON.stringify(options.type)};
+    var fileName = ${JSON.stringify(fileName)};
+    var type = ${JSON.stringify(type)};
     ss.saveFile(data, type);`,
       (res) => {
         console.log(res);

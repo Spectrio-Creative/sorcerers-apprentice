@@ -165,3 +165,21 @@ export function forPropertyInGroup(group: PropertyGroup, callback: (prop: Proper
     else callback(propClass);
   }
 }
+
+export function importFile(filePath: string): _ItemClasses | undefined {
+      // Try importing the file
+      const file = new File(filePath);
+      if (!file.exists) return;
+
+      // Search again in the library for the filename
+      const searchResults = searchLibrary(file.name, { maxResult: 1, strict: true });
+      if (searchResults.length > 0) return searchResults[0];
+
+      const item = app.project.importFile(new ImportOptions(file));
+
+      // Move the item into TOOLBOX/Imports folder
+      const toolbox: FolderItem = searchLibrary("TOOLBOX", { maxResult: 1, type: "Folder" })[0] as FolderItem || app.project.rootFolder.items.addFolder("TOOLBOX");
+      const importsFolder = searchLibrary("Imports", { maxResult: 1, type: "Folder", parent: toolbox })[0] as FolderItem || toolbox.items.addFolder("Imports");
+      item.parentFolder = importsFolder;
+      return item;
+}

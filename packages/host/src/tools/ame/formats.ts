@@ -23,23 +23,19 @@ export function writeFormatsJSON(jsonLocation: File | string = "~/formats.json")
   }
 
   const encoderWrapper = frontend.addFileToBatch(file.fsName, "H.264", "Match Source - High bitrate");
-  alert(`EncoderWrapper: ${JSON.stringify(!!encoderWrapper)}`);
   const formatJSON = {};
 
   // Loop through all the formats and presets
   for (const format of formats) {
     // const presets = encoder.getPresets(format);
     encoderWrapper.loadFormat(format);
-    const presets = encoderWrapper.getPresetList().map((preset: string) => {
-      // The presets are sometimes formatted like "9bb57b43-b3d1-448f-bdb0-4c5e3dcf9750#Match Source - High bitrate"
-      // We only want the name of the preset without the GUID.
-      // If there are multiple # characters, we only want to split on the first one.
-
+    const presets  = [];
+    const list = encoderWrapper.getPresetList();
+    for (const preset of list) {
       const breakPoint = preset.indexOf("#");
       const presetName = preset.substring(breakPoint + 1);
-      // const guid = preset.substring(0, breakPoint);
-      return presetName;
-    });
+      presets.push(presetName);
+    }
     formatJSON[format] = presets;
   }
 
@@ -49,9 +45,26 @@ export function writeFormatsJSON(jsonLocation: File | string = "~/formats.json")
   exporter.removeAllBatchItems();
   file.remove();
 
+  const simpleStringify = (obj: AMEFormats): string => {
+    let str = "{";
+    for (const key in obj) {
+      str += '"' + key + '": [ ';
+      for (const item of obj[key]) {
+        str += '"' + item + '",';
+      }
+      // Remove the trailing comma
+      str = str.slice(0, -1);
+      str += " ],";
+    }
+    // Remove the trailing comma
+    str = str.slice(0, -1);
+    str += "}";
+    return str;
+  };
+
   // Save the JSON to a file
   jsonFile.open("w");
-  jsonFile.write(JSON.stringify(formatJSON));
+  jsonFile.write('{ "timestamp": "' + new Date() + '", "formats": ' + simpleStringify(formatJSON) + "}");
   jsonFile.close();
 
   return jsonFile.fsName;

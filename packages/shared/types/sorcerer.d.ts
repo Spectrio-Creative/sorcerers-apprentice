@@ -5,7 +5,7 @@ interface InputFieldValue {
   title: string;
   tab?: string;
   options: FieldOption[];
-  type: FieldType | "Output";
+  type: FieldType | "Output" | "Format" | "Preset";
   value: string;
   hidden?: boolean;
 }

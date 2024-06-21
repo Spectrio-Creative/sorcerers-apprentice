@@ -3,10 +3,14 @@ import { computed, Ref, ref } from "vue";
 import { fetchAMEFormatsData, refreshAMEFormatsData } from "../tools/api";
 
 export const ameStore = defineStore("ame", () => {
-  const presetObj: Ref<AMEFormatsObj> = ref({});
+  const presetObj: Ref<AMEFormatsObj> = ref({timestamp: `${new Date()}`, formats: {}});
 
   const formats = computed(() => {
     return Object.keys(presetObj.value.formats || {});
+  });
+
+  const defaultFormat = computed(() => {
+    return formats.value.find((f) => /h\.264/i.test(f)) || formats.value[0] || "";
   });
 
   const getPresets = (format: string | undefined) => {
@@ -32,6 +36,7 @@ export const ameStore = defineStore("ame", () => {
 
   return {
     formats,
+    defaultFormat,
     getPresets,
     loadFormats,
     refreshFormats,
