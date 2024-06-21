@@ -1,12 +1,7 @@
 export async function saveFile(
   data?: string,
   type: ExportFile = "other"
-): Promise<{
-  status: string;
-  file: string;
-  filePath: string;
-  fileName: string;
-}> {
+): Promise<FileResponse> {
   return new Promise((resolve, _reject) => {
     // Select file from browser dialog to simulate the host
     if (!data) {

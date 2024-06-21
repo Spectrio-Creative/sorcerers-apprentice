@@ -141,14 +141,17 @@ export async function fetchSorcererData(quiet = true): Promise<SorcererOverview>
   });
 }
 
-export async function sendSorcererData(data: InputTemplateValue[]): Promise<string> {
+export async function sendSorcererData(data: InputTemplateValue[]): Promise<CompResponse> {
   return new Promise((resolve, _reject) => {
     if (isDev) {
       // Settimeout to simulate the delay of the host
       setTimeout(() => {
         console.log(JSON.parse(JSON.stringify(data)));
         // console.log(`setValuesFromList('${JSON.stringify(data)}');`);
-        resolve("OK");
+        resolve({
+          status: "OK",
+          compIds: data.map((_d) => ({ id: "123", guid: "456" })),
+        });
       }, 1000);
       return;
     }
@@ -160,7 +163,7 @@ export async function sendSorcererData(data: InputTemplateValue[]): Promise<stri
     `,
       (res) => {
         console.log(res);
-        resolve(res as string);
+        resolve(JSON.parse(res as string || "") as CompResponse);
       }
     );
   });

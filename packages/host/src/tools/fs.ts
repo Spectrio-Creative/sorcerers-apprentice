@@ -1,10 +1,29 @@
-export const openCSV = () => {
-  if (File.fs === "Windows") {
-    return File.openDialog("Open CSV file", "Text: *.csv,All files: *.*", false);
-  }
-  alert(File.fs);
+const videoFilter = "Video Files (*.mp4; *.avi; *.mov; *.mkv)|*.mp4; *.avi; *.mov; *.mkv|All Files (*.*)|*.*";
+const csvFilter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*";
+const audioFilter = "Audio Files (*.mp3; *.wav; *.aac; *.flac; *.ogg)|*.mp3; *.wav; *.aac; *.flac; *.ogg|All Files (*.*)|*.*";
+const imageFilter = "Image Files (*.jpg; *.jpeg; *.png; *.bmp; *.tiff)|*.jpg; *.jpeg; *.png; *.bmp; *.tiff|All Files (*.*)|*.*";
+const visualFilter = "Visual Files (*.svg; *.pdf; *.eps; *.ai)|*.svg; *.pdf; *.eps; *.ai|All Files (*.*)|*.*";
+const imageVideoFilter = "Image and Video Files (*.jpg; *.jpeg; *.png; *.bmp; *.tiff; *.mp4; *.avi; *.mov; *.mkv)|*.jpg; *.jpeg; *.png; *.bmp; *.tiff; *.mp4; *.avi; *.mov; *.mkv|All Files (*.*)|*.*";
+const mediaFilter = "All Supported Files (*.mp4; *.avi; *.mov; *.mkv; *.mp3; *.wav; *.aac; *.flac; *.jpg; *.jpeg; *.png; *.bmp; *.tiff)|*.mp4; *.avi; *.mov; *.mkv; *.mp3; *.wav; *.aac; *.flac; *.jpg; *.jpeg; *.png; *.bmp; *.tiff|All Files (*.*)|*.*"
+const allFilesFilter = "All Files (*.*)|*.*";
 
-  return File.openDialog(
+export const constructFileResponse = (file: File | null): FileResponse => {
+  const response: FileResponse = {
+    status: file ? "OK" : "CANCELLED",
+    file: file?.fsName,
+    filePath: file?.fsName,
+    fileName: file?.name,
+  }
+
+  return response;
+}
+
+export const openCSV = () => {
+  let file: File | null = null;
+  if (File.fs === "Windows") {
+    file = File.openDialog("Open CSV file", csvFilter, false);
+  }
+  else file = File.openDialog(
     "Open CSV file",
     function (file: File | Folder) {
       if (file instanceof Folder) return true;
@@ -15,15 +34,39 @@ export const openCSV = () => {
     },
     false
   );
+
+  const response = constructFileResponse(file);
+  return JSON.stringify(response);
 };
+
+export const openMediaFile = () => {
+  let file: File | null = null;
+  if (File.fs === "Windows") {
+    file = File.openDialog("Open media file", imageVideoFilter, false);
+  }
+  else file = File.openDialog(
+    "Open media file",
+    function (file: File | Folder) {
+      if (file instanceof Folder) return true;
+      if (file.hidden) return false;
+      if (file.name.match(/\.mp4$/i)) return true;
+      if (file.type == "MP4 ") return true;
+      return false;
+    },
+    false
+  );
+  
+  const response = constructFileResponse(file);
+  return JSON.stringify(response);
+}
 
 export interface SaveFileOptions {
   fileName?: string;
   prompt?: string;
-  type?: ExportFile;
+  type?: SorcererFile;
 }
 
-export const fileFiltersMac = (type: ExportFile) => {
+export const fileFiltersMac = (type: SorcererFile) => {
   switch (type) {
     case "csv":
       return function (file: File) {
@@ -31,7 +74,7 @@ export const fileFiltersMac = (type: ExportFile) => {
         if (file.type == "CSV ") return true;
         return false;
       };
-    case "mp4":
+    case "video":
       return function (file: File) {
         if (file.name.match(/\.mp4$/i)) return true;
         if (file.type == "MP4 ") return true;
@@ -44,10 +87,12 @@ export const fileFiltersMac = (type: ExportFile) => {
   }
 };
 
-export const fileFiltersWindows = (type: ExportFile) => {
-  if (type === "csv") return "CSV: *.csv";
-  if (type === "mp4") return "MP4: *.mp4";
-  return "*.*";
+export const fileFiltersWindows = (type: SorcererFile) => {
+  if (type === "csv") return csvFilter;
+  if (type === "video") return videoFilter;
+  if (type === "audio") return audioFilter;
+  if (type === "image") return imageFilter;
+  return allFilesFilter;
 };
 
 export const saveFile = (data?: string, options?: SaveFileOptions) => {
