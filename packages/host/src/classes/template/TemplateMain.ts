@@ -1,6 +1,7 @@
 import { fontLibrary } from "../../globals/project/fontLibrary";
 import { mediaLibrary } from "../../globals/project/mediaLibrary";
 import { searchLibrary } from "../../tools/project";
+import { log } from "../../tools/system";
 import { findTemplatesInFolders } from "../../tools/templates";
 import { createMainDialog } from "../MainDialog";
 import { Template } from "./Template";
@@ -106,7 +107,7 @@ export class TemplateMain {
       fontLibrary.refresh();
       mediaLibrary.refresh();
       const templates = this.templates.map((template) => template.getOverview());
-      
+
       return {
         templates,
         fonts: fontLibrary.projectFonts,
@@ -122,7 +123,8 @@ export class TemplateMain {
     }
   }
 
-  setValuesFromList(list: InputTemplateValue[]) {
+  setValuesFromList(list: InputTemplateValue[]): ({ id: number; guid: string } | null)[] {
+    const compIds: ({ id: number; guid: string } | null)[] = [];
     list.forEach((input) => {
       let found = this.templates.find((t) => t.id === input.templateId);
       if (!found) found = this.templates.find((t) => t.name === input.templateName);
@@ -130,8 +132,14 @@ export class TemplateMain {
         const tempChild = found.duplicate(input.compName);
         tempChild.fillValues(input.fields);
         tempChild.setCompName(tempChild.name);
+        compIds.push({ guid: (tempChild.mainComp as any).dynamicLinkGUID, id: tempChild.mainComp.id });
+      } else {
+        log(`Error: Could not find template for ${input.templateName}`);
+        compIds.push(null);
       }
     });
+
+    return compIds;
   }
 
   render(title: string) {
