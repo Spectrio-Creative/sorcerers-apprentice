@@ -196,7 +196,7 @@ defineExpose({
 const refreshPresets = async () => {
   const approved = await aeQuestion("Refreshing presets will clear the AME queue, are you sure you want to continue?");
   if (!approved) return;
-  ame.refreshPresets();
+  ame.refreshFormats();
 };
 
 const renderComp = async () => {

@@ -6,32 +6,35 @@ export const ameStore = defineStore("ame", () => {
   const presetObj: Ref<AMEFormatsObj> = ref({});
 
   const formats = computed(() => {
-    return Object.keys(presetObj.value);
+    return Object.keys(presetObj.value.formats || {});
   });
 
   const getPresets = (format: string | undefined) => {
-    return presetObj.value[format || ""] || [];
+    if (!presetObj.value.formats) return [];
+    return presetObj.value.formats[format || ""] || [];
   };
   
-  const loadPresets = async () => {
+  const loadFormats = async () => {
     const presets = await fetchAMEFormatsData();
     presetObj.value = presets;
   };
 
-  const refreshPresets = async () => {
+  const refreshFormats = async () => {
     const presets = await refreshAMEFormatsData();
     presetObj.value = presets;
   };
 
   const init = async () => {
-    await loadPresets();
+    await loadFormats();
+    const empty = Object.keys(presetObj.value.formats).length === 0;
+    return !empty;
   };
 
   return {
     formats,
     getPresets,
-    loadPresets,
-    refreshPresets,
+    loadFormats,
+    refreshFormats,
     init
   };
 });
