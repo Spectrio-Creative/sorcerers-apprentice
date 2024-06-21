@@ -1,4 +1,4 @@
-import { searchLibrary } from "../../../tools/project";
+import { importFile, searchLibrary } from "../../../tools/project";
 import { parseLayerType, alignAnchorPoint, getLayerRect } from "../../../tools/layer";
 import { LayerBase, LayerBaseOptions } from "./LayerBase";
 
@@ -22,7 +22,7 @@ export class LayerMedia extends LayerBase {
     const originalType = parseLayerType(this.layer);
 
     // Check if value exists in the library
-    const item = searchLibrary(value, { maxResult: 1, strict: true })[0] || searchLibrary(value, { maxResult: 1 })[0];
+    let item = searchLibrary(value, { maxResult: 1, strict: true })[0] || searchLibrary(value, { maxResult: 1 })[0] || importFile(value);
     if (!item) return;
 
     this.avLayer.replaceSource(item as AVItem, true);
