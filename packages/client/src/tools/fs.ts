@@ -1,6 +1,6 @@
 export async function saveFile(
   data?: string,
-  type: ExportFile = "other"
+  type: SorcererFile = "other"
 ): Promise<FileResponse> {
   return new Promise((resolve, _reject) => {
     // Select file from browser dialog to simulate the host
@@ -15,7 +15,7 @@ export async function saveFile(
     }
 
     // Save file to simulate the host
-    const blobType = type === "csv" ? "text/csv" : type === "mp4" ? "video/mp4" : "text/plain";
+    const blobType = type === "csv" ? "text/csv" : type === "video" ? "video/mp4" : "text/plain";
     const blob = new Blob([data], { type: blobType });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -33,7 +33,7 @@ export async function saveFile(
   });
 }
 
-export async function selectFile(_type: ImportFile | ExportFile = "other"): Promise<{
+export async function selectFile(_type: SorcererFile = "other"): Promise<{
   status: string;
   file: string;
   filePath: string;

@@ -17,7 +17,7 @@ const props = defineProps<{
   title: string;
   showCancel?: boolean;
   cancel?: () => void;
-  fileType: ImportFile | ExportFile;
+  fileType: SorcererFile;
   output?: boolean;
   options: string[];
   slim?: boolean;

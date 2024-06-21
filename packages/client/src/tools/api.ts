@@ -200,9 +200,7 @@ export async function sayHello(): Promise<string> {
   });
 }
 
-export async function selectFile(
-  type: ImportFile | ExportFile = "other"
-): Promise<{
+export async function selectFile(type: SorcererFile = "other"): Promise<{
   status: string;
   file: string;
   filePath: string;

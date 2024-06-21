@@ -45,7 +45,7 @@ export function createSSNamespace() {
     template.showMenuPanel();
   }
 
-  function selectFile(type: ImportFile = "other") {
+  function selectFile(type: SorcererFile = "other") {
     if (type === "csv") {
       return openCSV();
     }
@@ -53,7 +53,7 @@ export function createSSNamespace() {
     return File.openDialog("Select a file", "*.*", false);
   }
 
-  function saveFile(data?: string, type: ExportFile = "other") {
+  function saveFile(data?: string, type: SorcererFile = "other"): string {
     try {
       const file: File = saveExport(data, { type });
 
