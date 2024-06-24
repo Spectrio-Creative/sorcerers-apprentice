@@ -429,3 +429,24 @@ const ss = createSSNamespace();
 const response = ss.setValuesFromList(JSON.stringify(textData));
 
 log(response);
+
+// const responseObj = JSON.parse(response) as CompResponseOK;
+
+// const ameComps: AMEComp[] = [];
+
+// const guid = responseObj.compIds[0]?.guid;
+
+// const input = textData[0];
+
+// if (guid) {
+//   ameComps.push({
+//     guid,
+//     filePath: input.outputFile as string,
+//     format: input.outputFormat as string,
+//     preset: input.outputPreset as string,
+//   });
+// }
+
+// log(JSON.stringify(ameComps));
+
+// ss.sendCompsToAME(ameComps, false);
