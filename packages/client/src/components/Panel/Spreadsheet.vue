@@ -540,6 +540,10 @@ const deleteRows = () => {
         }
       }
     }
+
+    :deep(.dropdown .select-container .multiselect .multiselect__content-wrapper) {
+      position: absolute;
+    }
   }
 }
 </style>

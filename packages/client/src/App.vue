@@ -6,7 +6,7 @@
       <template v-if="!initialized">
         <div style="margin: auto; width: max-content; text-align: center; margin-top: 10em">
           <h2>The Sorcerer's Apprentice</h2>
-          <p>Initialising...{{ initialized }}</p>
+          <!-- <p>Initialising...</p> -->
         </div>
       </template>
       <template v-else>

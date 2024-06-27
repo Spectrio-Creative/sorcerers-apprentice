@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, computed } from "vue";
+import { ref, Ref, computed, onMounted } from "vue";
 import Button from "../Generic/Button.vue";
 import TemplateField from "../Field/TemplateField.vue";
 import { inputsStore } from "../../stores/inputs";
@@ -194,8 +194,8 @@ const selectOutputFile = async (id: string) => {
   const input = inputs.inputs.find((input) => input.id === id);
   if (!input) return;
 
-  const fileInfo = await saveFile({type: "video", fileName: input.compName || "Comp" });
-  if(!(fileInfo?.filePath)) return;
+  const fileInfo = await saveFile({ type: "video", fileName: input.compName || "Comp" });
+  if (!fileInfo?.filePath) return;
 
   input.outputFile = fileInfo.filePath;
 };
@@ -222,6 +222,12 @@ const refreshPresets = async () => {
 const addCompToQueue = async (render: boolean) => {
   await inputs.processInputs(true, render);
 };
+
+onMounted(async () => {
+  // Make sure that the first tab is displayed when the panel is loaded
+  const before = beforeRefresh();
+  afterRefresh(before);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -276,6 +282,10 @@ const addCompToQueue = async (render: boolean) => {
       // align-items: flex-end;
       justify-content: flex-end;
       margin-bottom: 2rem;
+    }
+
+    :deep(.dropdown .select-container .multiselect .multiselect__content-wrapper) {
+      position: absolute;
     }
   }
 }

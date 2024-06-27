@@ -95,6 +95,18 @@ defineExpose({ addTag });
 
     :deep(.multiselect) {
       min-height: 1.8rem;
+
+      &::after {
+        position: absolute;
+        content: "";
+        top: 2px;
+        right: 0;
+        width: 2em;
+        height: 1.5rem;
+        z-index: 0;
+        background: #161616cf;
+      }
+
       .multiselect__tags {
         height: 1.8rem;
         min-height: 1.8rem;
@@ -131,6 +143,7 @@ defineExpose({ addTag });
         background-color: var(--tertiary-color);
         color: var(--secondary-color);
         font-size: 0.8rem;
+        text-wrap: nowrap;
       }
 
       input {
@@ -192,6 +205,10 @@ defineExpose({ addTag });
         // .multiselect__content-wrapper {
         //     border-color: var(--highlight-color);
         // }
+
+        &::after {
+          right: 2px;
+        }
       }
     }
   }

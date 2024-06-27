@@ -45,7 +45,7 @@ const model = defineModel();
   grid-template-columns: 1fr 90px;
 
   &.slim {
-    grid-template-columns: 1fr calc(70px - 3em);
+    grid-template-columns: minmax(0, 1fr) calc(70px - 3em);
     gap: 5px;
   }
 }
