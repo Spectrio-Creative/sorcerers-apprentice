@@ -24,6 +24,7 @@ import { computed, ref, watch } from "vue";
 import VueMultiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.css";
 import CancelButton from "./CancelButton.vue";
+import Tooltip from "./Tooltip.vue";
 
 const props = withDefaults(
   defineProps<{
