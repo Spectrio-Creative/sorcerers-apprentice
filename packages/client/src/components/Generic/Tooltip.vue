@@ -15,7 +15,11 @@
 <script setup lang="ts">
 import { computed, defineProps, onMounted, ref } from "vue";
 
-const props = defineProps<{ text?: string; maxWidth?: number }>();
+const props = withDefaults(defineProps<{ text?: string; maxWidth?: number; hoverTime?: number }>(), {
+  text: "",
+  maxWidth: 200,
+  hoverTime: 1000,
+});
 
 const hoverer = ref<HTMLElement | null>(null);
 const extraClasses = ref("");
@@ -40,7 +44,7 @@ const deactivateTooltip = () => {
   extraClasses.value = "";
 };
 
-const widthLimit = computed(() => (props.maxWidth || 200) + 'px');
+const widthLimit = computed(() => (props.maxWidth || 200) + "px");
 
 onMounted(() => {
   activateTooltip();
