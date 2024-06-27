@@ -96,7 +96,7 @@ export async function fetchAMEFormatsData(): Promise<AMEFormatsObj> {
   return new Promise((resolve, _reject) => {
     csInterface.evalScript("ss.fetchAMEFormatsData();", async (res) => {
       // console.log(res);
-      if (res === "{}") {
+      if (res === "{}" || res === "") {
         resolve({ timestamp: `${new Date()}`, formats: {} });
       }
       const data = JSON.parse(res as string);
@@ -200,7 +200,7 @@ export async function sendSorcererData(data: InputTemplateValue[]): Promise<Comp
     `,
       (res) => {
         console.log(res);
-        resolve(JSON.parse(res as string || "") as CompResponse);
+        resolve(JSON.parse(res as string || JSON.stringify({status: "ERROR", error: "Didn't get response from AE Call"} as CompResponseERROR)) as CompResponse);
       }
     );
   });
