@@ -27,11 +27,16 @@
           <div>Output File:</div>
           <TextInput v-model="input.compName" />
           <div class="file-selector">
-            <TextInput v-model="input.outputFile" />    
+            <TextInput v-model="input.outputFile" />
             <Button text="Browse" :on-click="() => selectOutputFile(input.id)" :width="125"></Button>
           </div>
           <div style="display: flex; gap: 1em">
-            <Button class="refresh-button" :on-click="refreshPresets" :styles="['tertiary', 'round']" tooltip="Refresh AME Formats">
+            <Button
+              class="refresh-button"
+              :on-click="refreshPresets"
+              :styles="['tertiary', 'round']"
+              tooltip="Refresh AME Formats"
+            >
               <div class="inner">
                 <RefreshIcon />
               </div>

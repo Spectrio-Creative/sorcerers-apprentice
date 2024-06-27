@@ -383,7 +383,7 @@ const exportCSV = () => {
 
   for (const [key, group] of Object.entries(groups)) {
     const csv = Papa.unparse(group);
-    saveFile({data: csv, fileName: `${key.replace("+++", "+")}.csv`, type: "csv"});
+    saveFile({ data: csv, fileName: `${key.replace("+++", "+")}.csv`, type: "csv" });
   }
 
   for (const id of inputsToRemove) {

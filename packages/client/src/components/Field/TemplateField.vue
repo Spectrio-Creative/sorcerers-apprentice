@@ -47,7 +47,7 @@
       v-model="model"
       :cancel="removeField"
       :show-cancel="changed"
-      :options="[]"
+      :options="input.outputFile ? [input.outputFile] : []"
       :slim="slim"
       file-type="video"
     />

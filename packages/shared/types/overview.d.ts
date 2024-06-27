@@ -22,6 +22,7 @@ interface FieldOverview extends FieldQuickOverview {
 
 interface TemplateOverview {
   name: string;
+  defaultOutput: string;
   id: number;
   comp: string;
   folder: string;

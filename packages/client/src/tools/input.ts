@@ -23,7 +23,7 @@ export const createInputFromTemplate = (template: TemplateOverview): InputTempla
     templateId: template.id,
     templateName: template.name,
     compName: template.comp,
-    outputFile: `~/${template.name}.mp4`,
+    outputFile: template.defaultOutput,
     templateOverview,
     status: "Ready",
     fields: [],

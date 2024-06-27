@@ -2,7 +2,7 @@ import { version } from "../../../../package.json";
 import { getFormattedTimestamp } from "../tools/time";
 
 export class SystemRoot {
-  osName: string;
+  osName: "windows" | "mac";
   slash: string;
   rootFolder: Folder;
   logFile: File;
@@ -25,6 +25,16 @@ export class SystemRoot {
     if (subDirectory) filePath += `${this.slash}${subDirectory}`;
     if (!Folder(`${filePath}`).exists) Folder(`${filePath}`).create();
     return new File(`${filePath}${this.slash}${fileName}`);
+  }
+
+  /**
+   * Creates a new file object next to the project file.
+   * @param fileName The name of the file to create.
+   */
+  createProjectRootFile(fileName: string) {
+    if (!app.project.file) return;
+    const projectFolder = app.project.file.parent.fsName;
+    return new File(`${projectFolder}${this.slash}${fileName}`);
   }
 
   /**

@@ -33,7 +33,7 @@ export const getFieldFromTemplate = (template: TemplateOverview, header: string,
   if (header === "Template Name") return createFieldOverview({ title: "Template Name", value: template.name }, false);
   if (header === "Comp Name") return createFieldOverview({ title: "Comp Name", value: template.name });
   if (header === "Output File")
-    return createFieldOverview({ title: "Output File", value: "", type: "Output" });
+    return createFieldOverview({ title: "Output File", value: template.defaultOutput || "", type: "Output" });
   if (header === "Output Format") return createFieldOverview({ title: "Output Format", value: ame.defaultFormat, type: "Format" });
   const defaultPreset = ame.getPresets(ame.defaultFormat)[0] || "";
   if (header === "Output Preset") return createFieldOverview({ title: "Output Preset", value: defaultPreset, type: "Preset" });
