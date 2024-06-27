@@ -1,6 +1,8 @@
 import { nanoid } from "nanoid";
+import { ameStore } from "../stores/ame";
 
 export const createInputFromTemplate = (template: TemplateOverview): InputTemplateValue => {
+  const ame = ameStore();
   const templateOverview = template.fields
     .filter((field) => field.type !== "Group")
     .map((field) => {
@@ -24,6 +26,8 @@ export const createInputFromTemplate = (template: TemplateOverview): InputTempla
     templateName: template.name,
     compName: template.comp,
     outputFile: template.defaultOutput,
+    outputFormat: ame.defaultFormat,
+    outputPreset: ame.getPresets(ame.defaultFormat)[0],
     templateOverview,
     status: "Ready",
     fields: [],

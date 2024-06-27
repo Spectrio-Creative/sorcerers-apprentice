@@ -20,7 +20,7 @@ export const ameStore = defineStore("ame", () => {
   
   const loadFormats = async () => {
     const presets = await fetchAMEFormatsData();
-    presetObj.value = presets;
+    presetObj.value = presets || {timestamp: `${new Date()}`, formats: {}};
   };
 
   const refreshFormats = async () => {
@@ -30,7 +30,8 @@ export const ameStore = defineStore("ame", () => {
 
   const init = async () => {
     await loadFormats();
-    const empty = Object.keys(presetObj.value.formats).length === 0;
+    const numOfFormats = Object.keys(presetObj.value?.formats || {}).length;
+    const empty = numOfFormats === 0;
     return !empty;
   };
 
