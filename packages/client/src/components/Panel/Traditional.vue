@@ -26,7 +26,35 @@
           <div>Comp Name:</div>
           <div>Output File:</div>
           <TextInput v-model="input.compName" />
-          <TextInput v-model="input.outputFile" />
+          <div class="file-selector">
+            <TextInput v-model="input.outputFile" />
+            <Button text="Browse" :on-click="() => selectOutputFile(input.id)" :width="125"></Button>
+          </div>
+          <div style="display: flex; gap: 1em">
+            <Button
+              class="refresh-button"
+              :on-click="refreshPresets"
+              :styles="['tertiary', 'round']"
+              tooltip="Refresh AME Formats"
+            >
+              <div class="inner">
+                <RefreshIcon />
+              </div>
+            </Button>
+
+            <DropDown
+              v-model="input.outputFormat"
+              :options="ame.formats"
+              style="width: 100%"
+              placeholder="Select Format"
+            />
+          </div>
+          <DropDown
+            v-model="input.outputPreset"
+            :options="ame.getPresets(input.outputFormat)"
+            style="width: 100%"
+            placeholder="Select Preset"
+          />
         </div>
       </template>
 
@@ -46,11 +74,7 @@
         <div class="field-menu" :class="{ shown: selectedTemplate?.id === template.id }">
           <template v-for="group in groupedFields(template)">
             <div class="field-box" :class="{ shown: selectedGroup?.title === group.title }">
-              <TemplateField
-                v-for="field in group.fields"
-                :field="field"
-                :input="inputs.findInput(template)"
-              />
+              <TemplateField v-for="field in group.fields" :field="field" :input="inputs.findInput(template)" />
             </div>
           </template>
         </div>
@@ -58,20 +82,25 @@
     </div>
     <div class="actions">
       <Button :disabled="templates.length < 1" :on-click="inputs.processInputs">Build Comp</Button>
-      <Button :disabled="templates.length < 1" :on-click="renderComp">Render</Button>
+      <Button :disabled="templates.length < 1" :on-click="() => addCompToQueue(false)">Add To Queue (AME)</Button>
+      <Button :disabled="templates.length < 1" :on-click="() => addCompToQueue(true)">Render (AME)</Button>
     </div>
     <!-- {{ inputs.inputs }} -->
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, Ref, computed } from "vue";
+import { ref, Ref, computed, onMounted } from "vue";
 import Button from "../Generic/Button.vue";
 import TemplateField from "../Field/TemplateField.vue";
 import { inputsStore } from "../../stores/inputs";
 import TextInput from "../Generic/TextInput.vue";
 import { appStore } from "../../stores/app";
 import { sorcererStore } from "../../stores/sorcerer";
+import RefreshIcon from "../../components/Icons/RefreshIcon.vue";
+import { ameStore } from "../../stores/ame";
+import DropDown from "../Generic/DropDown.vue";
+import { aeQuestion, runTest, saveFile } from "../../tools/api";
 
 interface Group {
   title: string;
@@ -80,6 +109,7 @@ interface Group {
 
 const inputs = inputsStore();
 const app = appStore();
+const ame = ameStore();
 const sorcerer = sorcererStore();
 
 const selectedTemplate: Ref<TemplateOverview | null> = ref(null);
@@ -157,10 +187,20 @@ const beforeRefresh = () => {
     ? groups.value.findIndex((group) => group.title === selectedGroup.value?.title)
     : 0;
 
-    return { selectedIndex, groupIndex };
+  return { selectedIndex, groupIndex };
 };
 
-const afterRefresh = (options: {selectedIndex: number, groupIndex: number}) => {
+const selectOutputFile = async (id: string) => {
+  const input = inputs.inputs.find((input) => input.id === id);
+  if (!input) return;
+
+  const fileInfo = await saveFile({ type: "video", fileName: input.compName || "Comp" });
+  if (!fileInfo?.filePath) return;
+
+  input.outputFile = fileInfo.filePath;
+};
+
+const afterRefresh = (options: { selectedIndex: number; groupIndex: number }) => {
   selectedTemplate.value = sorcerer.overview.templates[options.selectedIndex];
   selectGroup(groups.value[options.groupIndex]);
   selectTemplate(selectedTemplate.value);
@@ -170,14 +210,24 @@ const afterRefresh = (options: {selectedIndex: number, groupIndex: number}) => {
 defineExpose({
   beforeRefresh,
   afterRefresh,
-})
+});
 
-
-const renderComp = async () => {
-  // await buildComp();
-  await inputs.processInputs();
-  // sorcerer.renderComps();
+const refreshPresets = async () => {
+  await runTest();
+  const approved = await aeQuestion("Refreshing presets will clear the AME queue, are you sure you want to continue?");
+  if (!approved) return;
+  ame.refreshFormats();
 };
+
+const addCompToQueue = async (render: boolean) => {
+  await inputs.processInputs(true, render);
+};
+
+onMounted(async () => {
+  // Make sure that the first tab is displayed when the panel is loaded
+  const before = beforeRefresh();
+  afterRefresh(before);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -233,6 +283,28 @@ const renderComp = async () => {
       justify-content: flex-end;
       margin-bottom: 2rem;
     }
+
+    :deep(.dropdown .select-container .multiselect .multiselect__content-wrapper) {
+      position: absolute;
+    }
+  }
+}
+
+.file-selector {
+  display: grid;
+  grid-template-columns: 1fr 125px;
+  gap: 1em;
+  display: grid;
+  grid-template-columns: 1fr 90px;
+}
+
+.refresh-button {
+  margin: 0 0 2em;
+
+  .inner {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
   }
 }
 </style>

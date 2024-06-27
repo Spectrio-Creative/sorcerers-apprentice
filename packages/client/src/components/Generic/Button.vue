@@ -1,20 +1,24 @@
 <template>
   <div>
-    <button
-      class="btn"
-      :class="{ selected, ...styleMap, disabled, danger: type === 'danger' }"
-      @click="onClick"
-      :style="width ? `width: calc(${width}px - 3em);` : ''"
-      :disabled="disabled"
-    >
-      {{ text }}
-      <slot></slot>
-    </button>
+    <Tooltip :text="tooltip">
+      <button
+        class="btn"
+        :class="{ selected, ...styleMap, disabled, danger: type === 'danger' }"
+        @click="onClick"
+        :style="width ? `width: calc(${width}px - 3em);` : ''"
+        :disabled="disabled"
+      >
+        {{ text }}
+        <slot></slot>
+      </button>
+    </Tooltip>
   </div>
 </template>
 
 <script setup lang="ts">
 import { defineProps } from "vue";
+import Tooltip from "./Tooltip.vue";
+
 type style = "primary" | "secondary" | "tertiary" | "tab" | "refresh" | "round" | "icon" | "dark";
 const props = withDefaults(
   defineProps<{
@@ -24,6 +28,7 @@ const props = withDefaults(
     selected?: boolean;
     styles?: style[];
     disabled?: boolean;
+    tooltip?: string;
     type?: "normal" | "danger" | "warning" | "success";
   }>(),
   {

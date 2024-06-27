@@ -19,6 +19,13 @@ body {
   --error-color-dark: #ff3333;
   --success-color: #00cc66;
   --warning-color: #ffcc00;
+
+  --color-scrollbar: #2b2b2b;
+  --color-scrollbar-thumb: #3c3c3c;
+  --color-scrollbar-thumb-hover: #4c4c4c;
+  --width-scrollbar-track: 10px;
+  --radius-scrollbar-thumb: 5px;
+  
   
   background-color: var(--primary-color);
   color: var(--secondary-color);
@@ -40,4 +47,35 @@ input {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
+}
+
+/* Scrollbar style */
+#app::-webkit-scrollbar {
+  display: block;
+}
+body::-webkit-scrollbar {
+  width: 0px;
+}
+::-webkit-scrollbar {
+  background-color: var(--color-scrollbar);
+  width: var(--width-scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  width: var(--width-scrollbar-track);
+  background: var(--color-scrollbar-thumb);
+  border-radius: var(--radius-scrollbar-thumb);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-scrollbar-thumb-hover);
+}
+::-webkit-scrollbar-resizer {
+  display: none;
+  width: 0px;
+  background-color: transparent;
+}
+::-webkit-scrollbar-button {
+  height: 0px;
+}
+::-webkit-scrollbar-corner {
+  display: none;
 }

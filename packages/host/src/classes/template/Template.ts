@@ -1,6 +1,6 @@
 import { addTab, addTabbedPannel } from "../../pluginTools/dialogElements";
 import { allCompsFromFolder, searchComp, searchLibrary } from "../../tools/project";
-import { log } from "../../tools/system";
+import { log, systemRoot } from "../../tools/system";
 import { TemplateChild } from "./TemplateChild";
 import { FieldBase } from "./field/Field";
 import { makeFieldBase } from "./field/makeFieldBase";
@@ -101,14 +101,20 @@ export class Template {
     return templateChild;
   }
 
-  getOverview() {
+  getOverview(logs = false) {
     const editableOverview = this.editableFields.map((field) => {
       const fieldOverview = field.getOverview();
       return fieldOverview;
     });
-    log(`Overview (${this.name}): ${JSON.stringify(editableOverview)}`);
+    logs && log(`Overview (${this.name}): ${JSON.stringify(editableOverview)}`);
+    const defaultOutputFile = systemRoot.createProjectRootFile(`${this.name}.mp4`);
+    
+    let defaultOutput = defaultOutputFile.fsName;
+    if (systemRoot.osName === "mac") defaultOutput = defaultOutputFile.absoluteURI;
+
     return {
       name: this.name,
+      defaultOutput,
       id: this.id,
       comp: this.comp.name,
       folder: this.folder.name,

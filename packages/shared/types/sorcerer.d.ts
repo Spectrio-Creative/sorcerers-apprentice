@@ -5,7 +5,7 @@ interface InputFieldValue {
   title: string;
   tab?: string;
   options: FieldOption[];
-  type: FieldType | "Output";
+  type: FieldType | "Output" | "Format" | "Preset";
   value: string;
   hidden?: boolean;
 }
@@ -32,6 +32,8 @@ interface InputTemplateValue {
   templateOverview: TemplateOverviewField[];
   compName?: string;
   outputFile?: string;
+  outputFormat?: string;
+  outputPreset?: string;
   status?: InputStatus;
   fields: InputFieldValue[];
 }

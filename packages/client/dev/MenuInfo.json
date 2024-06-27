@@ -1,8 +1,8 @@
-export const menuOverview = JSON.stringify({
+{
   "templates": [
     {
       "name": "Fish",
-      "defaultOutput": "~/Creative%20Cloud%20Files/Sorcerer's%20Script/Fish.mp4",
+      "defaultOutput": "C:\\Users\\Prince John\\Creative Cloud Files\\Sorcerer's Script\\Fish.mp4",
       "id": 120,
       "comp": "Fish",
       "folder": "Fish",
@@ -131,7 +131,7 @@ export const menuOverview = JSON.stringify({
     },
     {
       "name": "Media",
-      "defaultOutput": "~/Creative%20Cloud%20Files/Sorcerer's%20Script/Media.mp4",
+      "defaultOutput": "C:\\Users\\Prince John\\Creative Cloud Files\\Sorcerer's Script\\Media.mp4",
       "id": 20383,
       "comp": "Media",
       "folder": "Media",
@@ -220,7 +220,7 @@ export const menuOverview = JSON.stringify({
     },
     {
       "name": "Moving Media",
-      "defaultOutput": "~/Creative%20Cloud%20Files/Sorcerer's%20Script/Moving%20Media.mp4",
+      "defaultOutput": "C:\\Users\\Prince John\\Creative Cloud Files\\Sorcerer's Script\\Moving Media.mp4",
       "id": 23286,
       "comp": "Moving Media",
       "folder": "Moving Media",
@@ -309,46 +309,14 @@ export const menuOverview = JSON.stringify({
     }
   ],
   "fonts": [
-    {
-      "font": "Montserrat-Black",
-      "fontFamily": "Montserrat",
-      "fontStyle": "Black"
-    },
-    {
-      "font": "Montserrat-Bold",
-      "fontFamily": "Montserrat",
-      "fontStyle": "Bold"
-    },
-    {
-      "font": "Montserrat-ExtraLight",
-      "fontFamily": "Montserrat",
-      "fontStyle": "ExtraLight"
-    },
-    {
-      "font": "Montserrat-Light",
-      "fontFamily": "Montserrat",
-      "fontStyle": "Light"
-    },
-    {
-      "font": "Montserrat-Medium",
-      "fontFamily": "Montserrat",
-      "fontStyle": "Medium"
-    },
-    {
-      "font": "Montserrat-Regular",
-      "fontFamily": "Montserrat",
-      "fontStyle": "Regular"
-    },
-    {
-      "font": "Montserrat-SemiBold",
-      "fontFamily": "Montserrat",
-      "fontStyle": "SemiBold"
-    },
-    {
-      "font": "Montserrat-Thin",
-      "fontFamily": "Montserrat",
-      "fontStyle": "Thin"
-    }
+    { "font": "Montserrat-Black", "fontFamily": "Montserrat", "fontStyle": "Black" },
+    { "font": "Montserrat-Bold", "fontFamily": "Montserrat", "fontStyle": "Bold" },
+    { "font": "Montserrat-ExtraLight", "fontFamily": "Montserrat", "fontStyle": "ExtraLight" },
+    { "font": "Montserrat-Light", "fontFamily": "Montserrat", "fontStyle": "Light" },
+    { "font": "Montserrat-Medium", "fontFamily": "Montserrat", "fontStyle": "Medium" },
+    { "font": "Montserrat-Regular", "fontFamily": "Montserrat", "fontStyle": "Regular" },
+    { "font": "Montserrat-SemiBold", "fontFamily": "Montserrat", "fontStyle": "SemiBold" },
+    { "font": "Montserrat-Thin", "fontFamily": "Montserrat", "fontStyle": "Thin" }
   ],
   "libraryAssets": [
     {
@@ -1452,4 +1420,4 @@ export const menuOverview = JSON.stringify({
       "typeName": "Footage"
     }
   ]
-} as SorcererOverview);
+}

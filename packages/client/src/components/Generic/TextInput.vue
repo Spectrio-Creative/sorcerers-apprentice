@@ -1,14 +1,18 @@
 <template>
-  <div class="text-input" :class="{ cancelable: showCancel, locked }">
-    <span @click="onClick">
-      <input type="text" v-model="model" style="display: inline-block" />
-    </span>
+  <div ref="textInput" class="text-input" :class="{ cancelable: showCancel, locked }">
+    <Tooltip :text="tooltipText" :max-width="500">
+      <span @click="onClick">
+        <input type="text" v-model="model" style="display: inline-block" />
+      </span>
+    </Tooltip>
     <CancelButton v-if="showCancel" @click="cancel" />
   </div>
 </template>
 
 <script setup lang="ts">
-import CancelButton from './CancelButton.vue';
+import { computed, onMounted, ref, watch } from "vue";
+import CancelButton from "./CancelButton.vue";
+import Tooltip from "./Tooltip.vue";
 
 withDefaults(
   defineProps<{
@@ -25,6 +29,34 @@ withDefaults(
 );
 
 const model = defineModel();
+
+const overflow = ref(false);
+const textInput = ref<HTMLInputElement | null>(null);
+const tooltipText = computed(() => overflow.value ? (model.value as string) || "" : "");
+
+const updateOverflow = () => {
+  if (model.value === "") return false;
+  if (!textInput.value) return false;
+  const $textInput = $(textInput.value as HTMLElement);
+  const input = $textInput.find("input")[0];
+  const scrollWidth = input?.scrollWidth || 0;
+  const clientWidth = input?.clientWidth || 0;
+  // console.log(textInput.value, scrollWidth, clientWidth, model.value);
+  return scrollWidth > clientWidth;
+};
+
+watch(model, () => {
+  overflow.value = updateOverflow();
+});
+
+onMounted(() => {
+  overflow.value = updateOverflow();
+
+  setTimeout(() => {
+    // The timeout is needed to make sure that the initial overflow is calculated correctly
+    overflow.value = updateOverflow();
+  }, 200);
+});
 </script>
 
 <style lang="scss" scoped>

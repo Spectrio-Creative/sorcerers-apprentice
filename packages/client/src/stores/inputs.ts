@@ -3,7 +3,7 @@ import { Ref, ref } from "vue";
 import { createInputFromTemplate } from "../tools/input";
 import { sorcererStore } from "./sorcerer";
 import { appStore } from "./app";
-import { sendSorcererData } from "../tools/api";
+import { aeAlert, aeQuestion, sendCompsToAME, sendSorcererData } from "../tools/api";
 
 export const inputsStore = defineStore("inputs", () => {
   const sorcerer = sorcererStore();
@@ -160,15 +160,59 @@ export const inputsStore = defineStore("inputs", () => {
     });
   };
 
-  const processInputs = async () => {
-    app.processing = true;
+  const processInputs = async (sendToAME = false, startRender = false) => {
     const readyInputs = inputs.value.filter((i) => i.status === "Ready");
+
+    const missingOutputDetails = readyInputs.some((input) => !input.outputFile || !input.outputFormat || !input.outputPreset);
+    if (sendToAME === true && missingOutputDetails) {
+      console.log("Send to AME", sendToAME)
+      aeAlert("Cannot send comps to AME without all output details (file, format, and preset).");
+      return;
+    }
+
+    
+    app.processing = true;
+
+    const ameComps: AMEComp[] = [];
 
     for (const input of readyInputs) {
       input.status = "Processing";
       cleanInputFields(input);
-      await sendSorcererData([input]);
+      const response = await sendSorcererData([input]);
+      if (response.status === "ERROR") {
+        const isLastInput = readyInputs[readyInputs.length - 1].id === input.id;
+        const continueQueue = isLastInput
+          ? true
+          : aeQuestion(
+              `Error processing ${input.templateName}. Do you want to continue processing the rest of the queue?`
+            );
+        if (!continueQueue) {
+          app.processing = false;
+          return;
+        }
+        input.status = "Disabled";
+        continue;
+      }
+
+      const guid = response.compIds[0]?.guid;
+
+      if (guid) {
+        ameComps.push({
+          guid,
+          filePath: input.outputFile as string,
+          format: input.outputFormat as string,
+          preset: input.outputPreset as string,
+        });
+      }
+
       input.status = "Complete";
+    }
+
+    if (sendToAME) {
+      const response = await sendCompsToAME(ameComps, startRender);
+      if (response.status === "ERROR") {
+        aeAlert(`Error sending comps to AME: ${response.error}`);
+      }
     }
 
     app.processing = false;

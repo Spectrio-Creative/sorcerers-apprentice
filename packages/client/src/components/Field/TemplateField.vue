@@ -47,9 +47,29 @@
       v-model="model"
       :cancel="removeField"
       :show-cancel="changed"
-      :options="[]"
+      :options="input.outputFile ? [input.outputFile] : []"
       :slim="slim"
       file-type="video"
+    />
+    <MediaField
+      v-else-if="field.type === 'Format'"
+      :title="field.title"
+      v-model="model"
+      :cancel="removeField"
+      :show-cancel="changed"
+      :options="ame.formats"
+      :slim="slim"
+      file-type="other"
+    />
+    <MediaField
+      v-else-if="field.type === 'Preset'"
+      :title="field.title"
+      v-model="model"
+      :cancel="removeField"
+      :show-cancel="changed"
+      :options="ame.getPresets(input.outputFormat)"
+      :slim="slim"
+      file-type="other"
     />
     <FontField
       v-else-if="field.type === 'Font'"
@@ -60,6 +80,8 @@
       :slim="slim"
     />
     <div v-else>Unknown field type: {{ field.type }}</div>
+  </div>
+  <div>
   </div>
 </template>
 
@@ -72,12 +94,13 @@ import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { inputsStore } from "../../stores/inputs";
 import CheckBox from "../Generic/CheckBox.vue";
 import { sorcererStore } from "../../stores/sorcerer";
+import { ameStore } from "../../stores/ame";
 
 interface Props {
   field: FieldQuickOverview;
   slim?: boolean;
   input: InputTemplateValue;
-  inputKey?: "templateName" | "compName" | "outputFile";
+  inputKey?: "templateName" | "compName" | "outputFile" | "outputFormat" | "outputPreset";
   onChanged?: (value: string) => void;
   onRemoved?: () => void;
 }
@@ -90,6 +113,7 @@ const props = withDefaults(defineProps<Props>(), {
 const model = defineModel({ default: "" });
 const inputs = inputsStore();
 const sorcerer = sorcererStore();
+const ame = ameStore();
 
 const visible = ref(!props.field.hidden);
 

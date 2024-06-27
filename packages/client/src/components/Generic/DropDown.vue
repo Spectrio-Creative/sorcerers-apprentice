@@ -1,27 +1,30 @@
 <template>
   <div class="dropdown">
-    <div class="select-container" :class="{ cancelable: showCancel, slim }">
-      <VueMultiselect
-        class="multiselect"
-        v-model="model"
-        :options="allOptions"
-        :placeholder="placeholder"
-        :taggable="!fixed"
-        @tag="addTag"
-        tag-placeholder="Add this as new tag"
-        @select="onSelect"
-      >
-      </VueMultiselect>
+    <div ref="multiselect" class="select-container" :class="{ cancelable: showCancel, slim }">
+      <Tooltip :text="textOverflow ? model : ''" :max-width="500">
+        <VueMultiselect
+          class="multiselect"
+          v-model="model"
+          :options="allOptions"
+          :placeholder="placeholder"
+          :taggable="!fixed"
+          @tag="addTag"
+          tag-placeholder="Add this as new tag"
+          @select="onSelect"
+        >
+        </VueMultiselect>
+      </Tooltip>
     </div>
     <CancelButton v-if="showCancel" @click="cancel" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import VueMultiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.css";
 import CancelButton from "./CancelButton.vue";
+import Tooltip from "./Tooltip.vue";
 
 const props = withDefaults(
   defineProps<{
@@ -44,9 +47,17 @@ const props = withDefaults(
 
 const model = defineModel({ default: "" });
 const addedOptions = ref<string[]>([]);
+const multiselect = ref<HTMLElement | null>(null);
 
 const allOptions = computed(() => {
   return [...props.options, ...addedOptions.value];
+});
+
+// Watch options for changes and change model if it's not in the list
+watch(allOptions, (newOptions) => {
+  if (!newOptions.includes(model.value)) {
+    model.value = newOptions[0];
+  }
 });
 
 function addTag(newTag: string) {
@@ -54,7 +65,20 @@ function addTag(newTag: string) {
   model.value = newTag;
 }
 
-defineExpose({addTag});
+const textOverflow = computed(() => {
+  if (!multiselect.value) return false;
+  const $multiselect = $(multiselect.value);
+  const single = $multiselect.find(".multiselect__single")[0];
+  if (!single) {
+    return (model.value?.length || 0) * .7 * 12 > multiselect.value.clientWidth;
+  }
+  const scrollWidth = single.scrollWidth || 0;
+  const clientWidth = single.clientWidth || 0;
+  const overflow = scrollWidth > clientWidth;
+  return !!overflow;
+});
+
+defineExpose({ addTag });
 </script>
 
 <style lang="scss" scoped>
@@ -71,6 +95,18 @@ defineExpose({addTag});
 
     :deep(.multiselect) {
       min-height: 1.8rem;
+
+      &::after {
+        position: absolute;
+        content: "";
+        top: 2px;
+        right: 0;
+        width: 2em;
+        height: 1.5rem;
+        z-index: 0;
+        background: #161616cf;
+      }
+
       .multiselect__tags {
         height: 1.8rem;
         min-height: 1.8rem;
@@ -107,6 +143,7 @@ defineExpose({addTag});
         background-color: var(--tertiary-color);
         color: var(--secondary-color);
         font-size: 0.8rem;
+        text-wrap: nowrap;
       }
 
       input {
@@ -125,6 +162,7 @@ defineExpose({addTag});
       .multiselect__content-wrapper {
         border-color: var(--tertiary-color);
         border-radius: 0;
+        position: relative;
 
         .multiselect__option {
           padding: 0.5rem 1rem;
@@ -167,6 +205,10 @@ defineExpose({addTag});
         // .multiselect__content-wrapper {
         //     border-color: var(--highlight-color);
         // }
+
+        &::after {
+          right: 2px;
+        }
       }
     }
   }

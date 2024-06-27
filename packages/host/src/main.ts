@@ -1,14 +1,16 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { testIt as playground } from "./playground/tests";
 import { TemplateMain } from "./classes/template/TemplateMain";
 import polyfill from "./tools/polyfill";
-import { log } from "./tools/system";
-import { openCSV, saveCSV, saveMP4, saveOther } from "./tools/fs";
+import { systemRoot, log } from "./tools/system";
+import { saveFile as saveExport, openCSV, openMediaFile, constructFileResponse } from "./tools/fs";
+import { version } from "../../../package.json";
+import { saveFormatsJSON } from "./tools/ame/formatsAECompiled";
+import { queueInAME } from "./tools/ame";
 
 polyfill();
 
 // Create namespace to avoid conflicts with global
 export function createSSNamespace() {
+  log(`Running Sorcerer's Apprentice Script (v${version})`);
   const template = new TemplateMain();
 
   function getMenuInfo() {
@@ -35,28 +37,41 @@ export function createSSNamespace() {
 
   function setValuesFromList(list: string) {
     const parsed: InputTemplateValue[] = JSON.parse(list);
-    template.setValuesFromList(parsed);
-    return "OK";
+    const compIds = template.setValuesFromList(parsed);
+    return JSON.stringify({
+      status: "OK",
+      compIds,
+    });
+  }
+
+  function sendCompsToAME(data: AMEComp[], startRender = false): string {
+    // Save the project so that the comp is available to AME
+    app.project.save();
+    queueInAME(data, startRender);
+    return JSON.stringify({
+      status: "OK",
+    });
   }
 
   function showMenu() {
     template.showMenuPanel();
   }
 
-  function selectFile(type: ImportFile = "other") {
+  function selectFile(type: SorcererFile = "other") {
     if (type === "csv") {
       return openCSV();
     }
 
-    return File.openDialog("Select a file", "*.*", false);
+    if (type === "image" || type === "video") {
+      return openMediaFile();
+    }
+
+    return JSON.stringify(constructFileResponse(File.openDialog("Select a file", "*.*", false)));
   }
 
-  function saveFile(data?: string, type: ExportFile = "other") {
+  function saveFile(data?: string, type: SorcererFile = "other"): string {
     try {
-      let file: File;
-      if (type === "csv") file = saveCSV(data);
-      else if (type === "mp4") file = saveMP4();
-      else file = saveOther(data);
+      const file: File = saveExport(data, { type });
 
       if (!file) return JSON.stringify({ status: "CANCELLED", file });
       const filePath = file.fsName;
@@ -69,22 +84,48 @@ export function createSSNamespace() {
   }
 
   function testIt() {
-    playground(template);
+    const testFile = systemRoot.createRootFile("test.txt");
+    testFile.open("w");
+    testFile.write("Test file created");
+    testFile.close();
   }
 
   function SayHello() {
     alert("CS Interface made connection with root host function.");
   }
 
+  function fetchAMEFormatsData() {
+    const ameFormats = systemRoot.createRootFile("ameFormats.json");
+    if (!ameFormats.exists) return JSON.stringify({});
+    ameFormats.open("r");
+    const data = JSON.parse(ameFormats.read());
+    return JSON.stringify(data);
+  }
+
+  function refreshAMEFormatsData() {
+    const ameFormats = systemRoot.createRootFile("ameFormats.json");
+    let finished = false;
+    saveFormatsJSON({
+      jsonLocation: ameFormats,
+      callback: () => {
+        finished = true;
+        alert("AME Formats data refreshed");
+      },
+    });
+  }
+
   return {
     getMenuInfo,
     setValuesFromList,
+    sendCompsToAME,
     showMenu,
     writeOverview,
     selectFile,
     saveFile,
     testIt,
     SayHello,
+    fetchAMEFormatsData,
+    refreshAMEFormatsData,
   };
 }
 

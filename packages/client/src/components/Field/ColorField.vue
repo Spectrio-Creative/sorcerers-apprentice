@@ -21,6 +21,7 @@
 <script setup lang="ts">
 import { ModelRef, computed, defineProps, ref } from "vue";
 import TextInput from "../Generic/TextInput.vue";
+import CancelButton from "../Generic/CancelButton.vue";
 import PickColors from "vue-pick-colors";
 // @ts-ignore
 import tinycolor from 'tinycolor2';

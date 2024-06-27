@@ -102,17 +102,12 @@ export class TemplateMain {
   }
 
   getOverview() {
-    log("getting overview");
     try {
       this.refresh();
       fontLibrary.refresh();
       mediaLibrary.refresh();
-
-      log(`fontLibrary: ${JSON.stringify(fontLibrary.projectFonts)}`);
-      log(`mediaLibrary: ${JSON.stringify(mediaLibrary.mediaItems)}`);
       const templates = this.templates.map((template) => template.getOverview());
-      log(`templates: ${JSON.stringify(templates)}`);
-      
+
       return {
         templates,
         fonts: fontLibrary.projectFonts,
@@ -128,7 +123,8 @@ export class TemplateMain {
     }
   }
 
-  setValuesFromList(list: InputTemplateValue[]) {
+  setValuesFromList(list: InputTemplateValue[]): ({ id: number; guid: string } | null)[] {
+    const compIds: ({ id: number; guid: string } | null)[] = [];
     list.forEach((input) => {
       let found = this.templates.find((t) => t.id === input.templateId);
       if (!found) found = this.templates.find((t) => t.name === input.templateName);
@@ -136,8 +132,14 @@ export class TemplateMain {
         const tempChild = found.duplicate(input.compName);
         tempChild.fillValues(input.fields);
         tempChild.setCompName(tempChild.name);
+        compIds.push({ guid: (tempChild.mainComp as any).dynamicLinkGUID, id: tempChild.mainComp.id });
+      } else {
+        log(`Error: Could not find template for ${input.templateName}`);
+        compIds.push(null);
       }
     });
+
+    return compIds;
   }
 
   render(title: string) {

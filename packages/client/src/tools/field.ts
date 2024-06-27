@@ -1,9 +1,10 @@
 import { parseLayerName } from "../../../shared/tools/templates";
+import { ameStore } from "../stores/ame";
 
 export interface FieldSuperQuickOverview {
   fullTitle?: string;
   title: string;
-  type?: FieldType | "Output";
+  type?: FieldType | "Output" | "Format" | "Preset";
   tab?: string;
   tag?: string;
   options?: FieldOption[];
@@ -28,10 +29,14 @@ export const createFieldOverview = (partial: FieldSuperQuickOverview, editable?:
 };
 
 export const getFieldFromTemplate = (template: TemplateOverview, header: string, value?: string) => {
+  const ame = ameStore();
   if (header === "Template Name") return createFieldOverview({ title: "Template Name", value: template.name }, false);
   if (header === "Comp Name") return createFieldOverview({ title: "Comp Name", value: template.name });
   if (header === "Output File")
-    return createFieldOverview({ title: "Output File", value: `~/${template.name}.mp4`, type: "Output" });
+    return createFieldOverview({ title: "Output File", value: template.defaultOutput || "", type: "Output" });
+  if (header === "Output Format") return createFieldOverview({ title: "Output Format", value: ame.defaultFormat, type: "Format" });
+  const defaultPreset = ame.getPresets(ame.defaultFormat)[0] || "";
+  if (header === "Output Preset") return createFieldOverview({ title: "Output Preset", value: defaultPreset, type: "Preset" });
 
   const headerParts = Object.entries(parseLayerName(header, true) || {}).filter(([_key, value]) =>
     Array.isArray(value) ? value.length : !!value

@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
+    "@types/jquery": "^3.5.30",
     "@types/papaparse": "^5.3.14",
     "@types/tinycolor2": "^1.4.6",
     "@vitejs/plugin-vue": "^5.0.4",
@@ -24,6 +25,7 @@
     "vue-tsc": "^1.8.27"
   },
   "dependencies": {
+    "@coreui/vue": "^5.1.0",
     "@vitejs/plugin-legacy": "^5.3.0",
     "@vueuse/core": "^10.8.0",
     "case-anything": "^2.1.13",

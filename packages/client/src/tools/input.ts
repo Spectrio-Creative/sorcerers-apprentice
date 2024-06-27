@@ -1,6 +1,8 @@
 import { nanoid } from "nanoid";
+import { ameStore } from "../stores/ame";
 
 export const createInputFromTemplate = (template: TemplateOverview): InputTemplateValue => {
+  const ame = ameStore();
   const templateOverview = template.fields
     .filter((field) => field.type !== "Group")
     .map((field) => {
@@ -23,7 +25,9 @@ export const createInputFromTemplate = (template: TemplateOverview): InputTempla
     templateId: template.id,
     templateName: template.name,
     compName: template.comp,
-    outputFile: `~/${template.name}.mp4`,
+    outputFile: template.defaultOutput,
+    outputFormat: ame.defaultFormat,
+    outputPreset: ame.getPresets(ame.defaultFormat)[0],
     templateOverview,
     status: "Ready",
     fields: [],
