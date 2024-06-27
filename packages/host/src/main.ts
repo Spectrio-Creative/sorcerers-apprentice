@@ -1,6 +1,6 @@
 import { TemplateMain } from "./classes/template/TemplateMain";
 import polyfill from "./tools/polyfill";
-import { createRootFile, log } from "./tools/system";
+import { systemRoot, log } from "./tools/system";
 import { saveFile as saveExport, openCSV, openMediaFile, constructFileResponse } from "./tools/fs";
 import { version } from "../../../package.json";
 import { saveFormatsJSON } from "./tools/ame/formatsAECompiled";
@@ -84,7 +84,7 @@ export function createSSNamespace() {
   }
 
   function testIt() {
-    const testFile = createRootFile("test.txt");
+    const testFile = systemRoot.createRootFile("test.txt");
     testFile.open("w");
     testFile.write("Test file created");
     testFile.close();
@@ -95,7 +95,7 @@ export function createSSNamespace() {
   }
 
   function fetchAMEFormatsData() {
-    const ameFormats = createRootFile("ameFormats.json");
+    const ameFormats = systemRoot.createRootFile("ameFormats.json");
     if (!ameFormats.exists) return JSON.stringify({});
     ameFormats.open("r");
     const data = JSON.parse(ameFormats.read());
@@ -103,7 +103,7 @@ export function createSSNamespace() {
   }
 
   function refreshAMEFormatsData() {
-    const ameFormats = createRootFile("ameFormats.json");
+    const ameFormats = systemRoot.createRootFile("ameFormats.json");
     let finished = false;
     saveFormatsJSON({
       jsonLocation: ameFormats,
