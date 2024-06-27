@@ -13,9 +13,9 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, onMounted, ref } from "vue";
+import { computed, defineProps, onMounted, ref } from "vue";
 
-defineProps<{ text?: string }>();
+const props = defineProps<{ text?: string; maxWidth?: number }>();
 
 const hoverer = ref<HTMLElement | null>(null);
 const extraClasses = ref("");
@@ -33,12 +33,14 @@ const end = () => {
 
 const activateTooltip = () => {
   if (!hovering.value) return;
-  extraClasses.value = "opacity: 0.7;";
+  extraClasses.value = "opacity: 0.8;";
 };
 
 const deactivateTooltip = () => {
   extraClasses.value = "";
 };
+
+const widthLimit = computed(() => (props.maxWidth || 200) + 'px');
 
 onMounted(() => {
   activateTooltip();
@@ -55,7 +57,7 @@ onMounted(() => {
   .tooltip {
     position: absolute;
     width: max-content;
-    max-width: 200px;
+    max-width: v-bind(widthLimit);
     top: -2.5em;
     left: 50%;
     transform: translateX(-50%);

@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
+    "@types/jquery": "^3.5.30",
     "@types/papaparse": "^5.3.14",
     "@types/tinycolor2": "^1.4.6",
     "@vitejs/plugin-vue": "^5.0.4",

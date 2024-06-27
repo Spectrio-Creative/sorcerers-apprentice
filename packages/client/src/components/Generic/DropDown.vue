@@ -1,17 +1,19 @@
 <template>
   <div class="dropdown">
-    <div class="select-container" :class="{ cancelable: showCancel, slim }">
-      <VueMultiselect
-        class="multiselect"
-        v-model="model"
-        :options="allOptions"
-        :placeholder="placeholder"
-        :taggable="!fixed"
-        @tag="addTag"
-        tag-placeholder="Add this as new tag"
-        @select="onSelect"
-      >
-      </VueMultiselect>
+    <div ref="multiselect" class="select-container" :class="{ cancelable: showCancel, slim }">
+      <Tooltip :text="textOverflow ? model : ''" :max-width="500">
+        <VueMultiselect
+          class="multiselect"
+          v-model="model"
+          :options="allOptions"
+          :placeholder="placeholder"
+          :taggable="!fixed"
+          @tag="addTag"
+          tag-placeholder="Add this as new tag"
+          @select="onSelect"
+        >
+        </VueMultiselect>
+      </Tooltip>
     </div>
     <CancelButton v-if="showCancel" @click="cancel" />
   </div>
@@ -44,6 +46,7 @@ const props = withDefaults(
 
 const model = defineModel({ default: "" });
 const addedOptions = ref<string[]>([]);
+const multiselect = ref<HTMLElement | null>(null);
 
 const allOptions = computed(() => {
   return [...props.options, ...addedOptions.value];
@@ -60,6 +63,19 @@ function addTag(newTag: string) {
   addedOptions.value.push(newTag);
   model.value = newTag;
 }
+
+const textOverflow = computed(() => {
+  if (!multiselect.value) return false;
+  const $multiselect = $(multiselect.value);
+  const single = $multiselect.find(".multiselect__single")[0];
+  if (!single) {
+    return (model.value?.length || 0) * .7 * 12 > multiselect.value.clientWidth;
+  }
+  const scrollWidth = single.scrollWidth || 0;
+  const clientWidth = single.clientWidth || 0;
+  const overflow = scrollWidth > clientWidth;
+  return !!overflow;
+});
 
 defineExpose({ addTag });
 </script>
