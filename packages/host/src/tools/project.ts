@@ -7,7 +7,7 @@ import { log } from "./system";
 // ====
 
 // This is locale-specific, so it's important to test it in the target locale
-export type ItemType = "Folder" | "Footage" | "Composition" | string;
+export type ItemType = "Folder" | "Footage" | "Composition" | "NonFolder" | string;
 
 export interface LibrarySearchOptions {
   type?: ItemType;
@@ -39,10 +39,12 @@ export function searchLibrary(search: RegExp | string | number, options: Library
   for (let i = 1; i <= parent.items.length; i++) {
     const item = parent.items[i];
     if (search.test(`${item[searcher]}`)) {
-      if (type === undefined || type === item.typeName) {
-        if (maxResult === 1) return [item];
-        results.push(item);
-      }
+      let push = true;
+      if (type !== undefined && type !== "NonFolder" && type !== item.typeName) push = false;
+      if (type === "NonFolder" && item instanceof FolderItem) push = false;
+
+      if (push && maxResult === 1) return [item];
+      if (push) results.push(item);
     }
 
     if (results.length === maxResult) break;
@@ -146,7 +148,11 @@ export function allCompsFromFolder(folder: FolderItem, logs = false): CompItem[]
   for (let i = 1; i <= folder.numItems; i++) {
     const item = folder.item(i);
     logs &&
-      log(`Found: ${item.name} | Id: ${item.id} | Folder: ${item instanceof FolderItem} | Comp: ${item instanceof CompItem}`);
+      log(
+        `Found: ${item.name} | Id: ${item.id} | Folder: ${item instanceof FolderItem} | Comp: ${
+          item instanceof CompItem
+        }`
+      );
     if (item instanceof CompItem) {
       results.push(item);
     }
@@ -167,19 +173,23 @@ export function forPropertyInGroup(group: PropertyGroup, callback: (prop: Proper
 }
 
 export function importFile(filePath: string): _ItemClasses | undefined {
-      // Try importing the file
-      const file = new File(filePath);
-      if (!file.exists) return;
+  // Try importing the file
+  const file = new File(filePath);
+  if (!file.exists) return;
 
-      // Search again in the library for the filename
-      const searchResults = searchLibrary(file.name, { maxResult: 1, strict: true });
-      if (searchResults.length > 0) return searchResults[0];
+  // Search again in the library for the filename
+  const searchResults = searchLibrary(file.name, { maxResult: 1, strict: true });
+  if (searchResults.length > 0) return searchResults[0];
 
-      const item = app.project.importFile(new ImportOptions(file));
+  const item = app.project.importFile(new ImportOptions(file));
 
-      // Move the item into TOOLBOX/Imports folder
-      const toolbox: FolderItem = searchLibrary("TOOLBOX", { maxResult: 1, type: "Folder" })[0] as FolderItem || app.project.rootFolder.items.addFolder("TOOLBOX");
-      const importsFolder = searchLibrary("Imports", { maxResult: 1, type: "Folder", parent: toolbox })[0] as FolderItem || toolbox.items.addFolder("Imports");
-      item.parentFolder = importsFolder;
-      return item;
+  // Move the item into TOOLBOX/Imports folder
+  const toolbox: FolderItem =
+    (searchLibrary("TOOLBOX", { maxResult: 1, type: "Folder" })[0] as FolderItem) ||
+    app.project.rootFolder.items.addFolder("TOOLBOX");
+  const importsFolder =
+    (searchLibrary("Imports", { maxResult: 1, type: "Folder", parent: toolbox })[0] as FolderItem) ||
+    toolbox.items.addFolder("Imports");
+  item.parentFolder = importsFolder;
+  return item;
 }

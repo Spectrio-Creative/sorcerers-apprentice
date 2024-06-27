@@ -27,9 +27,11 @@ export class LayerMedia extends LayerBase {
 
     // Check if value exists in the library
     let item =
-      searchLibrary(value, { maxResult: 1, strict: true })[0] ||
-      searchLibrary(value, { maxResult: 1 })[0] ||
+      searchLibrary(value, { maxResult: 1, strict: true, type: "NonFolder" })[0] ||
+      searchLibrary(value, { maxResult: 1, type: "NonFolder" })[0] ||
       importFile(value);
+
+    log(`Importing ${value} as item of type ${item?.typeName}`);
     if (!item) return;
 
     // Add the new item to the precomp
@@ -73,9 +75,9 @@ export class LayerMedia extends LayerBase {
     this.avLayer.scale.setValue([100 / scale.contain, 100 / scale.contain, 100 / scale.contain]);
   }
 
-  positionLayer(alignmentRoot: 'position' | 'anchorPoint' = 'position') {
+  positionLayer(alignmentRoot: "position" | "anchorPoint" = "position") {
     alignAnchorPoint(this.avLayer as Layer, ["center", "center"]);
-    
+
     const rect = getLayerRect(this.avLayer as Layer);
     const originalRect = this.originalRect;
     const sizeDelta = [rect.width - originalRect.width, rect.height - originalRect.height];
@@ -107,16 +109,18 @@ export class LayerMedia extends LayerBase {
     if (!positionKeys && !anchorKeys && !scaleKeys) return;
 
     // Align based on whether anchor point or position has keyframes
-    if (positionKeys && anchorKeys) log(`WARNING: Both position and anchor point have keyframes for ${this.avLayer.name} alignment may be off.`)
+    if (positionKeys && anchorKeys)
+      log(`WARNING: Both position and anchor point have keyframes for ${this.avLayer.name} alignment may be off.`);
     this.positionLayer(positionKeys ? "anchorPoint" : "position");
 
     if (scaleKeys) {
-      if(anchorKeys) log(`WARNING: Both scale and anchor point have keyframes for ${this.avLayer.name} alignment may be off.`)
+      if (anchorKeys)
+        log(`WARNING: Both scale and anchor point have keyframes for ${this.avLayer.name} alignment may be off.`);
       // Copy scale keyframes relative to the original scale
       const originalScale = this.originalAVLayer.scale.value;
       const currentScale = this.avLayer.scale.value;
       const scaleRatio = [currentScale[0] / originalScale[0], currentScale[1] / originalScale[1]] as TwoDPoint;
-      
+
       for (let i = 1; i <= this.originalAVLayer.scale.numKeys; i++) {
         const keyTime = this.originalAVLayer.scale.keyTime(i);
         const keyScale = this.originalAVLayer.scale.keyValue(i);
